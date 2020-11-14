@@ -1,0 +1,11 @@
+name: Dotfiles Validation
+on: [push]
+
+jobs:
+  build:
+    runs-on: macOS-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Execute full install
+      shell: bash
+      run: chmod +x fresh.sh && ./fresh.sh
