@@ -20,7 +20,7 @@ If you did all of the above you may now follow these install instructions to set
 
 1. Run the command below:
 ```
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/alexanderswerdlow/dotfiles/main/fresh.sh)"
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/alexanderswerdlow/dotfiles/master/fresh.sh)"
 ```
 2. After mackup is synced with your cloud storage, restore preferences by running `mackup restore`
 3. Restart your computer to finalize the process
