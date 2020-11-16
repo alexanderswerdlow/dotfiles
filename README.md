@@ -54,7 +54,7 @@ If you want to disable any Apple programs from bypassing the Network Extensions 
 - Alfred
 - WiFi Explorer Pro
 - Wireguard
-
+- Matlab
 
 ## Thanks To...
 
