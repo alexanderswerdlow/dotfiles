@@ -29,6 +29,21 @@ Your Mac is now ready to use!
 
 > Note: you can use a different location than `~/.dotfiles` if you want. Just make sure you also update the reference in the [`.zshrc`](./.zshrc) file.
 
+### Non-automated Setup (Dangerous!!!)
+
+The commands below disable important macOS security features and should not be taken lightly. They will make it much easier for malware to break things and/or be more invasive. I decide to disable these features both for convinience (i.e. macOS doesn't need to verify the signature of every program, make it diffcult to open some programs etc.) and because I've run into several programs (specifically for development) that require SIP to be disabled anyway.
+
+I've taken these commands from [here](https://www.naut.ca/blog/2020/11/13/forbidden-commands-to-liberate-macos/)
+- Disable GateKeeper: `sudo spctl --master-disable`
+- Disable Library Validation: `sudo defaults write /Library/Preferences/com.apple.security.libraryvalidation.plist DisableLibraryValidation -bool true`
+
+The following commands must be executed from recovery mode:
+
+- Disable SIP:  `csrutil disable`
+- Disable Apple Mobile File Integrity: `nvram boot-args="amfi_get_out_of_my_way=1"`
+
+If you want to disable any Apple programs from bypassing the Network Extensions API, see [here](https://tinyapps.org/blog/202010210700_whose_computer_is_it.html)
+
 ## Thanks To...
 
 [Dries's Dotfiles](https://github.com/driesvints/dotfiles) for the initial setup of the repo.
