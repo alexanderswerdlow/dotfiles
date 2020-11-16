@@ -49,6 +49,10 @@ ln -s $HOME/.dotfiles/.mackup.cfg $HOME/.mackup.cfg
 if [ -z "${CI}" ]
 then
   echo "Setting macOS Preferences"
+  
+  # Block OCSP Responder
+  sudo sh -c 'echo "0.0.0.0  ocsp.apple.com" >> /etc/hosts'
+  
   source .macos
 else
   echo "In Testing, not setting macOS Preferences"
