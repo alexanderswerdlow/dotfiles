@@ -44,6 +44,18 @@ The following commands must be executed from recovery mode:
 
 If you want to disable any Apple programs from bypassing the Network Extensions API, see [here](https://tinyapps.org/blog/202010210700_whose_computer_is_it.html)
 
+### Additional Programs
+
+- Wolfram Desktop
+- PDF Expert
+- Texpad
+- Forklift
+- Numi
+- Alfred
+- WiFi Explorer Pro
+- Wireguard
+
+
 ## Thanks To...
 
 [Dries's Dotfiles](https://github.com/driesvints/dotfiles) for the initial setup of the repo.
