@@ -49,3 +49,6 @@ alias wip="commit wip"
 alias venv="python3 -m venv"
 alias act="source ./bin/activate"
 alias deact="deactivate"
+
+alias seas="ssh swerdlow@lnxsrv.seas.ucla.edu"
+alias edit="subl ~/.zshrc"
