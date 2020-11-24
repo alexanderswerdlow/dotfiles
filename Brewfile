@@ -73,10 +73,10 @@ cask 'provisionql'
 
 # Mac App Store
 unless ENV.has_key?('CI') then
-  mas 'Speedtest', id: 1153157709
-  mas 'Notability', id: 736189492
-  mas 'Magnet', id: 441258766
-  mas 'Newton - Supercharged emailing', id: 1059655371
-  mas 'nPlayer', id: 1451273814
-  mas 'ApolloOne - Photo Video Viewer', id: 1044484672
+  mas 'Speedtest', id: 1153157709 # Get that speed
+  mas 'Notability', id: 736189492 # favorite iPad note taking app, syncs notes to iCloud
+  mas 'Magnet', id: 441258766 # macOS window manager
+  mas 'Newton - Supercharged emailing', id: 1059655371 # Dope email client
+  mas 'nPlayer', id: 1451273814 # Plays back some video files smoother than IINA + better FTP/AFP playback
+  mas 'ApolloOne - Photo Video Viewer', id: 1044484672 # Better than preview
 end
