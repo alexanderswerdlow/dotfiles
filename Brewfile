@@ -48,6 +48,7 @@ cask 'typora' # Markdown editor
 cask 'visual-studio-code' # All the random code
 cask 'monitorcontrol' # External Monitor Brightness Control
 cask 'upic' # Image Uploader, primarily for Typora
+cask 'mactex-no-gui' # MacTeX without the GUI applications. I use Texpad
 
 # extra
 # Alfred - Spotlight but way better
