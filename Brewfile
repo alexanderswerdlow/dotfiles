@@ -26,6 +26,7 @@ brew 'bat' # When you need a new cat
 brew 'exa' # 
 brew 'wget' # Sometimes you gotta wget things
 brew 'iperf3' # Testing LAN Speeds. Useful for getting your *actual* WiFi speed and not just the WAN/internet speed
+brew 'wireguard-tools' # VPN
 
 # Apps
 cask '1password' # Shhhhh
