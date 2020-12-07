@@ -44,6 +44,9 @@ The following commands must be executed from recovery mode:
 
 If you want to disable any Apple programs from bypassing the Network Extensions API, see [here](https://tinyapps.org/blog/202010210700_whose_computer_is_it.html)
 
+### More Info
+Installs iTerm2, oh-my-zsh, and the [Powerlevel10k theme](https://github.com/romkatv/powerlevel10k)
+
 ### Additional Programs
 
 - Wolfram Desktop
