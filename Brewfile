@@ -31,6 +31,7 @@ brew 'rga'
 brew 'pandoc'
 brew 'poppler'
 brew 'tesseract'
+brew 'fzf'
 
 # Apps
 cask '1password' # Shhhhh
