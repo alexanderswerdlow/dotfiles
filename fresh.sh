@@ -63,6 +63,8 @@ curl -L --url https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS
 curl -L --url https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Italic.ttf --output ~/Library/Fonts/"MesloLGS NF Italic.ttf"
 curl -L --url https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold%20Italic.ttf --output ~/Library/Fonts/"MesloLGS NF Bold Italic.ttf"
 
+ln -s "/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl" /usr/local/bin/subl
+
 cat ~/.ssh/id_rsa.pub
 
 echo "Done!"
