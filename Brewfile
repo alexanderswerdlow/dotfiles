@@ -27,6 +27,10 @@ brew 'exa' #
 brew 'wget' # Sometimes you gotta wget things
 brew 'iperf3' # Testing LAN Speeds. Useful for getting your *actual* WiFi speed and not just the WAN/internet speed
 brew 'wireguard-tools' # VPN
+brew 'rga'
+brew 'pandoc'
+brew 'poppler'
+brew 'tesseract'
 
 # Apps
 cask '1password' # Shhhhh
