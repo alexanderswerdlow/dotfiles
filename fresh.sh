@@ -54,14 +54,14 @@ then
   sudo sh -c 'echo "0.0.0.0  ocsp.apple.com" >> /etc/hosts'
   
   source .macos
+  
+  curl -L --url https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Regular.ttf --output ~/Library/Fonts/"MesloLGS NF Regular.ttf"
+  curl -L --url https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold.ttf --output ~/Library/Fonts/"MesloLGS NF Bold.ttf"
+  curl -L --url https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Italic.ttf --output ~/Library/Fonts/"MesloLGS NF Italic.ttf"
+  curl -L --url https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold%20Italic.ttf --output ~/Library/Fonts/"MesloLGS NF Bold Italic.ttf"
 else
   echo "In Testing, not setting macOS Preferences"
 fi
-
-curl -L --url https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Regular.ttf --output ~/Library/Fonts/"MesloLGS NF Regular.ttf"
-curl -L --url https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold.ttf --output ~/Library/Fonts/"MesloLGS NF Bold.ttf"
-curl -L --url https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Italic.ttf --output ~/Library/Fonts/"MesloLGS NF Italic.ttf"
-curl -L --url https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold%20Italic.ttf --output ~/Library/Fonts/"MesloLGS NF Bold Italic.ttf"
 
 ln -s "/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl" /usr/local/bin/subl
 
