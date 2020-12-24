@@ -59,6 +59,7 @@ then
   curl -L --url https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold.ttf --output ~/Library/Fonts/"MesloLGS NF Bold.ttf"
   curl -L --url https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Italic.ttf --output ~/Library/Fonts/"MesloLGS NF Italic.ttf"
   curl -L --url https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold%20Italic.ttf --output ~/Library/Fonts/"MesloLGS NF Bold Italic.ttf"
+  mkdir -p ~/bin
 else
   echo "In Testing, not setting macOS Preferences"
 fi
