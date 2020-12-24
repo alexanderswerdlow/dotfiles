@@ -7,15 +7,12 @@ tap 'homebrew/bundle'
 brew 'bash' # Latest Bash version
 brew 'coreutils' # Those that come with macOS are outdated
 brew 'ffmpeg' # Audio/Video Transcoding/Streaming
-brew 'gh' # Github CLI
 brew 'git' # Git gud
 brew 'grep' # You know...grep
 brew 'httpie' # Wget but better
 brew 'mackup' # Syncs mac preferences
 brew 'mas' # Mac App Store manager
 brew 'pkg-config' # https://github.com/driesvints/dotfiles/issues/20
-brew 'trash' # Manage the Trash bin
-brew 'tree' # List directories in a tree structure
 brew 'fasd' # Better cd (https://github.com/clvv/fasd)
 
 # Development
@@ -86,5 +83,4 @@ unless ENV.has_key?('CI') then
   mas 'Magnet', id: 441258766 # macOS window manager
   mas 'Newton - Supercharged emailing', id: 1059655371 # Dope email client
   mas 'nPlayer', id: 1451273814 # Plays back some video files smoother than IINA + better FTP/AFP playback
-  mas 'ApolloOne - Photo Video Viewer', id: 1044484672 # Better than preview
 end
