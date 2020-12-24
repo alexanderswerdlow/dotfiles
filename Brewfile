@@ -53,6 +53,9 @@ cask 'monitorcontrol' # External Monitor Brightness Control
 cask 'upic' # Image Uploader, primarily for Typora
 cask 'mactex-no-gui' # MacTeX without the GUI applications. I use Texpad
 cask 'daisydisk'
+cask 'clion'
+cask 'intellij-idea'
+cask 'pycharm'
 
 # extra
 # Alfred - Spotlight but way better
