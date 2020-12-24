@@ -64,7 +64,7 @@ else
   echo "In Testing, not setting macOS Preferences"
 fi
 
-ln -s "/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl" /usr/local/bin/st
+# ln -s "/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl" /usr/local/bin/st
 
 cat ~/.ssh/id_rsa.pub
 
