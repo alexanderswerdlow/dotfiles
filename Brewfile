@@ -55,12 +55,10 @@ cask 'mactex-no-gui' # MacTeX without the GUI applications. I use Texpad
 cask 'daisydisk'
 cask 'clion'
 cask 'intellij-idea'
-cask 'pycharm'
+cask 'pycharm' #  Best C/C++/Java IDE if it's not a super quick edit
+cask 'alfred' # Spotlight but way better
 
-# extra
-# Alfred - Spotlight but way better
 # Wolfram Desktop - Mathematica basically
-# Clion, IntelliJ - Best C/C++/Java IDE if it's not a super quick edit
 # PDFSearch - Excellent PDF Searching + can index a whole folder of various text files
 # Terminus Beta
 # MacTracker - Complete history/specs of Apple devices
