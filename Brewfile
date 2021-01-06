@@ -2,6 +2,7 @@
 tap 'homebrew/cask'
 tap 'homebrew/cask-versions'
 tap 'homebrew/bundle'
+tap 'AdoptOpenJDK/openjdk'
 
 # Binaries
 brew 'bash' # Latest Bash version
@@ -57,6 +58,8 @@ cask 'clion'
 cask 'intellij-idea'
 cask 'pycharm' #  Best C/C++/Java IDE if it's not a super quick edit
 cask 'alfred' # Spotlight but way better
+cask 'adoptopenjdk'
+cask 'adoptopenjdk8'
 
 # Wolfram Desktop - Mathematica basically
 # PDFSearch - Excellent PDF Searching + can index a whole folder of various text files
