@@ -93,10 +93,10 @@ alias startsc="sudo launchctl load -w /Library/LaunchAgents/Safe.Connect.client.
 alias quitsc="osascript -e 'tell application \"SafeConnect.app\" to quit';sudo launchctl unload -w /Library/LaunchAgents/Safe.Connect.client.plist"
 alias home="cd ~/"
 
-cpu_str=$(sysctl -a | grep 'machdep.cpu.brand_string')
-arm64_cpu="Apple M1"
-
 if [[ "$(uname)" == "Darwin" ]]; then
+
+    cpu_str=$(sysctl -a | grep 'machdep.cpu.brand_string')
+    arm64_cpu="Apple M1"
     if [[ "$cpu_str" == *"$arm64_cpu"* ]]; then
         # Brew
         alias armbrew="arch -arm64 /opt/homebrew/bin/brew"
