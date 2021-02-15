@@ -1,6 +1,6 @@
 #!/bin/sh
 
-if [ "$(uname)" == "Darwin" ]; then
+if [[ "$(uname)" == "Darwin" ]]; then
     echo 'Running on macOS. Rethinking life'
     exit 1
 fi
