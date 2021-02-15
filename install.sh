@@ -5,17 +5,23 @@ if uname | grep -q 'darwin'; then
     exit 1
 fi
 
+sudo apt-get update
+
 sudo apt-get install -y zsh fzf wget unzip curl sudo git
 
 curl -fsSL https://starship.rs/install.sh | bash -s -- -y
 
 sudo sed s/required/sufficient/g -i /etc/pam.d/chsh
 
-sudo chsh -s /usr/bin/zsh $USER
+sudo chsh -s $(which zsh) $USER
 
 mv $HOME/.zshrc $HOME/.zshrc_default
 
 ln -s $HOME/dotfiles/.zshrc $HOME/.zshrc
+
+cp $HOME/.bashrc $HOME/.bashrc_default
+
+echo 'exec zsh' > $HOME/.bashrc
 
 mkdir $HOME/.zsh
 
