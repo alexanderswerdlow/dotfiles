@@ -9,7 +9,9 @@ sudo apt-get install -y zsh fzf wget unzip curl sudo git
 
 curl -fsSL https://starship.rs/install.sh | bash -s -- -y
 
-chsh -s /usr/bin/zsh $USERNAME
+sudo sed s/required/sufficient/g -i /etc/pam.d/chsh
+
+sudo chsh -s /usr/bin/zsh $USER
 
 mv $HOME/.zshrc $HOME/.zshrc_default
 
