@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 if [[ "$(uname)" == "Darwin" ]]; then
     echo 'Running on macOS. Rethinking life'
