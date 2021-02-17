@@ -56,7 +56,6 @@ alias system_python="/usr/bin/python3"
 alias upgrade="pip install --upgrade pip"
 
 # Brew
-
 alias brewd="brew doctor"
 alias brewi="brew install"
 alias brewr="brew uninstall"
@@ -93,52 +92,49 @@ alias startsc="sudo launchctl load -w /Library/LaunchAgents/Safe.Connect.client.
 alias quitsc="osascript -e 'tell application \"SafeConnect.app\" to quit';sudo launchctl unload -w /Library/LaunchAgents/Safe.Connect.client.plist"
 alias home="cd ~/"
 
-if [[ "$(uname)" == "Darwin" ]]; then
+if [[ "$MACHINE" == "X86" ]]; then
+    # Python
+    alias brew_python="/usr/local/bin/python3"
+    alias brew_pip="/usr/local/bin/python3 -m pip"
+    alias system_python="/usr/bin/python3"
+    alias system_pip="/usr/bin/python3 -m pip"
 
-    cpu_str=$(sysctl -a | grep 'machdep.cpu.brand_string')
-    arm64_cpu="Apple M1"
-    if [[ "$cpu_str" == *"$arm64_cpu"* ]]; then
-        # Brew
-        alias armbrew="arch -arm64 /opt/homebrew/bin/brew"
-        alias abrew=armbrew
-        alias intelbrew="arch -x86_64 /usr/local/bin/brew"
-        alias ibrew=intelbrew
-        alias brew=abrew
+    export JAVA_8_HOME=$(/usr/libexec/java_home -v1.8)
+    export JAVA_15_HOME=$(/usr/libexec/java_home -v15)
 
-        # Python
-        alias intel_python3="/usr/local/bin/python3"
-        alias intel_python="ipython3"
-        alias intel_pip3="/usr/local/bin/pip3"
-        alias intel_pip="ipip3"
+    alias java8='export JAVA_HOME=$JAVA_8_HOME && java -version'
+    alias java15='export JAVA_HOME=$JAVA_15_HOME && java -version'
+    alias cat='bat'
+    alias ls='exa'
+elif [[ "$MACHINE" == "ARM64" ]]; then
+    # Brew
+    alias armbrew="arch -arm64 /opt/homebrew/bin/brew"
+    alias abrew=armbrew
+    alias intelbrew="arch -x86_64 /usr/local/bin/brew"
+    alias ibrew=intelbrew
+    alias brew=abrew
 
-        alias arm_python3="/opt/homebrew/bin/python3"
-        alias armpython="apython3"
-        alias armpip3="/opt/homebrew/bin/pip3"
-        alias armpip="apip3"
+    # Python
+    alias intel_python3="/usr/local/bin/python3"
+    alias intel_python="ipython3"
+    alias intel_pip3="/usr/local/bin/pip3"
+    alias intel_pip="ipip3"
 
-        alias intel='arch -x86_64'
+    alias arm_python3="/opt/homebrew/bin/python3"
+    alias armpython="apython3"
+    alias armpip3="/opt/homebrew/bin/pip3"
+    alias armpip="apip3"
 
-        alias mvenv='mkvirtualenv'
-        alias rvenv='rmvirtualenv'
-        alias venv='workon'
-        alias act='workon'
+    alias intel='arch -x86_64'
 
-        alias code="code-insiders"
-    else
-        # Python
-        alias brew_python="/usr/local/bin/python3"
-        alias brew_pip="/usr/local/bin/python3 -m pip"
-        alias system_python="/usr/bin/python3"
-        alias system_pip="/usr/bin/python3 -m pip"
+    alias mvenv='mkvirtualenv'
+    alias rvenv='rmvirtualenv'
+    alias venv='workon'
+    alias act='workon'
 
-        export JAVA_8_HOME=$(/usr/libexec/java_home -v1.8)
-        export JAVA_15_HOME=$(/usr/libexec/java_home -v15)
-
-        alias java8='export JAVA_HOME=$JAVA_8_HOME && java -version'
-        alias java15='export JAVA_HOME=$JAVA_15_HOME && java -version'
-        alias cat='bat'
-        alias ls='exa'
-    fi
+    alias code="code-insiders"
+else
+    # Do Nothing
 fi
 
 function abspath() {

@@ -1,3 +1,17 @@
+if [[ "$(uname)" == "Darwin" ]]; then
+  export OS='macOS'
+  cpu_str=$(sysctl -a | grep 'machdep.cpu.brand_string')
+  arm64_cpu="Apple M1"
+  if [[ "$cpu_str" == *"$arm64_cpu"* ]]; then
+    export MACHINE='ARM64'
+  else
+    export MACHINE='X86'
+  fi
+else
+  export OS='Linux'
+  export MACHINE='Other'
+fi
+
 export DOTFILES=$HOME/.dotfiles
 
 source ~/dotfiles/aliases.zsh
@@ -21,7 +35,7 @@ eval "$(zoxide init zsh)"
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # Random
-if [[ "$(uname)" == "Darwin" ]]; then
+if [[ "$OS" == "macOS" ]]; then
 
   source ~/dotfiles/path.zsh
 
