@@ -1,3 +1,5 @@
+export DOTFILES=$HOME/dotfiles
+
 if [[ "$(uname)" == "Darwin" ]]; then
   export OS='macOS'
   cpu_str=$(sysctl -a | grep 'machdep.cpu.brand_string')
@@ -12,22 +14,15 @@ else
   export MACHINE='Other'
 fi
 
+source $DOTFILES/path.zsh
+source $DOTFILES/aliases.zsh
+
 # Random
 if [[ "$OS" == "macOS" ]]; then
-
-  source ~/dotfiles/path.zsh
-
-  source /Users/aswerdlow/.zsh/zsh-pyenv-lazy/pyenv-lazy.plugin.zsh
-
+  source $DOTFILES/plugins/pyenv-lazy/pyenv-lazy.plugin.zsh
   source ~/.iterm2_shell_integration.zsh
-
   # test -r /Users/aswerdlow/.opam/opam-init/init.zsh && . /Users/aswerdlow/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
-
 fi
-
-export DOTFILES=$HOME/dotfiles
-
-source ~/dotfiles/aliases.zsh
 
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
@@ -40,9 +35,6 @@ else
 fi
 
 eval "$(starship init zsh)"
-
-source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
-
 eval "$(zoxide init zsh)"
-
+source $DOTFILES/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

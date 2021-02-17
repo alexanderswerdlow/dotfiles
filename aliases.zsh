@@ -73,7 +73,7 @@ alias local-ip="ipconfig getifaddr en0"
 alias seas="ssh -R 52698:localhost:52698 swerdlow@lnxsrv09.seas.ucla.edu"
 alias seas6="ssh -R 52698:localhost:52698 swerdlow@lnxsrv06.seas.ucla.edu"
 alias seas11="ssh -R 52698:localhost:52698 swerdlow@lnxsrv11.seas.ucla.edu"
-alias edit="code ~/.dotfiles"
+alias edit="code ~/dotfiles"
 alias aliases="subl ~/.dotfiles/aliases.zsh"
 alias paths="subl ~/.dotfiles/path.zsh"
 alias untar="tar -xvzf"
@@ -126,12 +126,10 @@ elif [[ "$MACHINE" == "ARM64" ]]; then
     alias armpip="apip3"
 
     alias intel='arch -x86_64'
-
     alias mvenv='mkvirtualenv'
     alias rvenv='rmvirtualenv'
     alias venv='workon'
     alias act='workon'
-
     alias code="code-insiders"
 else
     # Do Nothing
@@ -164,7 +162,6 @@ function ucla() {
     run_rsync "$local" "$server:$remote"; fswatch -o . | while read f; do run_rsync "$local" "$server:$remote"; done
 }
 
-
 rga-fzf() {
     RG_PREFIX="rga --files-with-matches"
     local file
@@ -177,19 +174,6 @@ rga-fzf() {
     )" &&
     echo "opening $file" &&
     open "$file"
-}
-
-function sman() {
-    man $1 > /tmp/man && subl /tmp/man
-}
-
-
-function pman() {
-    man -t $1 | open -f -a PDF\ Expert
-}
-
-function hman() {
-    MANWIDTH=80 MANPAGER='col -bx' man $@ | open -b com.sublimetext.3
 }
 
 function jdk() {
