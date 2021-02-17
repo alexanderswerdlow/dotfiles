@@ -12,7 +12,20 @@ else
   export MACHINE='Other'
 fi
 
-export DOTFILES=$HOME/.dotfiles
+# Random
+if [[ "$OS" == "macOS" ]]; then
+
+  source ~/dotfiles/path.zsh
+
+  source /Users/aswerdlow/.zsh/zsh-pyenv-lazy/pyenv-lazy.plugin.zsh
+
+  source ~/.iterm2_shell_integration.zsh
+
+  # test -r /Users/aswerdlow/.opam/opam-init/init.zsh && . /Users/aswerdlow/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
+
+fi
+
+export DOTFILES=$HOME/dotfiles
 
 source ~/dotfiles/aliases.zsh
 
@@ -33,19 +46,3 @@ source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 eval "$(zoxide init zsh)"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-# Random
-if [[ "$OS" == "macOS" ]]; then
-
-  source ~/dotfiles/path.zsh
-
-  source /Users/aswerdlow/.zsh/zsh-pyenv-lazy/pyenv-lazy.plugin.zsh
-
-  source ~/.iterm2_shell_integration.zsh
-
-  ZSH_PYENV_LAZY_VIRTUALENV=true
-
-  # opam configuration
-  # test -r /Users/aswerdlow/.opam/opam-init/init.zsh && . /Users/aswerdlow/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
-
-fi

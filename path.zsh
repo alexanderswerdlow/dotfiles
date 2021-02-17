@@ -46,8 +46,6 @@ elif [[ "$MACHINE" == "ARM64" ]]; then
     export CPPFLAGS="-I/usr/local/opt/openssl@1.1/include -I/usr/local/opt/readline/include -I/usr/local/opt/sqlite/include -I/usr/local/opt/zlib/include"
 
     export ZPYI_IMPORTS=requests
-    ZSH_PYENV_LAZY_VIRTUALENV=true
-
     # export PAGER="col -b  | open -a /Applications/Sublime\ Text.app -f"
 else
     # Do Nothing
@@ -55,5 +53,6 @@ fi
 
 
 if [[ "$OS" == "macOS" ]]; then
+    ZSH_PYENV_LAZY_VIRTUALENV=true
     export PAGER="col -b  | open -a /Applications/Google\ Chrome\ Dev.app -f"
 fi
