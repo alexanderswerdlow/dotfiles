@@ -16,6 +16,7 @@ if [[ "$MACHINE" == "X86" ]]; then
     export PATH="/usr/local/sbin:$PATH"
     export PATH="$HOME/bin:$PATH"
     export PATH="/usr/local/Homebrew/bin:$PATH"
+    export PAGER="col -b  | open -a /Applications/Google\ Chrome.app -f"
 elif [[ "$MACHINE" == "ARM64" ]]; then
     # Python (System Pip)
     export PATH="/Users/aswerdlow/Library/Python/3.8/bin:$PATH"
@@ -47,6 +48,7 @@ elif [[ "$MACHINE" == "ARM64" ]]; then
 
     export ZPYI_IMPORTS=requests
     # export PAGER="col -b  | open -a /Applications/Sublime\ Text.app -f"
+    export PAGER="col -b  | open -a /Applications/Google\ Chrome\ Dev.app -f"
 else
     # Do Nothing
 fi
@@ -54,5 +56,4 @@ fi
 
 if [[ "$OS" == "macOS" ]]; then
     ZSH_PYENV_LAZY_VIRTUALENV=true
-    export PAGER="col -b  | open -a /Applications/Google\ Chrome\ Dev.app -f"
 fi
