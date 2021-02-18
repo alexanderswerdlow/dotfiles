@@ -1,4 +1,6 @@
-import subprocess, re, fire, time, datetime, os, shutil
+#!/usr/bin/python3
+
+import subprocess, re, fire, time, datetime, os, shutil, configparser, os
 
 def change_network_order(preferred_service):
     process = subprocess.run(['networksetup', '-listnetworkserviceorder'], capture_output=True, check=True, text=True)
@@ -6,7 +8,6 @@ def change_network_order(preferred_service):
     if preferred_service in services:
         services.insert(0, services.pop(services.index(preferred_service)))
     process = subprocess.run(['networksetup', '-ordernetworkservices'] + services)
-
 
 def connect_vpn(vpn_name):
     vpn_status = os.popen(f"networksetup -showpppoestatus \"{vpn_name}\"").read().strip()
@@ -31,6 +32,12 @@ def backup_scripts():
     base_dir = f"{h}/Documents/Programs/Shell/{datestr}"
     shutil.copytree(f"{h}/dotfiles", f"{base_dir}/dotfiles", ignore=shutil.ignore_patterns("plugins"), dirs_exist_ok=True)
     shutil.copytree(f"{h}/bin", f"{base_dir}/bin", dirs_exist_ok=True)
+
+def connect_server():
+    config = configparser.ConfigParser()
+    config.read(os.environ['SECRETS'])
+    for location in config['server']['volumes'].split(','):
+        subprocess.run(['osascript', '-e', f'mount volume "{config["server"]["address"]}/{location}"'], timeout=5)
 
 if __name__ == '__main__':
     fire.Fire()

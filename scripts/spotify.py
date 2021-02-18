@@ -1,5 +1,7 @@
-import requests, json, datetime, configparser, fire
-secrets_file = '../secrets.ini'
+#!/usr/bin/python3
+
+import requests, json, datetime, configparser, fire, os
+secrets_file = os.environ['SECRETS']
 config = configparser.ConfigParser()
 config.read(secrets_file)
 sp = config['spotify']
