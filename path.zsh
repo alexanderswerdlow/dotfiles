@@ -12,6 +12,7 @@ if [[ "$MACHINE" == "X86" ]]; then
     export PATH="/usr/local/opt/gnu-tar/libexec/gnubin:$PATH"
     export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
 
+    export PATH="$HOME/go/bin:$PATH"
     export PATH="$PATH:/Users/aswerdlow/.local/bin"
     export PATH="/usr/local/sbin:$PATH"
     export PATH="$HOME/bin:$PATH"

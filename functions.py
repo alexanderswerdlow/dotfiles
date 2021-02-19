@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-import subprocess, re, fire, time, datetime, os, shutil, configparser, os
+import subprocess, re, fire, time, datetime, os, shutil, configparser, os, requests
 
 def change_network_order(preferred_service):
     process = subprocess.run(['networksetup', '-listnetworkserviceorder'], capture_output=True, check=True, text=True)
