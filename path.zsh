@@ -58,4 +58,5 @@ fi
 if [[ "$OS" == "macOS" ]]; then
     ZSH_PYENV_LAZY_VIRTUALENV=true
     export SECRETS="$HOME/Documents/Programs/secrets.ini"
+    export PATH="$DOTFILES/scripts:$PATH"
 fi

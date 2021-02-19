@@ -120,6 +120,9 @@ elif [[ "$MACHINE" == "ARM64" ]]; then
     alias intel_pip3="/usr/local/bin/pip3"
     alias intel_pip="ipip3"
 
+    alias system_python="/usr/bin/python3"
+    alias system_pip="/usr/bin/python3 -m pip"
+
     alias arm_python3="/opt/homebrew/bin/python3"
     alias armpython="apython3"
     alias armpip3="/opt/homebrew/bin/pip3"
