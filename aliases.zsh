@@ -11,6 +11,9 @@ alias reload="exec zsh"
 # Directories
 alias dotfiles="cd $DOTFILES"
 alias library="cd $HOME/Library"
+alias dotfiles="code $DOTFILES"
+alias aliases="subl $DOTFILES/aliases.zsh"
+alias paths="subl $DOTFILES/path.zsh"
 alias '..'="cd .."
 alias '...'="cd ../../"
 alias gp="git peek"
@@ -51,18 +54,6 @@ alias venv="python3 -m venv"
 alias act="source ./bin/activate"
 alias deact="deactivate"
 
-alias system_pip="/usr/bin/pip3"
-alias system_python="/usr/bin/python3"
-alias upgrade="pip install --upgrade pip"
-
-# Brew
-alias brewd="brew doctor"
-alias brewi="brew install"
-alias brewr="brew uninstall"
-alias brews="brew search"
-alias brewu="brew update && brew upgrade && brew cleanup"
-
-
 alias empty-trash="sudo rm -frv /Volumes/*/.Trashes; \
                    sudo rm -frv ~/.Trash; \
                    sudo rm -frv /private/var/log/asl/*.asl; \
@@ -73,9 +64,6 @@ alias local-ip="ipconfig getifaddr en0"
 alias seas="ssh -R 52698:localhost:52698 swerdlow@lnxsrv09.seas.ucla.edu"
 alias seas6="ssh -R 52698:localhost:52698 swerdlow@lnxsrv06.seas.ucla.edu"
 alias seas11="ssh -R 52698:localhost:52698 swerdlow@lnxsrv11.seas.ucla.edu"
-alias edit="code ~/dotfiles"
-alias aliases="subl ~/.dotfiles/aliases.zsh"
-alias paths="subl ~/.dotfiles/path.zsh"
 alias untar="tar -xvzf"
 
 alias torguard="sudo wg-quick up wg0 >/dev/null 2>&1"
@@ -93,12 +81,6 @@ alias quitsc="osascript -e 'tell application \"SafeConnect.app\" to quit';sudo l
 alias home="cd ~/"
 
 if [[ "$MACHINE" == "X86" ]]; then
-    # Python
-    alias brew_python="/usr/local/bin/python3"
-    alias brew_pip="/usr/local/bin/python3 -m pip"
-    alias system_python="/usr/bin/python3"
-    alias system_pip="/usr/bin/python3 -m pip"
-
     export JAVA_8_HOME=$(/usr/libexec/java_home -v1.8)
     export JAVA_15_HOME=$(/usr/libexec/java_home -v15)
 
@@ -108,25 +90,12 @@ if [[ "$MACHINE" == "X86" ]]; then
     alias ls='exa'
 elif [[ "$MACHINE" == "ARM64" ]]; then
     # Brew
-    alias armbrew="arch -arm64 /opt/homebrew/bin/brew"
-    alias abrew=armbrew
-    alias intelbrew="arch -x86_64 /usr/local/bin/brew"
-    alias ibrew=intelbrew
+    alias abrew="arch -arm64 /opt/homebrew/bin/brew"
+    alias ibrew="arch -x86_64 /usr/local/bin/brew"
     alias brew=abrew
 
-    # Python
-    alias intel_python3="/usr/local/bin/python3"
-    alias intel_python="ipython3"
-    alias intel_pip3="/usr/local/bin/pip3"
-    alias intel_pip="ipip3"
-
-    alias system_python="/usr/bin/python3"
-    alias system_pip="/usr/bin/python3 -m pip"
-
-    alias arm_python3="/opt/homebrew/bin/python3"
-    alias armpython="apython3"
-    alias armpip3="/opt/homebrew/bin/pip3"
-    alias armpip="apip3"
+    alias ipython="/opt/homebrew/bin/python3"
+    alias ipip="/opt/homebrew/bin/python3 -m pip"
 
     alias intel='arch -x86_64'
     alias mvenv='mkvirtualenv'
@@ -136,6 +105,21 @@ elif [[ "$MACHINE" == "ARM64" ]]; then
     alias code="code-insiders"
 else
     # Do Nothing
+fi
+
+if [[ "$OS" == "macOS" ]]; then
+    # Brew
+    alias brewd="brew doctor"
+    alias brewi="brew install"
+    alias brewr="brew uninstall"
+    alias brews="brew search"
+    alias brewu="brew update && brew upgrade && brew cleanup"
+
+    alias spython="/usr/bin/python3"
+    alias spip="/usr/bin/python3 -m pip"
+
+    alias bpython="$BREWPREFIX/bin/python3"
+    alias bpip="$BREWPREFIX/bin/python3 -m pip"
 fi
 
 function abspath() {
@@ -192,4 +176,13 @@ function timezsh() {
 
 function gcd() {
   git clone "$1" && cd "$(basename "$1" .git)"
+}
+
+function upgrade(){
+    $1 -m pip install --upgrade pip
+}
+
+function sman()
+{
+    man $1 | col -b | subl
 }
