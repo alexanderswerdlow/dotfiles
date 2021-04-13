@@ -1,9 +1,9 @@
-#!/usr/bin/python3
-
 import subprocess, re, fire, time, datetime, os, shutil, configparser, shlex
 
-def exec(command: str, combine_output: bool = True, timeout: int=None):
-    if combine_output:
+def exec(command: str, combine_output: bool = True, timeout: int=None, raw_process: bool = False):
+    if raw_process:
+        return subprocess.run(shlex.split(command), stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, timeout=timeout)
+    elif combine_output:
         return subprocess.run(shlex.split(command), stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, timeout=timeout).stdout.rstrip()
     else:
         p = subprocess.run(shlex.split(command), capture_output=True, text=True, timeout=timeout)
@@ -14,7 +14,8 @@ def change_network_order(preferred_service):
     services = [r.group('name') for r in (re.search(r'\(\d+\) (?P<name>.*)', l) for l in orig_services) if r is not None]
     if preferred_service in services:
         services.insert(0, services.pop(services.index(preferred_service)))
-    exec(f'networksetup -ordernetworkservices {services}')
+        new_order = " ".join('"{0}"'.format(s) for s in services)
+        exec(f'networksetup -ordernetworkservices {new_order}')
 
 def connect_vpn(vpn_name):
     def internet_working():
@@ -48,6 +49,21 @@ def connect_server():
     config.read(os.environ['SECRETS'])
     for location in config['server']['volumes'].split(','):
         subprocess.run(['osascript', '-e', f'mount volume "{config["server"]["address"]}/{location}"'], timeout=5)
+
+def check_connection():
+    home_loc = os.getenv('HOME')
+    ping_output = exec(f'ping -c1 google.com', raw_process=True)
+    wget_output = exec(f'wget --spider http://example.com', raw_process=True)
+    datestr = f'NETWORK CHECK at : {str(datetime.datetime.now())}:'
+    with open(f"{home_loc}/tmp/network_log.txt", "a") as file:
+        if ping_output.returncode == 0 and wget_output.returncode == 0:
+            file.write(f'{datestr} SUCCEEDED\n')
+            file.write(f'Ping: {ping_output.stdout}\n')
+            file.write(f'Wget: {wget_output.stdout}\n\n')
+        else:
+            file.write(f'{datestr} FAILED\n')
+            file.write(f'Ping: {ping_output.stdout}\n')
+            file.write(f'Wget: {wget_output.stdout}\n\n')
 
 if __name__ == '__main__':
     fire.Fire()

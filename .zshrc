@@ -35,7 +35,9 @@ export LANG=en_US.UTF-8
 if [[ -n $SSH_CONNECTION ]]; then
   export EDITOR='nano'
 else
-  export EDITOR='code-insiders'
+  if [[ "$MACHINE" == "ARM64" ]]; then
+  else
+  fi
 fi
 
 eval "$(starship init zsh)"

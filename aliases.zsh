@@ -9,7 +9,6 @@ alias c="clear"
 alias reload="exec zsh"
 
 # Directories
-alias dotfiles="cd $DOTFILES"
 alias library="cd $HOME/Library"
 alias dotfiles="code $DOTFILES"
 alias aliases="subl $DOTFILES/aliases.zsh"
@@ -78,7 +77,14 @@ alias awake='caffeinate -d -i -s -u'
 
 alias startsc="sudo launchctl load -w /Library/LaunchAgents/Safe.Connect.client.plist; open -a '/Applications/SafeConnect.app/Contents/MacOS/scClient'"
 alias quitsc="osascript -e 'tell application \"SafeConnect.app\" to quit';sudo launchctl unload -w /Library/LaunchAgents/Safe.Connect.client.plist"
+alias dns="networksetup -setdnsservers 'Wi-Fi' 1.1.1.1 8.8.8.8"
+alias qvpn="launchctl unload ~/Library/LaunchAgents/local.vpn.plist && networksetup -disconnectpppoeservice 'TorGuard VPN: USA' && dns"
+alias vpn="launchctl load ~/Library/LaunchAgents/local.vpn.plist && dns"
+alias wifi="/usr/bin/python3 $DOTFILES/scripts/func.py change_network_order 'Wi-Fi'"
+alias ethernet="/usr/bin/python3 $DOTFILES/scripts/func.py change_network_order 'Ethernet'"
+
 alias home="cd ~/"
+alias search="rga --rga-adapters=decompress --rga-cache-max-blob-len=200000000"
 
 if [[ "$MACHINE" == "X86" ]]; then
     export JAVA_8_HOME=$(/usr/libexec/java_home -v1.8)
@@ -102,7 +108,6 @@ elif [[ "$MACHINE" == "ARM64" ]]; then
     alias rvenv='rmvirtualenv'
     alias venv='workon'
     alias act='workon'
-    alias code="code-insiders"
 else
     # Do Nothing
 fi
@@ -150,7 +155,7 @@ function ucla() {
 }
 
 rga-fzf() {
-    RG_PREFIX="rga --files-with-matches"
+    RG_PREFIX="rga --rga-adapters=tar,sqlite,decompress,pandoc --rga-cache-max-blob-len=200000000 --files-with-matches"
     local file
     file="$(
         FZF_DEFAULT_COMMAND="$RG_PREFIX '$1'" \
@@ -160,7 +165,7 @@ rga-fzf() {
                 --preview-window="70%:wrap"
     )" &&
     echo "opening $file" &&
-    open "$file"
+    subl "$file"
 }
 
 function jdk() {
@@ -178,11 +183,18 @@ function gcd() {
   git clone "$1" && cd "$(basename "$1" .git)"
 }
 
-function upgrade(){
+function upgrade() {
     $1 -m pip install --upgrade pip
 }
 
-function sman()
-{
+function sman() {
     man $1 | col -b | subl
+}
+
+function touchid() {
+    # unset -f sudo
+    if [[ "$(uname)" == 'Darwin' ]] && ! grep 'pam_tid.so' /etc/pam.d/sudo --silent; then
+      sudo sed -i -e '1s;^;auth       sufficient     pam_tid.so\n;' /etc/pam.d/sudo
+    fi
+    # sudo "$@"
 }

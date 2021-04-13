@@ -41,37 +41,53 @@ def update_playlist():
     playlist_id = sp['playlist_id'].split(':')[-1]
     HEADERS = {"Accept":"application/json", "Content-Type":"application/json",
     "Authorization":f"Bearer {token}"}
-    r_library = requests.get(url = "https://api.spotify.com/v1/me/tracks", headers=HEADERS) 
+    r_library = requests.get(url = "https://api.spotify.com/v1/me/tracks", headers=HEADERS, params={'limit' : 50}) 
     r_existing_playlist = requests.get(url = f"https://api.spotify.com/v1/playlists/{playlist_id}", headers=HEADERS)
 
     if not r_library.ok or not r_existing_playlist.ok:
-        print("Library/Plaulist request failed")
+        print("Library/Playlist request failed")
         exit(1)
 
-    data = {'tracks': []}
+    
+    old_uris = set()
     for track in r_existing_playlist.json()['tracks']['items']:
         d = track['track']
-        data['tracks'].append({"uri": d['uri']})
-
-    r_delete = requests.delete(url=f"https://api.spotify.com/v1/playlists/{playlist_id}/tracks", headers=HEADERS, data=json.dumps(data))
-    if r_delete.ok:
-        print(r_delete.json())
-    else:
-        print("Get Playlist Failed")
-        exit(1)
+        old_uris.add(track['track']['uri'])
 
     track_uris_to_add = ''
+    new_uris = set()
     for track in r_library.json()['items']:
         dt = datetime.datetime.fromisoformat(track['added_at'].replace("Z", "+00:00"))
         days_since = (datetime.datetime.now(datetime.timezone.utc) - dt).total_seconds() / 86400.0
-        if days_since <= 60:
-            track_uris_to_add += f"{track['track']['uri']},"
+        if days_since <= 120:
+            new_uris.add(track['track']['uri'])
 
-    r_put_new_tracks = requests.put(url=f"https://api.spotify.com/v1/playlists/{playlist_id}/tracks", headers=HEADERS, params={'uris': track_uris_to_add})
+    to_delete = old_uris - new_uris
+    to_add = new_uris - old_uris
+
+    print(f'To Delete: {to_delete}')
+    print(f'To Add: {to_add}')
+
+    data_to_delete = {'tracks': []}
+    for uri in to_delete:
+        data_to_delete['tracks'].append({"uri": uri})
+
+    data_to_add = {'uris': []}
+    for uri in to_add:
+        data_to_add['uris'].append(uri)
+
+    r_delete = requests.delete(url=f"https://api.spotify.com/v1/playlists/{playlist_id}/tracks", headers=HEADERS, data=json.dumps(data_to_delete))
+    if r_delete.ok:
+        print(r_delete.json())
+    else:
+        print(f"Get Playlist Failed: {r_delete}")
+        exit(1)
+
+    r_put_new_tracks = requests.post(url=f"https://api.spotify.com/v1/playlists/{playlist_id}/tracks", headers=HEADERS, data=json.dumps(data_to_add))
     if r_put_new_tracks.ok:
         print(r_put_new_tracks.json())
     else:
-        print("Put songs into playlist failed")
+        print(f"Put songs into playlist failed: {r_put_new_tracks}")
         exit(1)
 
     print("Playlist Update Sucessful: " + datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S"))
