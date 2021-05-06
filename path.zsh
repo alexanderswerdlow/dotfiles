@@ -17,7 +17,7 @@ if [[ "$MACHINE" == "X86" ]]; then
     export PATH="/usr/local/sbin:$PATH"
     export PATH="$HOME/bin:$PATH"
     export PATH="/usr/local/Homebrew/bin:$PATH"
-    export PAGER="col -b  | open -a /Applications/Google\ Chrome.app -f"
+    # export PAGER="col -b  | open -a /Applications/Google\ Chrome.app -f"
     export JAVA_8_HOME=$(/usr/libexec/java_home -v1.8)
     export JAVA_HOME="$JAVA_8_HOME"
 elif [[ "$MACHINE" == "ARM64" ]]; then
@@ -61,4 +61,5 @@ if [[ "$OS" == "macOS" ]]; then
     ZSH_PYENV_LAZY_VIRTUALENV=true
     export SECRETS="$HOME/Documents/Programs/secrets.ini"
     export PATH="$DOTFILES/scripts:$PATH"
+    export PATH="/usr/X11/bin/xhost:$PATH"
 fi

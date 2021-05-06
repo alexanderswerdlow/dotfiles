@@ -108,6 +108,7 @@ elif [[ "$MACHINE" == "ARM64" ]]; then
     alias rvenv='rmvirtualenv'
     alias venv='workon'
     alias act='workon'
+    alias matlab="/Applications/MATLAB_R2021a.app/bin/matlab"
 else
     # Do Nothing
 fi
@@ -116,7 +117,7 @@ if [[ "$OS" == "macOS" ]]; then
     # Brew
     alias brewd="brew doctor"
     alias brewi="brew install"
-    alias brewr="brew uninstall"
+    alias brewr="brew uninstall --zap"
     alias brews="brew search"
     alias brewu="brew update && brew upgrade && brew cleanup"
 
@@ -197,4 +198,34 @@ function touchid() {
       sudo sed -i -e '1s;^;auth       sufficient     pam_tid.so\n;' /etc/pam.d/sudo
     fi
     # sudo "$@"
+}
+
+function encodeuri {
+  local string="${@}"
+  local strlen=${#string}
+  local encoded=""
+
+  for (( pos = 0; pos < strlen; pos ++ )); do
+    c=${string:$pos:1}
+    case "$c" in
+      [-_.~a-zA-Z0-9]) o="${c}" ;;
+      *) printf -v o '%%%02x' "'$c"
+    esac
+    encoded+="${o}"
+  done
+  echo "${encoded}"
+}
+
+function man {
+  if [[ -d /Applications/Setapp/Dash.app && -d "$HOME/Library/Application Support/Dash/DocSets/Man_Pages" ]]; then
+    query=`encodeuri ${@}`
+    /usr/bin/open "dash-plugin://keys=manpages&query=$query"
+  else
+    /usr/bin/man ${@}
+  fi
+}
+
+# Example Usage: matlabr script.m
+function matlabr {
+  matlab -nodisplay -nosplash -nodesktop -r "run('$1');"
 }

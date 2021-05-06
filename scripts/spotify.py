@@ -54,7 +54,6 @@ def update_playlist():
         d = track['track']
         old_uris.add(track['track']['uri'])
 
-    track_uris_to_add = ''
     new_uris = set()
     for track in r_library.json()['items']:
         dt = datetime.datetime.fromisoformat(track['added_at'].replace("Z", "+00:00"))
@@ -67,6 +66,10 @@ def update_playlist():
 
     print(f'To Delete: {to_delete}')
     print(f'To Add: {to_add}')
+
+    if not to_delete or not to_add:
+        print('Exiting early. No changes')
+        exit()
 
     data_to_delete = {'tracks': []}
     for uri in to_delete:
