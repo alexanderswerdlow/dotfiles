@@ -8,7 +8,6 @@ export DOTFILES=$HOME/Documents/dotfiles
 
 # Check for Homebrew and install if we don't have it
 if test ! $(which brew); then
-  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/alexanderswerdlow/dotfiles/master/install_xcode_command_line_tools.sh)"
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 fi
 
@@ -56,3 +55,7 @@ fi
 cat ~/.ssh/id_rsa.pub
 
 echo "Done!"
+
+should_install_command_line_tools() {
+    
+}
