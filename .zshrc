@@ -40,7 +40,7 @@ else
   fi
 fi
 
-# eval "$(starship init zsh)"
+eval "$(starship init zsh)"
 eval "$(zoxide init zsh)"
 source $DOTFILES/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

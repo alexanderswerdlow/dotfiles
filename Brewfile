@@ -2,6 +2,7 @@
 tap 'homebrew/cask'
 tap 'homebrew/cask-versions'
 tap 'homebrew/bundle'
+tap 'homebrew/cask-fonts'
 tap 'AdoptOpenJDK/openjdk'
 
 # Binaries
@@ -10,17 +11,14 @@ brew 'coreutils' # Those that come with macOS are outdated
 brew 'ffmpeg' # Audio/Video Transcoding/Streaming
 brew 'git' # Git gud
 brew 'grep' # You know...grep
-brew 'httpie' # Wget but better
 brew 'mackup' # Syncs mac preferences
 brew 'mas' # Mac App Store manager
 brew 'pkg-config' # https://github.com/driesvints/dotfiles/issues/20
-brew 'fasd' # Better cd (https://github.com/clvv/fasd)
 
 # Development
 brew 'imagemagick' # CLI image  optimizer/transformer
 brew 'yarn' # When npm is too annoying
 brew 'python' # When you need the super new syntactical sugar
-brew 'bat' # When you need a new cat
 brew 'exa' # 
 brew 'wget' # Sometimes you gotta wget things
 brew 'iperf3' # Testing LAN Speeds. Useful for getting your *actual* WiFi speed and not just the WAN/internet speed
@@ -30,8 +28,12 @@ brew 'pandoc'
 brew 'poppler'
 brew 'tesseract'
 brew 'fzf'
+brew 'pyenv'
+brew 'starship'
+brew 'zoxide'
 
 # Apps
+cask 'font-fira-code-nerd-font'
 cask '1password' # Shhhhh
 cask 'aerial' # Sweet screensaver videos taken from tvOS
 cask 'authy' # Shhhhh
@@ -59,7 +61,7 @@ cask 'intellij-idea'
 cask 'pycharm' #  Best C/C++/Java IDE if it's not a super quick edit
 cask 'alfred' # Spotlight but way better
 cask 'adoptopenjdk'
-cask 'adoptopenjdk8'
+cask 'adoptopenjdk/openjdk/adoptopenjdk8'
 
 # Wolfram Desktop - Mathematica basically
 # PDFSearch - Excellent PDF Searching + can index a whole folder of various text files
