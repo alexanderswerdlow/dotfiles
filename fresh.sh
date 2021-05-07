@@ -13,7 +13,7 @@ fi
 
 ssh-keygen -t rsa -b 4096 -N "" -f ~/.ssh/id_rsa
 
-git clone https://github.com/alexanderswerdlow/dotfiles.git $DOTFILES && cd $DOTFILES
+git clone --recurse-submodules https://github.com/alexanderswerdlow/dotfiles.git $DOTFILES && cd $DOTFILES
 
 # Update Homebrew recipes
 brew update
@@ -22,12 +22,14 @@ brew update
 brew tap homebrew/bundle
 brew bundle
 
-# Create a Sites directory
-# This is a default directory for macOS user accounts but doesn't comes pre-installed
-mkdir $HOME/Github
+echo "Cloning repositories..."
 
-# Clone Github repositories
-./clone.sh
+GITHUB=$HOME/github
+
+mkdir $GITHUB
+
+# Personal
+git clone https://github.com/alexanderswerdlow/f1tenth.git $GITHUB/f1tenth
 
 # Removes .zshrc from $HOME (if it exists) and symlinks the .zshrc file from the .dotfiles
 rm -rf $HOME/.zshrc
@@ -55,7 +57,3 @@ fi
 cat ~/.ssh/id_rsa.pub
 
 echo "Done!"
-
-should_install_command_line_tools() {
-    
-}
