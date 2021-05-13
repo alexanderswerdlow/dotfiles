@@ -3,7 +3,6 @@ alias copyssh="pbcopy < $HOME/.ssh/id_rsa.pub"
 alias reloadshell="source $HOME/.zshrc"
 alias reloaddns="dscacheutil -flushcache && sudo killall -HUP mDNSResponder"
 alias ll="/usr/local/opt/coreutils/libexec/gnubin/ls -AhlFo --color --group-directories-first"
-alias phpstorm='open -a /Applications/PhpStorm.app "`pwd`"'
 alias shrug="echo '¯\_(ツ)_/¯' | pbcopy"
 alias c="clear"
 alias reload="exec zsh"
@@ -34,6 +33,7 @@ alias docker-composer="docker-compose"
 # Git
 alias gst="git status"
 alias gb="git branch"
+alias gc="git clone"
 alias gl="git log --oneline --decorate --color"
 alias amend="git add . && git commit --amend --no-edit"
 alias commit="git add . && git commit -m"
@@ -93,7 +93,6 @@ if [[ "$MACHINE" == "X86" ]]; then
     alias java8='export JAVA_HOME=$JAVA_8_HOME && java -version'
     alias java15='export JAVA_HOME=$JAVA_15_HOME && java -version'
     alias cat='bat'
-    alias ls='exa'
 elif [[ "$MACHINE" == "ARM64" ]]; then
     # Brew
     alias abrew="arch -arm64 /opt/homebrew/bin/brew"
@@ -104,10 +103,6 @@ elif [[ "$MACHINE" == "ARM64" ]]; then
     alias ipip="/opt/homebrew/bin/python3 -m pip"
 
     alias intel='arch -x86_64'
-    alias mvenv='mkvirtualenv'
-    alias rvenv='rmvirtualenv'
-    alias venv='workon'
-    alias act='workon'
     alias matlab="/Applications/MATLAB_R2021a.app/bin/matlab"
 else
     # Do Nothing
@@ -126,6 +121,7 @@ if [[ "$OS" == "macOS" ]]; then
 
     alias bpython="$BREWPREFIX/bin/python3"
     alias bpip="$BREWPREFIX/bin/python3 -m pip"
+    alias ls='exa'
 fi
 
 function abspath() {
@@ -217,7 +213,7 @@ function encodeuri {
 }
 
 function man {
-  if [[ -d /Applications/Setapp/Dash.app && -d "$HOME/Library/Application Support/Dash/DocSets/Man_Pages" ]]; then
+  if [[ -d /Applications/Dash.app && -d "$HOME/Library/Application Support/Dash/DocSets/Man_Pages" ]]; then
     query=`encodeuri ${@}`
     /usr/bin/open "dash-plugin://keys=manpages&query=$query"
   else
