@@ -18,6 +18,9 @@ else
   export MACHINE='Other'
 fi
 
+export INTEL_BREW_PREFIX='/usr/local'
+export ARM_BREW_PREFIX='/opt/homebrew'
+
 source $DOTFILES/path.zsh
 source $DOTFILES/aliases.zsh
 
@@ -35,7 +38,9 @@ if [[ -n $SSH_CONNECTION ]]; then
   export EDITOR='nano'
 else
   if [[ "$MACHINE" == "ARM64" ]]; then
+    export EDITOR='subl -w'
   else
+    export EDITOR='subl -w'
   fi
 fi
 

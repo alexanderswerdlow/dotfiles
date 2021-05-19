@@ -3,6 +3,7 @@ tap 'homebrew/cask'
 tap 'homebrew/cask-versions'
 tap 'homebrew/bundle'
 tap 'homebrew/cask-fonts'
+tap 'homebrew/autoupdate'
 tap 'AdoptOpenJDK/openjdk'
 
 # Binaries

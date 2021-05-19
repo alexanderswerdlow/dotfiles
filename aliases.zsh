@@ -9,6 +9,8 @@ alias reload="exec zsh"
 
 # Directories
 alias library="cd $HOME/Library"
+alias subl="/Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl"
+alias st="subl"
 alias dotfiles="code $DOTFILES"
 alias aliases="subl $DOTFILES/aliases.zsh"
 alias paths="subl $DOTFILES/path.zsh"
@@ -50,7 +52,7 @@ alias wip="commit wip"
 
 # Python
 alias venv="python3 -m venv"
-alias act="source ./bin/activate"
+# alias act="source ./bin/activate"
 alias deact="deactivate"
 
 alias empty-trash="sudo rm -frv /Volumes/*/.Trashes; \
@@ -87,11 +89,6 @@ alias home="cd ~/"
 alias search="rga --rga-adapters=decompress --rga-cache-max-blob-len=200000000"
 
 if [[ "$MACHINE" == "X86" ]]; then
-    export JAVA_8_HOME=$(/usr/libexec/java_home -v1.8)
-    export JAVA_15_HOME=$(/usr/libexec/java_home -v15)
-
-    alias java8='export JAVA_HOME=$JAVA_8_HOME && java -version'
-    alias java15='export JAVA_HOME=$JAVA_15_HOME && java -version'
     alias cat='bat'
 elif [[ "$MACHINE" == "ARM64" ]]; then
     # Brew
@@ -122,6 +119,12 @@ if [[ "$OS" == "macOS" ]]; then
     alias bpython="$BREWPREFIX/bin/python3"
     alias bpip="$BREWPREFIX/bin/python3 -m pip"
     alias ls='exa'
+
+    export JAVA_8_HOME=$(/usr/libexec/java_home -v1.8)
+    export JAVA_16_HOME=$(/usr/libexec/java_home -v16)
+
+    alias java8='export JAVA_HOME=$JAVA_8_HOME && java -version'
+    alias java16='export JAVA_HOME=$JAVA_16_HOME && java -version'
 fi
 
 function abspath() {
