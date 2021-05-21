@@ -86,10 +86,11 @@ alias wifi="/usr/bin/python3 $DOTFILES/scripts/func.py change_network_order 'Wi-
 alias ethernet="/usr/bin/python3 $DOTFILES/scripts/func.py change_network_order 'Ethernet'"
 
 alias home="cd ~/"
-alias search="rga --rga-adapters=decompress --rga-cache-max-blob-len=200000000"
+alias search="rga --no-messages"
+alias ssearch="rga --rga-adapters=+pdfpages,tesseract --no-messages"
 
 if [[ "$MACHINE" == "X86" ]]; then
-    alias cat='bat'
+    # Do Nothing
 elif [[ "$MACHINE" == "ARM64" ]]; then
     # Brew
     alias abrew="arch -arm64 /opt/homebrew/bin/brew"
@@ -100,6 +101,7 @@ elif [[ "$MACHINE" == "ARM64" ]]; then
     alias ipip="/opt/homebrew/bin/python3 -m pip"
 
     alias intel='arch -x86_64'
+    alias arm='arch -arm64'
     alias matlab="/Applications/MATLAB_R2021a.app/bin/matlab"
 else
     # Do Nothing
@@ -112,6 +114,7 @@ if [[ "$OS" == "macOS" ]]; then
     alias brewr="brew uninstall --zap"
     alias brews="brew search"
     alias brewu="brew update && brew upgrade && brew cleanup"
+    alias ibrewu="ibrew update && ibrew upgrade && ibrew cleanup"
 
     alias spython="/usr/bin/python3"
     alias spip="/usr/bin/python3 -m pip"
@@ -119,12 +122,21 @@ if [[ "$OS" == "macOS" ]]; then
     alias bpython="$BREWPREFIX/bin/python3"
     alias bpip="$BREWPREFIX/bin/python3 -m pip"
     alias ls='exa'
+    alias cat='bat --paging=never'
 
     export JAVA_8_HOME=$(/usr/libexec/java_home -v1.8)
     export JAVA_16_HOME=$(/usr/libexec/java_home -v16)
 
     alias java8='export JAVA_HOME=$JAVA_8_HOME && java -version'
     alias java16='export JAVA_HOME=$JAVA_16_HOME && java -version'
+
+    export CHROME="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+    export PROFILE_BASE="$HOME/Profiles"
+
+    alias ccchrome='chrome-private.sh --name temp --delete'
+    alias cchrome="chrome-private.sh --root-profile $PROFILE_BASE/fresh --name temp --delete"
+    alias chrome="chrome-private.sh --root-profile $PROFILE_BASE/base --name temp --delete"
+    alias echrome="chrome-private.sh --profile $PROFILE_BASE/base"
 fi
 
 function abspath() {
@@ -154,18 +166,27 @@ function ucla() {
     run_rsync "$local" "$server:$remote"; fswatch -o . | while read f; do run_rsync "$local" "$server:$remote"; done
 }
 
-rga-fzf() {
-    RG_PREFIX="rga --rga-adapters=tar,sqlite,decompress,pandoc --rga-cache-max-blob-len=200000000 --files-with-matches"
-    local file
-    file="$(
-        FZF_DEFAULT_COMMAND="$RG_PREFIX '$1'" \
-            fzf --sort --preview="[[ ! -z {} ]] && rga --pretty --context 5 {q} {}" \
-                --phony -q "$1" \
-                --bind "change:reload:$RG_PREFIX {q}" \
-                --preview-window="70%:wrap"
-    )" &&
-    echo "opening $file" &&
-    subl "$file"
+function rga-fzf() {
+	RG_PREFIX="rga --files-with-matches"
+	local file
+	file="$(
+		FZF_DEFAULT_COMMAND="$RG_PREFIX '$1'" \
+			fzf --sort --preview="[[ ! -z {} ]] && rga --pretty --context 5 {q} {}" \
+				--phony -q "$1" \
+				--bind "change:reload:$RG_PREFIX {q}" \
+				--preview-window="70%:wrap"
+	)" &&
+	echo "opening $file" &&
+	subl "$file"
+}
+
+function rg-fzf(){
+  INITIAL_QUERY=""
+  RG_PREFIX="rg --column --line-number --no-heading --color=always --smart-case "
+  FZF_DEFAULT_COMMAND="$RG_PREFIX '$INITIAL_QUERY'" \
+    fzf --bind "change:reload:$RG_PREFIX {q} || true" \
+        --ansi --disabled --query "$INITIAL_QUERY" \
+        --height=50% --layout=reverse
 }
 
 function jdk() {

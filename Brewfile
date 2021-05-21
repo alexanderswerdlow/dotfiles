@@ -32,6 +32,7 @@ brew 'fzf'
 brew 'pyenv'
 brew 'starship'
 brew 'zoxide'
+brew 'wgcf'
 
 cask 'font-fira-code-nerd-font'
 cask 'adoptopenjdk'
