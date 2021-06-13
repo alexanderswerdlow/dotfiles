@@ -11,7 +11,7 @@ alias reload="exec zsh"
 alias library="cd $HOME/Library"
 alias subl="/Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl"
 alias st="subl"
-alias dotfiles="code $DOTFILES"
+alias dotfiles="subl $DOTFILES"
 alias aliases="subl $DOTFILES/aliases.zsh"
 alias paths="subl $DOTFILES/path.zsh"
 alias '..'="cd .."
@@ -39,7 +39,6 @@ alias gc="git clone"
 alias gl="git log --oneline --decorate --color"
 alias amend="git add . && git commit --amend --no-edit"
 alias commit="git add . && git commit -m"
-alias diff="git diff"
 alias force="git push --force"
 alias nuke="git clean -df && git reset --hard"
 alias pop="git stash pop"
@@ -52,7 +51,13 @@ alias wip="commit wip"
 
 # Python
 alias venv="python3 -m venv"
-# alias act="source ./bin/activate"
+alias act="source ./bin/activate"
+
+# alias np="ptpython"
+# alias p="ptpython -i"
+# export PYTHONSTARTUP=$HOME/.pythonstartup
+# export PTPYTHON_CONFIG_HOME=/Users/aswerdlow/.ptpython
+
 alias deact="deactivate"
 
 alias empty-trash="sudo rm -frv /Volumes/*/.Trashes; \
@@ -89,20 +94,24 @@ alias home="cd ~/"
 alias search="rga --no-messages"
 alias ssearch="rga --rga-adapters=+pdfpages,tesseract --no-messages"
 
+alias carbon="carbon-now -h -c"
+
 if [[ "$MACHINE" == "X86" ]]; then
-    # Do Nothing
+    alias unifi='JAVA_VERSION=1.8 java -jar /Applications/UniFi.app/Contents/Resources/lib/ace.jar ui'
+    alias matlab="/Applications/MATLAB_R2020b.app/bin/matlab"
 elif [[ "$MACHINE" == "ARM64" ]]; then
     # Brew
     alias abrew="arch -arm64 /opt/homebrew/bin/brew"
     alias ibrew="arch -x86_64 /usr/local/bin/brew"
     alias brew=abrew
 
-    alias ipython="/opt/homebrew/bin/python3"
-    alias ipip="/opt/homebrew/bin/python3 -m pip"
+    alias ipython="/usr/local/bin/python3"
+    alias ipip="/usr/local/bin/python3 -m pip"
 
     alias intel='arch -x86_64'
     alias arm='arch -arm64'
-    alias matlab="/Applications/MATLAB_R2021a.app/bin/matlab"
+    alias matlabb="/Applications/MATLAB_R2021a.app/bin/matlab"
+    alias matlab="matlabb -nodisplay -nosplash -nodesktop"
 else
     # Do Nothing
 fi
@@ -119,8 +128,14 @@ if [[ "$OS" == "macOS" ]]; then
     alias spython="/usr/bin/python3"
     alias spip="/usr/bin/python3 -m pip"
 
-    alias bpython="$BREWPREFIX/bin/python3"
-    alias bpip="$BREWPREFIX/bin/python3 -m pip"
+    #alias bpython="$BREWPREFIX/bin/python3"
+    #alias bpip="$BREWPREFIX/bin/python3 -m pip"
+
+    alias ibpython="$INTEL_BREW_PREFIX/bin/python3"
+    alias ibpip="$INTEL_BREW_PREFIX/bin/python3 -m pip"
+
+    export PYENV_VIRTUALENV_DISABLE_PROMPT=1
+
     alias ls='exa'
     alias cat='bat --paging=never'
 
@@ -247,5 +262,5 @@ function man {
 
 # Example Usage: matlabr script.m
 function matlabr {
-  matlab -nodisplay -nosplash -nodesktop -r "run('$1');"
+  matlabb -nodisplay -nosplash -nodesktop -r "run('$1');"
 }

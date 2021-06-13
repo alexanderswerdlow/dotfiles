@@ -21,27 +21,29 @@ if [[ "$OS" == "macOS" ]]; then
             "$BREWPREFIX/opt/python/libexec/bin"
             "$BREWPREFIX/sbin"
             "$BREWPREFIX/bin"
-            "$BREWPREFIX/coreutils/libexec/gnubin"
-            "$BREWPREFIX/opt/gnu-tar/libexec/gnubin"
             "node_modules/.bin:vendor/bin"
             "/usr/bin"
             "/bin"
             "/usr/sbin"
             "/sbin"
             $path)
+
+    # "$BREWPREFIX/coreutils/libexec/gnubin"
+    # "$BREWPREFIX/opt/grep/libexec/gnubin"
+    # "$BREWPREFIX/opt/gnu-tar/libexec/gnubin"
+    # "$BREWPREFIX/opt/make/libexec/gnubin"
 fi
 
 
 if [[ "$MACHINE" == "X86" ]]; then
     path+=("$HOME/go/bin")
 
-    # "$BREWPREFIX/lib/python3.9/site-packages"
-    # "$HOME/Library/Python/3.9/lib/python/site-packages"
 elif [[ "$MACHINE" == "ARM64" ]]; then
 
     path+=( "$ARM_BREW_PREFIX/opt/openssl@1.1/bin"
+            "$INTEL_BREW_PREFIX/opt/python@3.9/libexec/bin"
             "$INTEL_BREW_PREFIX/bin"
-            "$INTEL_BREW_PREFIX/sbin")
+            "$INTEL_BREW_PREFIX/sbin" )
 
     export PYENV_ROOT="$HOME/.pyenv"
     export GEM_HOME="$HOME/.gem"

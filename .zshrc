@@ -49,21 +49,6 @@ eval "$(zoxide init zsh)"
 source $DOTFILES/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-# ## https://stackoverflow.com/a/48679640
-# ARCH="$(uname -m)"
-# case ARCH in
-#     i386)   ARCH="386" ;;
-#     i686)   ARCH="386" ;;
-#     x86_64) ARCH="amd64" ;;
-#     arm)    dpkg --print-architecture | grep -q "arm64" && ARCH="arm64" || ARCH="arm" ;;
-# esac
-
-# if [[ "${ARCH}"  == "arm64" ]]; then
-#     PREFIX="/opt/homebrew"
-# else
-#     PREFIX="/usr/local"
-# fi
-
 # # https://github.com/pyenv/pyenv/issues/1768
 # SDK_PATH="$(xcrun --show-sdk-path)"
 # export CPATH="${SDK_PATH}/usr/include"
@@ -71,4 +56,4 @@ source $DOTFILES/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 # export CFLAGS="-I${SDK_PATH}/usr/include $CFLAGS"
 # export CFLAGS="-I${PREFIX}/include $CFLAGS"
 # export LDFLAGS="-L${SDK_PATH}/usr/lib $LDFLAGS"
-# export LDFLAGS="-L${PREFIX}/lib $LDFLAGS"
+# export LDFLAGS="-L${PREFIX}/lib $LDFLAGS"export PATH="/usr/local/opt/proj@7/bin:$PATH"

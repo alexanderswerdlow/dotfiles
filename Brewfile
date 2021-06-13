@@ -8,6 +8,7 @@ tap 'AdoptOpenJDK/openjdk'
 
 # Binaries
 brew 'bash' # Latest Bash version
+brew 'zsh'
 brew 'coreutils' # Those that come with macOS are outdated
 brew 'ffmpeg' # Audio/Video Transcoding/Streaming
 brew 'git' # Git gud
@@ -17,26 +18,27 @@ brew 'mas' # Mac App Store manager
 brew 'pkg-config' # https://github.com/driesvints/dotfiles/issues/20
 
 # Development
-brew 'imagemagick' # CLI image  optimizer/transformer
+brew 'imagemagick' # CLI image optimizer/transformer
 brew 'yarn' # When npm is too annoying
 brew 'python' # When you need the super new syntactical sugar
-brew 'exa' # 
+brew 'exa' # ls alternative
+brew 'bat' # cat alternative
 brew 'wget' # Sometimes you gotta wget things
 brew 'iperf3' # Testing LAN Speeds. Useful for getting your *actual* WiFi speed and not just the WAN/internet speed
 brew 'wireguard-tools' # VPN
-brew 'rga'
-brew 'pandoc'
+brew 'rga' # Search utility based off of ripgrep
+brew 'pandoc' # File conversion utility
 brew 'poppler'
-brew 'tesseract'
-brew 'fzf'
-brew 'pyenv'
-brew 'starship'
-brew 'zoxide'
-brew 'wgcf'
+brew 'tesseract' # OCR
+brew 'fzf' # Fuzzy finder
+brew 'pyenv' # Python version manager
+brew 'starship' # Terminal prompt
+brew 'zoxide' # Z 
+brew 'wgcf' # Cloudflare Warp
 
-cask 'font-fira-code-nerd-font'
-cask 'adoptopenjdk'
-cask 'adoptopenjdk/openjdk/adoptopenjdk8'
+cask 'font-fira-code-nerd-font' # Font for starship
+cask 'adoptopenjdk' # Latest JDK
+cask 'adoptopenjdk/openjdk/adoptopenjdk8' # JDK 8 will never die
 
 unless ENV.has_key?('FAST') || ENV.has_key?('CI') then
   cask '1password' # Shhhhh
