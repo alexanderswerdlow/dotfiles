@@ -44,6 +44,8 @@ else
   fi
 fi
 
+export $(awk '{print $0}' $SECRETS | grep -E '^\w' | sed 's/ = /=/')
+
 eval "$(starship init zsh)"
 eval "$(zoxide init zsh)"
 source $DOTFILES/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh

@@ -21,17 +21,6 @@ alias gp="git peek"
 # JS
 alias nfresh="rm -rf node_modules/ package-lock.json && npm install"
 
-# Vagrant
-alias v="vagrant global-status"
-alias vup="vagrant up"
-alias vhalt="vagrant halt"
-alias vssh="vagrant ssh"
-alias vreload="vagrant reload"
-alias vrebuild="vagrant destroy --force && vagrant up"
-
-# Docker
-alias docker-composer="docker-compose"
-
 # Git
 alias gst="git status"
 alias gb="git branch"
@@ -52,12 +41,6 @@ alias wip="commit wip"
 # Python
 alias venv="python3 -m venv"
 alias act="source ./bin/activate"
-
-# alias np="ptpython"
-# alias p="ptpython -i"
-# export PYTHONSTARTUP=$HOME/.pythonstartup
-# export PTPYTHON_CONFIG_HOME=/Users/aswerdlow/.ptpython
-
 alias deact="deactivate"
 
 alias empty-trash="sudo rm -frv /Volumes/*/.Trashes; \
@@ -66,7 +49,6 @@ alias empty-trash="sudo rm -frv /Volumes/*/.Trashes; \
                    sqlite3 ~/Library/Preferences/com.apple.LaunchServices.QuarantineEventsV* 'delete from LSQuarantineEvent'"
 
 alias local-ip="ipconfig getifaddr en0"
-
 alias seas="ssh -R 52698:localhost:52698 swerdlow@lnxsrv09.seas.ucla.edu"
 alias seas6="ssh -R 52698:localhost:52698 swerdlow@lnxsrv06.seas.ucla.edu"
 alias seas11="ssh -R 52698:localhost:52698 swerdlow@lnxsrv11.seas.ucla.edu"
@@ -85,7 +67,7 @@ alias awake='caffeinate -d -i -s -u'
 alias startsc="sudo launchctl load -w /Library/LaunchAgents/Safe.Connect.client.plist; open -a '/Applications/SafeConnect.app/Contents/MacOS/scClient'"
 alias quitsc="osascript -e 'tell application \"SafeConnect.app\" to quit';sudo launchctl unload -w /Library/LaunchAgents/Safe.Connect.client.plist"
 alias dns="networksetup -setdnsservers 'Wi-Fi' 1.1.1.1 8.8.8.8"
-alias qvpn="launchctl unload ~/Library/LaunchAgents/local.vpn.plist && networksetup -disconnectpppoeservice 'TorGuard VPN: USA' && dns"
+alias qvpn="launchctl unload ~/Library/LaunchAgents/local.vpn.plist && networksetup -disconnectpppoeservice 'TorGuard Dedicated' && dns"
 alias vpn="launchctl load ~/Library/LaunchAgents/local.vpn.plist && dns"
 alias wifi="/usr/bin/python3 $DOTFILES/scripts/func.py change_network_order 'Wi-Fi'"
 alias ethernet="/usr/bin/python3 $DOTFILES/scripts/func.py change_network_order 'Ethernet'"
@@ -95,6 +77,7 @@ alias search="rga --no-messages"
 alias ssearch="rga --rga-adapters=+pdfpages,tesseract --no-messages"
 
 alias carbon="carbon-now -h -c"
+export FZF_DEFAULT_COMMAND='fd --type file -E "*.jpg" -E "*.html" -E "*.htm" -E "*.txt"'
 
 if [[ "$MACHINE" == "X86" ]]; then
     alias unifi='JAVA_VERSION=1.8 java -jar /Applications/UniFi.app/Contents/Resources/lib/ace.jar ui'
@@ -128,8 +111,8 @@ if [[ "$OS" == "macOS" ]]; then
     alias spython="/usr/bin/python3"
     alias spip="/usr/bin/python3 -m pip"
 
-    #alias bpython="$BREWPREFIX/bin/python3"
-    #alias bpip="$BREWPREFIX/bin/python3 -m pip"
+    alias bpython="$BREWPREFIX/bin/python3"
+    alias bpip="$BREWPREFIX/bin/python3 -m pip"
 
     alias ibpython="$INTEL_BREW_PREFIX/bin/python3"
     alias ibpip="$INTEL_BREW_PREFIX/bin/python3 -m pip"
