@@ -22,7 +22,7 @@ export INTEL_BREW_PREFIX='/usr/local'
 export ARM_BREW_PREFIX='/opt/homebrew'
 
 source $DOTFILES/path.zsh
-source $DOTFILES/aliases.zsh
+source $DOTFILES/shortcuts/aliases.zsh
 
 # Random
 if [[ "$OS" == "macOS" ]]; then
@@ -58,4 +58,6 @@ source $DOTFILES/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 # export CFLAGS="-I${SDK_PATH}/usr/include $CFLAGS"
 # export CFLAGS="-I${PREFIX}/include $CFLAGS"
 # export LDFLAGS="-L${SDK_PATH}/usr/lib $LDFLAGS"
-# export LDFLAGS="-L${PREFIX}/lib $LDFLAGS"export PATH="/usr/local/opt/proj@7/bin:$PATH"
+# export LDFLAGS="-L${PREFIX}/lib $LDFLAGS"
+
+# source ~/.zpyi/zpyi.zsh

@@ -1,4 +1,4 @@
-import subprocess, re, fire, time, datetime, os, shutil, configparser, shlex
+import subprocess, re, fire, time, datetime, os, shutil, configparser, shlex, requests
 
 def exec(command: str, combine_output: bool = True, timeout: int=None, raw_process: bool = False):
     if raw_process:
@@ -54,16 +54,30 @@ def check_connection():
     home_loc = os.getenv('HOME')
     ping_output = exec(f'ping -c1 google.com', raw_process=True)
     wget_output = exec(f'wget --spider http://example.com', raw_process=True)
-    datestr = f'NETWORK CHECK at : {str(datetime.datetime.now())}:'
+    datestr = f'NETWORK CHECK at: {str(datetime.datetime.now())}:'
     with open(f"{home_loc}/tmp/network_log.txt", "a") as file:
         if ping_output.returncode == 0 and wget_output.returncode == 0:
             file.write(f'{datestr} SUCCEEDED\n')
-            file.write(f'Ping: {ping_output.stdout}\n')
-            file.write(f'Wget: {wget_output.stdout}\n\n')
         else:
             file.write(f'{datestr} FAILED\n')
             file.write(f'Ping: {ping_output.stdout}\n')
             file.write(f'Wget: {wget_output.stdout}\n\n')
+
+def update_dynamic_dns():
+    secrets_file = os.environ['SECRETS']
+    config = configparser.ConfigParser()
+    config.read(secrets_file)
+    sp = config['cloudflare']
+    ip_addr = requests.get('https://icanhazip.com')
+    if not ip_addr.ok:
+        print(f"Get IP Failed: {ip_addr}")
+    body = {'type': 'A', 'name': sp["domain"], 'content': ip_addr.text, 'ttl': '1', 'proxied': True}
+    header = { 'Authorization': f'Bearer {sp["cloudflare_token"]}', 'Content-type': 'application/json'}
+    update_dns = requests.put(url=f'https://api.cloudflare.com/client/v4/zones/{sp["zone"]}/dns_records/{sp["identifier"]}', json=body, headers=header)
+    if update_dns.ok:
+        print(update_dns.json(), ip_addr.text)
+    else:
+        print(f"Update Dynamic DNS Failed {update_dns}, {update_dns.json()}, {header}, {update_dns.url}")
 
 if __name__ == '__main__':
     fire.Fire()

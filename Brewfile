@@ -35,6 +35,11 @@ brew 'pyenv' # Python version manager
 brew 'starship' # Terminal prompt
 brew 'zoxide' # Z 
 brew 'wgcf' # Cloudflare Warp
+brew 'pyenv'
+brew 'pyenv-virtualenv'
+brew 'curl'
+brew 'gh'
+brew 'opencv'
 
 cask 'font-fira-code-nerd-font' # Font for starship
 cask 'adoptopenjdk' # Latest JDK
@@ -86,10 +91,13 @@ unless ENV.has_key?('FAST') || ENV.has_key?('CI') then
   cask 'quicklookase'
   cask 'qlvideo'
   cask 'provisionql'
+  cask 'basictex'
 
   mas 'Speedtest', id: 1153157709 # Get that speed
   mas 'Notability', id: 736189492 # favorite iPad note taking app, syncs notes to iCloud
   mas 'Magnet', id: 441258766 # macOS window manager
   mas 'Newton - Supercharged emailing', id: 1059655371 # Dope email client
   mas 'nPlayer', id: 1451273814 # Plays back some video files smoother than IINA + better FTP/AFP playback
+  mas "FSNotes", id: 1277179284
+  mas "Xcode", id: 497799835
 end
