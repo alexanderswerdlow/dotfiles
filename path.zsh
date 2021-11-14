@@ -1,19 +1,21 @@
+export PYENV_ROOT="$HOME/.pyenv"
+export ZSH_PYENV_LAZY_VIRTUALENV=true
+export HOMEBREW_NO_ANALYTICS=1
+export HOMEBREW_NO_INSECURE_REDIRECT=1
+export HOMEBREW_CASK_OPTS=--require-sha
+export HOMEBREW_AUTO_UPDATE_SECS="604800"
+
+# Remove duplicates
+typeset -U path
+
+path+=("$PYENV_ROOT/bin")
+
 # Global macOS exports/paths here
 if [[ "$OS" == "macOS" ]]; then
-    export ZSH_PYENV_LAZY_VIRTUALENV=true
     export SECRETS="$HOME/Documents/Programs/secrets.ini"
-    export HOMEBREW_NO_ANALYTICS=1
-    export HOMEBREW_NO_INSECURE_REDIRECT=1
-    export HOMEBREW_CASK_OPTS=--require-sha
-    export HOMEBREW_AUTO_UPDATE_SECS="604800"
     export MUJOCO_PY_MUJOCO_PATH="$HOME/.mujoco/mujoco210"
     export PAGER="col -b  | open -a /Applications/Google\ Chrome.app -f"
-    export PYENV_ROOT="$HOME/.pyenv"
     export STREET_VIEW_DATA_DIR="/Volumes/GoogleDrive/Shared drives/EE209AS/data"
-    # export HOMEBREW_NO_AUTO_UPDATE="1"
-
-    # Remove duplicates
-    typeset -U path
 
     path=(  "$DOTFILES/scripts"
             "$HOME/bin"
@@ -43,7 +45,6 @@ if [[ "$MACHINE" == "X86" ]]; then
     path+=("$MUJOCO_PY_MUJOCO_PATH/bin")
 
 elif [[ "$MACHINE" == "ARM64" ]]; then
-
     path+=( "$INTEL_BREW_PREFIX/opt/python@3.9/libexec/bin"
             "$INTEL_BREW_PREFIX/bin"
             "$INTEL_BREW_PREFIX/sbin"

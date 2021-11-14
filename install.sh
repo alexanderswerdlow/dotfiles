@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -e
+
 if uname | grep -q 'darwin'; then
     echo 'Running on macOS. Rethinking life'
     exit 1
@@ -14,6 +16,7 @@ export DOTFILES=$HOME/dotfiles
 # Check for Homebrew and install if we don't have it
 if test ! $(which brew); then
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 fi
 
 ssh-keygen -t rsa -b 4096 -N "" -f ~/.ssh/id_rsa
@@ -22,7 +25,7 @@ git clone --recurse-submodules https://github.com/alexanderswerdlow/dotfiles.git
 
 # Brew
 brew update
-brew install zoxide starship gcc
+brew install zoxide starship gcc pyenv pyenv-virtualenv
 
 # Docker
 curl -fsSL https://get.docker.com -o get-docker.sh

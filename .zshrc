@@ -28,8 +28,11 @@ source $DOTFILES/shortcuts/aliases.zsh
 if [[ "$OS" == "macOS" ]]; then
   source $DOTFILES/plugins/pyenv-lazy/pyenv-lazy.plugin.zsh
   source ~/.iterm2_shell_integration.zsh
+  export $(awk '{print $0}' $SECRETS | grep -E '^\w' | sed 's/ = /=/')
 elif [[ "$OS" == "Linux" ]]; then
   eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+  eval "$(pyenv init -)"
+  eval "$(pyenv virtualenv-init -)"
 fi
 
 export LC_ALL=en_US.UTF-8
@@ -46,7 +49,7 @@ else
   fi
 fi
 
-export $(awk '{print $0}' $SECRETS | grep -E '^\w' | sed 's/ = /=/')
+
 
 eval "$(starship init zsh)"
 eval "$(zoxide init zsh)"

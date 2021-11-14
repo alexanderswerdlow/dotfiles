@@ -23,6 +23,12 @@ If you did all of the above you may now follow these install instructions to set
 xcode-select --install
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/alexanderswerdlow/dotfiles/master/fresh.sh)"
 ```
+
+For Ubuntu:
+```
+wget -O - https://raw.githubusercontent.com/alexanderswerdlow/dotfiles/master/install.sh | sh
+```
+
 2. After mackup is synced with your cloud storage, restore preferences by running `mackup restore`
 3. Restart your computer to finalize the process
 
