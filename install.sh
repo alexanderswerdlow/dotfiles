@@ -19,7 +19,13 @@ if test ! $(which brew); then
   eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 fi
 
-ssh-keygen -t rsa -b 4096 -N "" -f ~/.ssh/id_rsa
+if [ ! -f ~/.ssh/id_rsa ]; then
+    ssh-keygen -t rsa -b 4096 -N "" -f ~/.ssh/id_rsa
+fi
+
+if [ -d "$HOME/dotfiles" ]; then
+    rm -rf $HOME/dotfiles
+fi
 
 git clone --recurse-submodules https://github.com/alexanderswerdlow/dotfiles.git $DOTFILES && cd $DOTFILES
 
