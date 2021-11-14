@@ -8,8 +8,7 @@ if uname | grep -q 'darwin'; then
 fi
 
 sudo apt-get update
-
-sudo apt-get install -y zsh fzf wget unzip curl sudo git
+sudo apt-get install -y zsh fzf wget unzip curl sudo git gcc g++ cmake build-essential
 
 export DOTFILES=$HOME/dotfiles
 
@@ -27,11 +26,11 @@ if [ -d "$HOME/dotfiles" ]; then
     rm -rf $HOME/dotfiles
 fi
 
-git clone --recurse-submodules https://github.com/alexanderswerdlow/dotfiles.git $DOTFILES && cd $DOTFILES
+git clone --recurse-submodules https://github.com/alexanderswerdlow/dotfiles.git $DOTFILES
 
 # Brew
 brew update
-brew install zoxide starship gcc pyenv pyenv-virtualenv
+brew install zoxide starship gcc pyenv pyenv-virtualenv bat exa
 
 # Docker
 curl -fsSL https://get.docker.com -o get-docker.sh
@@ -42,19 +41,16 @@ wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 sudo dpkg -i --force-depends google-chrome-stable_current_amd64.deb
 
 sudo sed s/required/sufficient/g -i /etc/pam.d/chsh
-
 sudo chsh -s $(which zsh) $USER
 
-mv $HOME/.zshrc $HOME/.zshrc_default
+test -r $HOME/.zshrc && mv $HOME/.zshrc $HOME/.zshrc_default
+test -r $HOME/.bash_profile && cp $HOME/.bash_profile $HOME/.bash_profile_default
+ln -s $DOTFILES/.zshrc $HOME/.zshrc
 
-ln -s $HOME/dotfiles/.zshrc $HOME/.zshrc
-
-cp $HOME/.bashrc $HOME/.bashrc_default
-
-echo 'exec zsh' > $HOME/.bashrc
-
-mkdir $HOME/.zsh
-
+mkdir -p $HOME/.zsh
+test -d ~/.zsh/zsh-autosuggestions && rm -rf ~/.zsh/zsh-autosuggestions
 git clone https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosuggestions
 
+sudo apt-get autoclean
+sudo apt-get clean
 sudo apt-get autoremove -y
