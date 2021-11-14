@@ -31,7 +31,7 @@ if [[ "$OS" == "macOS" ]]; then
   export $(awk '{print $0}' $SECRETS | grep -E '^\w' | sed 's/ = /=/')
 elif [[ "$OS" == "Linux" ]]; then
   eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-  eval "$(pyenv init -)"
+  eval "$(pyenv init --path)"
   eval "$(pyenv virtualenv-init -)"
 fi
 
