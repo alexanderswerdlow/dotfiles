@@ -1,4 +1,4 @@
-export DOTFILES=$HOME/Documents/dotfiles
+export DOTFILES=$HOME/dotfiles
 
 # Determine what type of machine we're running on
 # This affects what we source, put on our path, and which aliases we use
@@ -28,6 +28,8 @@ source $DOTFILES/shortcuts/aliases.zsh
 if [[ "$OS" == "macOS" ]]; then
   source $DOTFILES/plugins/pyenv-lazy/pyenv-lazy.plugin.zsh
   source ~/.iterm2_shell_integration.zsh
+elif [[ "$OS" == "Linux" ]]; then
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 fi
 
 export LC_ALL=en_US.UTF-8
@@ -50,6 +52,7 @@ eval "$(starship init zsh)"
 eval "$(zoxide init zsh)"
 source $DOTFILES/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
 
 # # https://github.com/pyenv/pyenv/issues/1768
 # SDK_PATH="$(xcrun --show-sdk-path)"

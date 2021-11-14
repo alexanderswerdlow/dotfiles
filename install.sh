@@ -9,7 +9,28 @@ sudo apt-get update
 
 sudo apt-get install -y zsh fzf wget unzip curl sudo git
 
-curl -fsSL https://starship.rs/install.sh | bash -s -- -y
+export DOTFILES=$HOME/dotfiles
+
+# Check for Homebrew and install if we don't have it
+if test ! $(which brew); then
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+fi
+
+ssh-keygen -t rsa -b 4096 -N "" -f ~/.ssh/id_rsa
+
+git clone --recurse-submodules https://github.com/alexanderswerdlow/dotfiles.git $DOTFILES && cd $DOTFILES
+
+# Brew
+brew update
+brew install zoxide starship gcc
+
+# Docker
+curl -fsSL https://get.docker.com -o get-docker.sh
+sudo sh get-docker.sh
+
+# Chrome
+wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+sudo dpkg -i --force-depends google-chrome-stable_current_amd64.deb
 
 sudo sed s/required/sufficient/g -i /etc/pam.d/chsh
 
@@ -26,7 +47,5 @@ echo 'exec zsh' > $HOME/.bashrc
 mkdir $HOME/.zsh
 
 git clone https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosuggestions
-
-curl --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/ajeetdsouza/zoxide/master/install.sh | sh
 
 sudo apt-get autoremove -y

@@ -4,7 +4,7 @@ set -e
 
 echo "Setting up your Mac..."
 
-export DOTFILES=$HOME/Documents/dotfiles
+export DOTFILES=$HOME/dotfiles
 
 # Check for Homebrew and install if we don't have it
 if test ! $(which brew); then

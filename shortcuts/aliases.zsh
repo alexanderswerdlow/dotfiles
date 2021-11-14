@@ -12,6 +12,7 @@ alias aliases="subl $DOTFILES/aliases.zsh"
 alias paths="subl $DOTFILES/path.zsh"
 alias '..'="cd .."
 alias '...'="cd ../../"
+alias size='du -h -d 1'
 
 # Files
 alias untar="tar -xvzf"
