@@ -7,6 +7,8 @@ if uname | grep -q 'darwin'; then
     exit 1
 fi
 
+sudo echo "I must be run with root permissions (not as root though!)"
+
 sudo apt-get update
 sudo apt-get install -y zsh fzf wget unzip curl sudo git gcc g++ cmake build-essential
 
