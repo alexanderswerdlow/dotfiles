@@ -3,7 +3,7 @@
 set -e
 
 # Determine what type of machine we're running on
-if [[ "$(uname)" == "Darwin" ]]; then
+if [ "$(uname)" = "Darwin" ]; then
   export SETUP_OS="macos"
 else
   export SETUP_OS="ubuntu"
@@ -11,11 +11,11 @@ fi
 
 sudo echo "Setting up your $OS machine..."
 
-export DOTFILES=$HOME/dotfiles
-export GITHUB=$HOME/github
+export DOTFILES="$HOME/dotfiles"
+export GITHUB="$HOME/github"
 
 # Check for Homebrew and install if we don't have it
-if test ! $(which brew); then
+if test ! "$(which brew)"; then
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 fi
 
@@ -27,17 +27,17 @@ if [ ! -f ~/.ssh/id_rsa ]; then
 fi
 
 if [ -d "$DOTFILES" ]; then
-    rm -rf $DOFILES
+    rm -rf "$DOTFILES"
 fi
 
-git clone --recurse-submodules https://github.com/alexanderswerdlow/dotfiles.git $DOTFILES
+git clone --recurse-submodules https://github.com/alexanderswerdlow/dotfiles.git "$DOTFILES"
 
-test -r $HOME/.zshrc && mv $HOME/.zshrc $HOME/.zshrc_default # Preserve .zshrc is previously existed
-ln -s $DOTFILES/.zshrc $HOME/.zshrc
+test -r "$HOME/.zshrc" && mv "$HOME/.zshrc" "$HOME/.zshrc_default" # Preserve .zshrc is previously existed
+ln -s "$DOTFILES/.zshrc" "$HOME/.zshrc"
 
 echo "Cloning repositories..."
-mkdir $GITHUB
-git clone https://github.com/alexanderswerdlow/f1tenth.git $GITHUB/f1tenth # Personal
+mkdir "$GITHUB"
+git clone https://github.com/alexanderswerdlow/f1tenth.git "$GITHUB/f1tenth" # Personal
 
 brew update # Update Homebrew recipes
 brew tap homebrew/bundle 

@@ -5,17 +5,17 @@ set -e
 brew autoupdate start
 
 # Symlink the Mackup config file to the home directory
-ln -s $DOTFILES/.mackup.cfg $HOME/.mackup.cfg
+ln -s "$DOTFILES/.mackup.cfg" "$HOME/.mackup.cfg"
 
 # Set macOS preferences
 # We will run this last because this will reload the shell
-if [ -z "${CI}" ] then;
+if [ -z "${CI}" ]; then
   echo "Setting macOS Preferences"
   
   # Block OCSP Responder
   sudo sh -c 'echo "0.0.0.0  ocsp.apple.com" >> /etc/hosts'
   
-  source .macos
+  . "$DOTFILES/.macos"
   
   mkdir -p ~/bin
 else

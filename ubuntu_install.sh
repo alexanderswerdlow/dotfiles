@@ -16,21 +16,23 @@ sudo dpkg -i --force-depends google-chrome-stable_current_amd64.deb
 rm google-chrome-stable_current_amd64.deb
 
 sudo sed s/required/sufficient/g -i /etc/pam.d/chsh
-sudo chsh -s $(which zsh) $USER
+sudo chsh -s "$(which zsh)" "$USER"
 
-test -r $HOME/.bash_profile && cp $HOME/.bash_profile $HOME/.bash_profile_default
+test -r "$HOME/.bash_profile" && cp "$HOME/.bash_profile" "$HOME/.bash_profile_default"
 
-mkdir -p $HOME/.zsh
-test -d ~/.zsh/zsh-autosuggestions && rm -rf ~/.zsh/zsh-autosuggestions
-git clone https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosuggestions
+mkdir -p "$HOME/.zsh"
+test -d "$HOME/.zsh/zsh-autosuggestions" && rm -rf "$HOME/.zsh/zsh-autosuggestions"
+git clone https://github.com/zsh-users/zsh-autosuggestions "$HOME/.zsh/zsh-autosuggestions"
 
 sudo apt-get autoclean
 sudo apt-get clean
 sudo apt-get autoremove -y
 
-exec zsh
+. "$HOME/.zshrc"
 
 PYTHON_VERSION="3.10.0"
 pyenv install $PYTHON_VERSION
 pyenv global $PYTHON_VERSION
 upgrade python
+
+exec zsh
