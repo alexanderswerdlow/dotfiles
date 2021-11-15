@@ -23,7 +23,7 @@ if [ ! -f ~/.ssh/id_rsa ]; then
     ssh-keygen -t rsa -b 4096 -N "" -f ~/.ssh/id_rsa
     eval "$(ssh-agent -s)"
     echo "Host *\n AddKeysToAgent yes\n UseKeychain yes\n IdentityFile ~/.ssh/id_rsa" | tee ~/.ssh/config
-    ssh-add -K ~/.ssh/id_rsa
+    ssh-add ~/.ssh/id_rsa
 fi
 
 if [ -d "$DOTFILES" ]; then
