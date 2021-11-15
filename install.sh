@@ -42,8 +42,7 @@ git clone https://github.com/alexanderswerdlow/f1tenth.git $GITHUB/f1tenth # Per
 brew update # Update Homebrew recipes
 brew tap homebrew/bundle 
 brew bundle --file="${DOTFILES}/${SETUP_OS}_brewfile" # Install all our dependencies with bundle
-brew autoupdate start
 
 sh "${DOTFILES}/${SETUP_OS}_install.sh"
 
-
+cat ~/.ssh/id_rsa.pub

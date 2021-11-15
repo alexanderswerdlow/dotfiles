@@ -2,13 +2,14 @@
 
 set -e
 
+brew autoupdate start
+
 # Symlink the Mackup config file to the home directory
 ln -s $DOTFILES/.mackup.cfg $HOME/.mackup.cfg
 
 # Set macOS preferences
 # We will run this last because this will reload the shell
-if [ -z "${CI}" ]
-then
+if [ -z "${CI}" ] then;
   echo "Setting macOS Preferences"
   
   # Block OCSP Responder
@@ -20,7 +21,5 @@ then
 else
   echo "In Testing, not setting macOS Preferences"
 fi
-
-cat ~/.ssh/id_rsa.pub
 
 echo "Done!"
