@@ -5,9 +5,6 @@ set -e
 sudo apt-get update
 sudo apt-get install -y zsh fzf wget unzip curl sudo git gcc g++ cmake build-essential
 
-# Brew
-brew install zoxide starship gcc pyenv pyenv-virtualenv bat exa
-
 # Docker
 curl -fsSL https://get.docker.com -o get-docker.sh
 sudo sh get-docker.sh

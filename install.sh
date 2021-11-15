@@ -2,9 +2,17 @@
 
 set -e
 
+# Determine what type of machine we're running on
+if [[ "$(uname)" == "Darwin" ]]; then
+  export SETUP_OS="macos"
+else
+  export SETUP_OS="ubuntu"
+fi
+
 sudo echo "Setting up your $OS machine..."
 
 export DOTFILES=$HOME/dotfiles
+export GITHUB=$HOME/github
 
 # Check for Homebrew and install if we don't have it
 if test ! $(which brew); then
@@ -27,11 +35,15 @@ git clone --recurse-submodules https://github.com/alexanderswerdlow/dotfiles.git
 test -r $HOME/.zshrc && mv $HOME/.zshrc $HOME/.zshrc_default # Preserve .zshrc is previously existed
 ln -s $DOTFILES/.zshrc $HOME/.zshrc
 
-brew update # Update Homebrew recipes
+echo "Cloning repositories..."
+mkdir $GITHUB
+git clone https://github.com/alexanderswerdlow/f1tenth.git $GITHUB/f1tenth # Personal
 
-# Determine what type of machine we're running on
-if [[ "$(uname)" == "Darwin" ]]; then
-  sh $DOTFILES/macos_install.zsh
-else
-  sh $DOTFILES/ubuntu_install.zsh
-fi
+brew update # Update Homebrew recipes
+brew tap homebrew/bundle 
+brew bundle --file="${DOTFILES}/${SETUP_OS}_brewfile" # Install all our dependencies with bundle
+brew autoupdate start
+
+sh "${DOTFILES}/${SETUP_OS}_install.sh"
+
+

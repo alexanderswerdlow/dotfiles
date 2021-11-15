@@ -2,20 +2,6 @@
 
 set -e
 
-# Install all our dependencies with bundle (See Brewfile)
-brew tap homebrew/bundle
-brew bundle
-brew autoupdate start
-
-echo "Cloning repositories..."
-
-GITHUB=$HOME/github
-
-mkdir $GITHUB
-
-# Personal
-git clone https://github.com/alexanderswerdlow/f1tenth.git $GITHUB/f1tenth
-
 # Symlink the Mackup config file to the home directory
 ln -s $DOTFILES/.mackup.cfg $HOME/.mackup.cfg
 
