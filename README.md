@@ -18,15 +18,17 @@ After going to our checklist above and making sure you backed everything up, we'
 
 If you did all of the above you may now follow these install instructions to setup a new Mac.
 
-1. Run the command below:
+1. 
+
+For macOS:
 ```
 xcode-select --install
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/alexanderswerdlow/dotfiles/master/macos_install.sh)"
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/alexanderswerdlow/dotfiles/master/install.sh)"
 ```
 
 For Ubuntu:
 ```
-wget --no-check-certificate --no-cache --no-cookies -O - https://raw.githubusercontent.com/alexanderswerdlow/dotfiles/master/ubuntu_install.sh | sh
+wget --no-check-certificate --no-cache --no-cookies -O - https://raw.githubusercontent.com/alexanderswerdlow/dotfiles/master/install.sh | sh
 ```
 
 2. After mackup is synced with your cloud storage, restore preferences by running `mackup restore`
