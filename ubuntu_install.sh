@@ -28,11 +28,9 @@ sudo apt-get autoclean
 sudo apt-get clean
 sudo apt-get autoremove -y
 
-. "$HOME/.zshrc"
+exec zsh
 
 PYTHON_VERSION="3.10.0"
 pyenv install $PYTHON_VERSION
 pyenv global $PYTHON_VERSION
 upgrade python
-
-exec zsh
