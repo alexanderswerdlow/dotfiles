@@ -7,6 +7,7 @@ if [ "$(uname)" = "Darwin" ]; then
   export SETUP_OS="macos"
 else
   export SETUP_OS="ubuntu"
+  sudo apt-get update && sudo apt-get install curl git
 fi
 
 sudo echo "Setting up your $OS machine..."
@@ -36,7 +37,7 @@ test -r "$HOME/.zshrc" && mv "$HOME/.zshrc" "$HOME/.zshrc_default" # Preserve .z
 ln -s "$DOTFILES/.zshrc" "$HOME/.zshrc"
 
 echo "Cloning repositories..."
-mkdir "$GITHUB"
+mkdir -p "$GITHUB"
 git clone https://github.com/alexanderswerdlow/f1tenth.git "$GITHUB/f1tenth" # Personal
 
 brew update # Update Homebrew recipes
