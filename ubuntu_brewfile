@@ -3,7 +3,6 @@ tap 'homebrew/bundle'
 tap 'homebrew/autoupdate'
 tap 'AdoptOpenJDK/openjdk'
 
-brew 'bash'
 brew 'zoxide'
 brew 'starship'
 brew 'gcc'
