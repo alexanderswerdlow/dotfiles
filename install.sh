@@ -38,7 +38,10 @@ ln -s "$DOTFILES/.zshrc" "$HOME/.zshrc"
 
 echo "Cloning repositories..."
 mkdir -p "$GITHUB"
-test -d "$GITHUB/f1tenth" || git clone https://github.com/alexanderswerdlow/f1tenth.git "$GITHUB/f1tenth" # Personal
+
+if [ ! -d "$GITHUB/f1tenth" ]; then
+  git clone https://github.com/alexanderswerdlow/f1tenth.git "$GITHUB/f1tenth" # Personal
+fi
 
 brew update # Update Homebrew recipes
 brew tap homebrew/bundle 
