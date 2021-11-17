@@ -37,11 +37,8 @@ test -r "$HOME/.zshrc" && mv "$HOME/.zshrc" "$HOME/.zshrc_default" # Preserve .z
 ln -s "$DOTFILES/.zshrc" "$HOME/.zshrc"
 
 echo "Cloning repositories..."
-mkdir -p "$GITHUB"
-
-if [ ! -d "$GITHUB/f1tenth" ]; then
-  git clone https://github.com/alexanderswerdlow/f1tenth.git "$GITHUB/f1tenth" # Personal
-fi
+test -d "$GITHUB" || mkdir "$GITHUB"
+test -d "$GITHUB/f1tenth" || git clone https://github.com/alexanderswerdlow/f1tenth.git "$GITHUB/f1tenth" # Personal
 
 brew update # Update Homebrew recipes
 brew tap homebrew/bundle 
