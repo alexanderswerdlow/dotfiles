@@ -40,6 +40,10 @@ echo "Cloning repositories..."
 test -d "$GITHUB" || mkdir "$GITHUB"
 test -d "$GITHUB/f1tenth" || git clone https://github.com/alexanderswerdlow/f1tenth.git "$GITHUB/f1tenth" # Personal
 
+if [ "$SETUP_OS" = "ubuntu" ]; then
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+fi
+
 brew update # Update Homebrew recipes
 brew tap homebrew/bundle 
 brew bundle --file="${DOTFILES}/${SETUP_OS}_brewfile" # Install all our dependencies with bundle
