@@ -5,7 +5,6 @@ tap 'AdoptOpenJDK/openjdk'
 
 brew 'zoxide'
 brew 'starship'
-brew 'gcc'
 brew 'pyenv'
 brew 'pyenv-virtualenv'
 brew 'bat'
