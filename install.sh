@@ -47,6 +47,7 @@ fi
 brew update # Update Homebrew recipes
 brew tap homebrew/bundle 
 brew bundle --file="${DOTFILES}/${SETUP_OS}_brewfile" # Install all our dependencies with bundle
+brew cleanup
 
 sh "${DOTFILES}/${SETUP_OS}_install.sh"
 
