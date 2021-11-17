@@ -1,3 +1,5 @@
+#!/bin/zsh
+
 export DOTFILES=$HOME/dotfiles
 
 # Determine what type of machine we're running on
