@@ -18,23 +18,32 @@ if [[ "$(uname)" == "Darwin" ]]; then
 else
   export OS='Linux'
   export MACHINE='Other'
+
 fi
 
 export INTEL_BREW_PREFIX='/usr/local'
 export ARM_BREW_PREFIX='/opt/homebrew'
+export LINUX_BREW_PREFIX='/home/linuxbrew/.linuxbrew'
 
 source $DOTFILES/path.zsh
 source $DOTFILES/shortcuts/aliases.zsh
+source $DOTFILES/plugins/pyenv-lazy/pyenv-lazy.plugin.zsh
+source $DOTFILES/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 # Random
 if [[ "$OS" == "macOS" ]]; then
-  source $DOTFILES/plugins/pyenv-lazy/pyenv-lazy.plugin.zsh
   source ~/.iterm2_shell_integration.zsh
   export $(awk '{print $0}' $SECRETS | grep -E '^\w' | sed 's/ = /=/')
+  
 elif [[ "$OS" == "Linux" ]]; then
   eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
   eval "$(pyenv init --path)"
   eval "$(pyenv virtualenv-init -)"
+
+  HISTFILE=~/.zsh_history
+  HISTSIZE=10000
+  SAVEHIST=10000
+  setopt appendhistory
 fi
 
 export LC_ALL=en_US.UTF-8
@@ -51,11 +60,8 @@ else
   fi
 fi
 
-
-
 eval "$(starship init zsh)"
 eval "$(zoxide init zsh)"
-source $DOTFILES/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 
