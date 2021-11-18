@@ -6,6 +6,9 @@ alias brews="brew search"
 alias brewu="brew update && brew upgrade && brew cleanup"
 alias ibrewu="ibrew update && ibrew upgrade && ibrew cleanup"
 
+
+alias subl="/Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl"
+
 # Python
 alias spython="/usr/bin/python3"
 alias spip="/usr/bin/python3 -m pip"

@@ -6,7 +6,6 @@ alias reload="exec zsh"
 
 # Directories
 alias library="cd $HOME/Library"
-alias subl="/Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl"
 alias dotfiles="code $DOTFILES"
 alias aliases="subl $DOTFILES/aliases.zsh"
 alias paths="subl $DOTFILES/path.zsh"

@@ -59,3 +59,18 @@ sudo apt install zlib1g
 sudo dpkg -i libcudnn8_x.x.x-1+cudax.x_amd64.deb
 sudo dpkg -i libcudnn8-dev_8.x.x.x-1+cudax.x_amd64.deb
 sudo dpkg -i libcudnn8-samples_8.x.x.x-1+cudax.x_amd64.deb
+
+
+# Spotify
+snap install spotify
+
+# Mouse wheel
+sudo apt install imwheel
+http://www.nicknorton.net/mousewheel.sh
+
+# Sublime Text
+wget -qO - https://download.sublimetext.com/sublimehq-pub.gpg | sudo apt-key add -
+sudo apt-get install apt-transport-https
+echo "deb https://download.sublimetext.com/ apt/stable/" | sudo tee /etc/apt/sources.list.d/sublime-text.list
+sudo apt-get update
+sudo apt-get install sublime-text
