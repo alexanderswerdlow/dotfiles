@@ -18,4 +18,3 @@ test -d "$HOME/.zsh/zsh-autosuggestions" && rm -rf "$HOME/.zsh/zsh-autosuggestio
 git clone https://github.com/zsh-users/zsh-autosuggestions "$HOME/.zsh/zsh-autosuggestions"
 
 exec zsh
-
