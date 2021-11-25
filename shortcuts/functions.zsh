@@ -68,3 +68,7 @@ function encodeuri {
 function matlabr {
   matlabb -nodisplay -nosplash -nodesktop -r "run('$1');"
 }
+
+function ffind {
+  find . -name "*$1*" -print
+}

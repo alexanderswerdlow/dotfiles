@@ -36,9 +36,11 @@ if [[ "$OS" == "macOS" ]]; then
   export $(awk '{print $0}' $SECRETS | grep -E '^\w' | sed 's/ = /=/')
   
 elif [[ "$OS" == "Linux" ]]; then
+  export $(awk '{print $0}' $SECRETS | grep -E '^\w' | sed 's/ = /=/')
   eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-  eval "$(pyenv init --path)"
-  eval "$(pyenv virtualenv-init -)"
+  # eval "$(pyenv init --path)"
+  # eval "$(pyenv virtualenv-init -)"
+  source $HOME/.cargo/env
 
   HISTFILE=~/.zsh_history
   HISTSIZE=10000

@@ -11,7 +11,6 @@ typeset -U path
 
 path+=("$PYENV_ROOT/bin")
 
-
 # Global macOS exports/paths here
 if [[ "$OS" == "macOS" ]]; then
     export SECRETS="$HOME/Documents/Programs/secrets.ini"
@@ -19,7 +18,7 @@ if [[ "$OS" == "macOS" ]]; then
     export PAGER="col -b  | open -a /Applications/Google\ Chrome.app -f"
     export STREET_VIEW_DATA_DIR="/Volumes/GoogleDrive/Shared drives/EE209AS/data"
 
-    path=(  "$DOTFILES/scripts"
+    path+=(  "$DOTFILES/scripts"
             "$HOME/bin"
             "$HOME/Documents/Programs/bin"
             "$HOME/.local/bin"
@@ -39,6 +38,18 @@ if [[ "$OS" == "macOS" ]]; then
     # "$BREWPREFIX/opt/grep/libexec/gnubin"
     # "$BREWPREFIX/opt/gnu-tar/libexec/gnubin"
     # "$BREWPREFIX/opt/make/libexec/gnubin"
+elif [[ "$OS" == "Linux" ]]; then
+    export SECRETS="$HOME/perm/perm_files/secrets.ini"
+    export CCACHE_DIR="$HOME/perm/ccache"
+    export LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libGLEW.so
+    export LD_LIBRARY_PATH=/usr/local/cuda-11.5/lib64:/usr/lib/nvidia:/home/aswerdlow/.mujoco/mujoco210/bin
+    path+=(  "$MUJOCO_PY_MUJOCO_PATH/bin"
+            "$DOTFILES/scripts"
+            "$HOME/bin"
+            "/usr/local/cuda-11.5/bin"
+            "/home/aswerdlow/.local/bin"
+            "/usr/lib/ccache"
+        )
 fi
 
 # Machine specific exports
@@ -56,11 +67,7 @@ elif [[ "$MACHINE" == "ARM64" ]]; then
     export ZPYI_IMPORTS="requests numpy"
 fi
 
-# OS Specific Exports
-if [[ "$OS" == "Linux" ]]; then
-    export PATH=/usr/local/cuda-11.5/bin:$PATH
-    export LD_LIBRARY_PATH=/usr/local/cuda-11.5/lib64:$LD_LIBRARY_PATH
-fi
 
+export USE_PICKLED_IMAGES="true"
 export PATH
 

@@ -55,11 +55,6 @@ alias imac="ssh aswerdlow@Alexanders-iMac.local"
 alias qvpn="launchctl unload ~/Library/LaunchAgents/local.vpn.plist && networksetup -disconnectpppoeservice 'TorGuard Dedicated' && dns"
 alias vpn="launchctl load ~/Library/LaunchAgents/local.vpn.plist && dns"
 
-alias torguard="sudo wg-quick up wg0 >/dev/null 2>&1"
-alias algo="sudo wg-quick up wg1 >/dev/null 2>&1"
-alias off="sudo wg-quick down wg0 >/dev/null 2>&1; sudo wg-quick down wg1 >/dev/null 2>&1"
-alias wireguard="sudo wg"
-
 # System
 alias o='a -e open' # quick opening files with xdg-open
 alias awake='caffeinate -d -i -s -u'

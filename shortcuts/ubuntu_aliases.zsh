@@ -1,0 +1,1 @@
+alias dash='gotop --nvidia'

@@ -26,6 +26,8 @@ pyenv install $PYTHON_VERSION
 pyenv global $PYTHON_VERSION
 upgrade python
 
+# Misc
+sudp apt-get install fonts-firacode
 
 # Go to Software & Updates and install latest nvidia driver
 
@@ -63,6 +65,7 @@ sudo dpkg -i libcudnn8-samples_8.x.x.x-1+cudax.x_amd64.deb
 
 # Spotify
 snap install spotify
+snap install slack --classic
 
 # Mouse wheel
 sudo apt install imwheel
@@ -74,3 +77,66 @@ sudo apt-get install apt-transport-https
 echo "deb https://download.sublimetext.com/ apt/stable/" | sudo tee /etc/apt/sources.list.d/sublime-text.list
 sudo apt-get update
 sudo apt-get install sublime-text
+
+# https://github.com/xxxserxxx/gotop
+
+# VSCode
+wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
+sudo install -o root -g root -m 644 packages.microsoft.gpg /etc/apt/trusted.gpg.d/
+sudo sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/trusted.gpg.d/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list'
+rm -f packages.microsoft.gpg
+sudo apt install apt-transport-https
+sudo apt update
+sudo apt install code # or code-insiders
+
+
+# POP Stuff
+# https://support.system76.com/articles/pop-shell/
+# https://github.com/pop-os/shell/issues/1182
+# export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/lib/x86_64-linux-gnu/pkgconfig
+# export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/share/pkgconfig
+
+
+# Typora
+wget -qO - https://typora.io/linux/public-key.asc | sudo apt-key add -
+sudo add-apt-repository 'deb https://typora.io/linux ./'
+sudo apt-get update
+sudo apt-get install typora
+
+# Wireguard
+sudo apt install wireguard
+apt-get install resolvconf
+# /etc/wireguard/wg0.conf
+# wg-quick up wg0
+
+# OpenCV/OpenMVG
+sudo apt update && sudo apt install -y cmake g++ wget unzip
+wget -O opencv.zip https://github.com/opencv/opencv/archive/master.zip
+wget -O opencv_contrib.zip https://github.com/opencv/opencv_contrib/archive/master.zip
+unzip opencv.zip
+unzip opencv_contrib.zip
+mkdir -p opencv_build && cd opencv_build
+
+cmake \
+      -D OPENCV_EXTRA_MODULES_PATH=../opencv_contrib-master/modules \
+      -D CMAKE_BUILD_TYPE=RELEASE \
+      -D CMAKE_INSTALL_PREFIX=/usr/local \
+      -D INSTALL_PYTHON_EXAMPLES=ON \
+      -D INSTALL_C_EXAMPLES=OFF \
+      -D OPENCV_ENABLE_NONFREE=ON \
+      -D BUILD_EXAMPLES=ON \
+      -D WITH_CUDA=ON \
+      -D WITH_CUDNN=ON \
+      -D OPENCV_DNN_CUDA=ON \
+      -D WITH_CUBLAS=ON \
+      -D ENABLE_FAST_MATH=1 \
+      -D CUDA_FAST_MATH=1 \
+../opencv-master
+sudo cmake --build . --target install -- -j"$(nproc)"
+
+git clone --recursive https://github.com/openMVG/openMVG.git
+sudo apt-get install libpng-dev libjpeg-dev libtiff-dev libxxf86vm1 libxxf86vm-dev libxi-dev libxrandr-dev graphviz
+mkdir openmvg_build && cd openmvg_build
+
+cmake -DCMAKE_BUILD_TYPE=RELEASE -DOpenMVG_USE_OCVSIFT=ON -DOpenCV_DIR="../opencv_build" -DOpenMVG_USE_OPENCV=ON ../openMVG/src/
+sudo cmake --build . --target install -- -j"$(nproc)"

@@ -26,9 +26,17 @@ alias findf='mdfind -onlyin . -name'
 export FZF_DEFAULT_COMMAND='fd --type file -E "*.jpg" -E "*.html" -E "*.htm" -E "*.txt"'
 
 # Python
-alias venv="python3 -m venv"
-alias act="source ./bin/activate"
-alias deact="deactivate"
+alias venv="python3 -m venv venv"
+alias act="source ./venv/bin/activate"
+alias dact="deactivate"
+alias rpy="pyenv uninstall"
+alias cpy="pyenv virtualenv"
+alias spy="pyenv shell"
+
+
+alias torguard="sudo wg-quick up wg0 >/dev/null 2>&1"
+alias off="sudo wg-quick down wg0 >/dev/null 2>&1"
+alias wireguard="sudo wg"
 
 # JS
 alias nfresh="rm -rf node_modules/ package-lock.json && npm install"
@@ -55,4 +63,6 @@ source $DOTFILES/shortcuts/functions.zsh
 
 if [[ "$OS" == "macOS" ]]; then
   source $DOTFILES/shortcuts/mac_aliases.zsh
+elif [[ "$OS" == "Linux" ]]; then
+  source $DOTFILES/shortcuts/ubuntu_aliases.zsh
 fi
