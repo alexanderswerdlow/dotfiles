@@ -12,6 +12,22 @@ ExecStart=/home/aswerdlow/bin/mount.sh
 WantedBy=multi-user.target
 
 
+[Unit]
+Description=IMWheel
+Wants=display-manager.service
+After=display-manager.service
+
+[Service]
+Type=simple
+Environment=XAUTHORITY=%h/.Xauthority
+ExecStart=/usr/bin/imwheel -d
+ExecStop=/usr/bin/pkill imwheel
+RemainAfterExit=yes
+
+[Install]
+WantedBy=graphical-session.target
+
+
 # Run to enable: systemctl enable ethtool
 
 # python3 func.py update_dynamic_dns
@@ -73,3 +89,8 @@ python3 software/SfM/SfM_SequentialPipeline.py $data_dir/images $data_dir/output
 python3 -c "import mujoco_py;print('gpu' in str(mujoco_py.cymj).split('/')[-1])"
 
 python3 -c "import mujoco_py;print(mujoco_py.cymj)"
+
+
+
+export LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libGLEW.so
+

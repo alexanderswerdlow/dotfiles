@@ -72,3 +72,7 @@ function matlabr {
 function ffind {
   find . -name "*$1*" -print
 }
+
+function venv {
+  $1 -m venv venv
+}

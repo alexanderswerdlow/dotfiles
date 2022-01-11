@@ -26,7 +26,6 @@ alias findf='mdfind -onlyin . -name'
 export FZF_DEFAULT_COMMAND='fd --type file -E "*.jpg" -E "*.html" -E "*.htm" -E "*.txt"'
 
 # Python
-alias venv="python3 -m venv venv"
 alias act="source ./venv/bin/activate"
 alias dact="deactivate"
 alias rpy="pyenv uninstall"

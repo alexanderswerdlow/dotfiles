@@ -27,12 +27,6 @@ if [ ! -f ~/.ssh/id_rsa ]; then
     ssh-add ~/.ssh/id_rsa
 fi
 
-if [ -d "$DOTFILES" ]; then
-    rm -rf "$DOTFILES"
-fi
-
-git clone --recurse-submodules https://github.com/alexanderswerdlow/dotfiles.git "$DOTFILES"
-
 test -r "$HOME/.zshrc" && mv "$HOME/.zshrc" "$HOME/.zshrc_default" # Preserve .zshrc is previously existed
 ln -s "$DOTFILES/.zshrc" "$HOME/.zshrc"
 

@@ -27,11 +27,11 @@ export LINUX_BREW_PREFIX='/home/linuxbrew/.linuxbrew'
 
 source $DOTFILES/path.zsh
 source $DOTFILES/shortcuts/aliases.zsh
-source $DOTFILES/plugins/pyenv-lazy/pyenv-lazy.plugin.zsh
 source $DOTFILES/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 # Random
 if [[ "$OS" == "macOS" ]]; then
+  source $DOTFILES/plugins/pyenv-lazy/pyenv-lazy.plugin.zsh
   source ~/.iterm2_shell_integration.zsh
   export $(awk '{print $0}' $SECRETS | grep -E '^\w' | sed 's/ = /=/')
   
@@ -40,7 +40,7 @@ elif [[ "$OS" == "Linux" ]]; then
   eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
   # eval "$(pyenv init --path)"
   # eval "$(pyenv virtualenv-init -)"
-  source $HOME/.cargo/env
+  # source $HOME/.cargo/env
 
   HISTFILE=~/.zsh_history
   HISTSIZE=10000

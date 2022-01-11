@@ -28,7 +28,69 @@ def update_auth():
         print(r_auth.json())
         exit(1)
 
+def update_discover_weekly():
+    r_auth_refresh = requests.post(url='https://accounts.spotify.com/api/token', data={'grant_type': 'refresh_token', 'refresh_token': sp['refresh_token'], 'client_id': sp['client_id'], 'client_secret': sp['client_secret']})
+    if r_auth_refresh.ok:
+        token = r_auth_refresh.json()['access_token']
+    else:
+        print("Refresh Auth Failed")
+        print(r_auth_refresh.json())
+        exit(1)
+
+    playlist_id_archive = sp['discover_archive_id'].split(':')[-1]
+    playlist_id_weekly = sp['discover_weekly_id'].split(':')[-1]
+    HEADERS = {"Accept":"application/json", "Content-Type":"application/json", "Authorization":f"Bearer {token}"}
+    r_discover_archive = requests.get(url = f"https://api.spotify.com/v1/playlists/{playlist_id_archive}", headers=HEADERS, params={'limit' : 50})
+    r_discover_weekly = requests.get(url = f"https://api.spotify.com/v1/playlists/{playlist_id_weekly}", headers=HEADERS, params={'limit' : 50})
+
+    if not r_discover_archive.ok or not r_discover_weekly.ok:
+        print("Discover Library/Playlist request failed")
+        exit(1)
+
+    total_archive = int(r_discover_archive.json()['tracks']['total'])
+    archive_offset = total_archive - 40 if total_archive > 40 else 0
+    r_discover_archive = requests.get(url = f"https://api.spotify.com/v1/playlists/{playlist_id_archive}/tracks", headers=HEADERS, params={'limit' : 50, 'offset' : archive_offset})
+    old_uris = set()
+    for track in r_discover_archive.json()['items']:
+        d = track['track']
+        old_uris.add(track['track']['uri'])
+
+    new_uris = set()
+    for track in r_discover_weekly.json()['tracks']['items']:
+        new_uris.add(track['track']['uri'])
+
+    to_add = new_uris - old_uris
+
+    print(f'Old: {len(old_uris)}, New: {len(new_uris)}, To Add {len(to_add)}: {to_add}')
+
+    if not to_add:
+        print('Exiting early. No changes')
+        return {
+        'statusCode': 200,
+        'body': json.dumps('Hello from Lambda!')
+        }
+
+    data_to_add = {'uris': []}
+    for uri in to_add:
+        data_to_add['uris'].append(uri)
+
+    r_put_new_tracks = requests.post(url=f"https://api.spotify.com/v1/playlists/{playlist_id_archive}/tracks", headers=HEADERS, data=json.dumps(data_to_add))
+    if r_put_new_tracks.ok:
+        print(r_put_new_tracks.json())
+    else:
+        print(f"Put songs into playlist failed: {r_put_new_tracks}")
+        exit(1)
+
+    print("Discover Weekly Update Sucessful: " + datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S"))
+    return {
+        'statusCode': 200,
+        'body': json.dumps('Hello from Lambda!')
+    }
+
+
 def lambda_handler(event, context):
+    update_discover_weekly()
+    print('Finished Discover')
     r_auth_refresh = requests.post(url='https://accounts.spotify.com/api/token', data={'grant_type': 'refresh_token', 'refresh_token': sp['refresh_token'], 'client_id': sp['client_id'], 'client_secret': sp['client_secret']})
     if r_auth_refresh.ok:
         token = r_auth_refresh.json()['access_token']

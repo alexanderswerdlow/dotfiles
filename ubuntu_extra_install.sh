@@ -109,6 +109,31 @@ apt-get install resolvconf
 # /etc/wireguard/wg0.conf
 # wg-quick up wg0
 
+# MPV
+sudo apt install mpv
+
+
+#Python 
+
+sudo apt install software-properties-common
+sudo add-apt-repository ppa:deadsnakes/ppa
+sudo apt-get update
+sudo apt install python3-pip
+sudo apt install python3.10 python3.10-venv
+python3.10 -m pip install --upgrade pip --user
+
+sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.8 1
+sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.9 2
+sudo update-alternatives --config python
+
+
+python -m venv venv
+source venv/bin/activate
+python --version
+
+
+# Don't do: python3.10 -m ensurepip --upgrade --user
+
 # OpenCV/OpenMVG
 sudo apt update && sudo apt install -y cmake g++ wget unzip
 wget -O opencv.zip https://github.com/opencv/opencv/archive/master.zip
