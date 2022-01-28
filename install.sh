@@ -39,7 +39,8 @@ if [ "$SETUP_OS" = "ubuntu" ]; then
 fi
 
 brew update # Update Homebrew recipes
-brew tap homebrew/bundle 
+brew tap homebrew/bundle
+echo "${DOTFILES}/${SETUP_OS}_brewfile"
 brew bundle --file="${DOTFILES}/${SETUP_OS}_brewfile" # Install all our dependencies with bundle
 brew cleanup
 
