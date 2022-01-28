@@ -2,11 +2,9 @@ export HOMEBREW_NO_ANALYTICS=1
 export HOMEBREW_NO_INSECURE_REDIRECT=1
 export HOMEBREW_CASK_OPTS=--require-sha
 export HOMEBREW_AUTO_UPDATE_SECS="604800"
-export MUJOCO_PY_MUJOCO_PATH="$HOME/.mujoco/mujoco210"
 
 # Remove duplicates
 typeset -U path
-
 
 # Global macOS exports/paths here
 if [[ "$OS" == "macOS" ]]; then
@@ -40,8 +38,8 @@ if [[ "$OS" == "macOS" ]]; then
     # "$BREWPREFIX/opt/make/libexec/gnubin"
 elif [[ "$OS" == "Linux" ]]; then
     export SECRETS="$DOTFILES/secrets.ini"
-    # export LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libGLEW.so
     # export LD_LIBRARY_PATH=$LD_LIBRARY_PATH/usr/local/cuda-11.5/lib64
+    export MUJOCO_PY_MUJOCO_PATH="$HOME/.mujoco/mujoco210"
     export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$MUJOCO_PY_MUJOCO_PATH/bin"
     export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/lib/nvidia"
     export LD_PRELOAD="/usr/lib/x86_64-linux-gnu/libGLEW.so"
@@ -67,6 +65,4 @@ elif [[ "$MACHINE" == "ARM64" ]]; then
     export ZPYI_IMPORTS="requests numpy"
 fi
 
-
-export USE_PICKLED_IMAGES="true"
 export PATH

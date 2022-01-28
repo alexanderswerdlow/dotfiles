@@ -19,7 +19,6 @@ brew 'pkg-config' # https://github.com/driesvints/dotfiles/issues/20
 
 # Development
 brew 'imagemagick' # CLI image optimizer/transformer
-brew 'yarn' # When npm is too annoying
 brew 'python' # When you need the super new syntactical sugar
 brew 'exa' # ls alternative
 brew 'bat' # cat alternative
@@ -28,8 +27,7 @@ brew 'iperf3' # Testing LAN Speeds. Useful for getting your *actual* WiFi speed 
 brew 'wireguard-tools' # VPN
 brew 'rga' # Search utility based off of ripgrep
 brew 'pandoc' # File conversion utility
-brew 'poppler'
-brew 'tesseract' # OCR
+
 brew 'fzf' # Fuzzy finder
 brew 'pyenv' # Python version manager
 brew 'starship' # Terminal prompt
@@ -45,9 +43,13 @@ cask 'font-fira-code-nerd-font' # Font for starship
 cask 'adoptopenjdk' # Latest JDK
 cask 'adoptopenjdk/openjdk/adoptopenjdk8' # JDK 8 will never die
 
+# Retired (currently on leave pending return)
+# brew 'yarn' # When npm is too annoying
+# brew 'tesseract' # OCR
+# brew 'poppler'
+
 unless ENV.has_key?('FAST') || ENV.has_key?('CI') then
   cask '1password' # Shhhhh
-  cask 'aerial' # Sweet screensaver videos taken from tvOS
   cask 'authy' # Shhhhh
   cask 'appcleaner' # Removes trace files while deleting apps
   cask 'coderunner' # Quickly run/debug code in a bunch of languages, don't even need to save a file
@@ -64,12 +66,9 @@ unless ENV.has_key?('FAST') || ENV.has_key?('CI') then
   cask 'the-unarchiver' # Archive Utility doesn't always cut it
   cask 'typora' # Markdown editor
   cask 'visual-studio-code' # All the random code
-  cask 'monitorcontrol' # External Monitor Brightness Control
   cask 'upic' # Image Uploader, primarily for Typora
   cask 'mactex-no-gui' # MacTeX without the GUI applications. I use Texpad
   cask 'daisydisk'
-  cask 'clion'
-  cask 'intellij-idea'
   cask 'pycharm' #  Best C/C++/Java IDE if it's not a super quick edit
   cask 'alfred' # Spotlight but way better
 
@@ -81,6 +80,12 @@ unless ENV.has_key?('FAST') || ENV.has_key?('CI') then
   # Forklift - Best SFTP Client
   # Matlab - ...
 
+  # Retired (currently on leave pending return)
+  # cask 'clion'
+  # cask 'intellij-idea'
+  # cask 'aerial' # Sweet screensaver videos taken from tvOS
+  # cask 'monitorcontrol' # External Monitor Brightness Control
+
   # Quicklook
   cask 'qlcolorcode'
   cask 'qlmarkdown'
@@ -91,9 +96,11 @@ unless ENV.has_key?('FAST') || ENV.has_key?('CI') then
   cask 'quicklookase'
   cask 'qlvideo'
   cask 'provisionql'
-  cask 'basictex'
 
-  mas 'Speedtest', id: 1153157709 # Get that speed
+  cask 'openinterminal-lite'
+  cask 'openineditor-lite'
+
+  # mas 'Speedtest', id: 1153157709 # Get that speed
   mas 'Notability', id: 736189492 # favorite iPad note taking app, syncs notes to iCloud
   mas 'Magnet', id: 441258766 # macOS window manager
   mas 'Newton - Supercharged emailing', id: 1059655371 # Dope email client

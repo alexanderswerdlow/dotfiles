@@ -1,0 +1,10 @@
+{
+	"backup_dir": "~/.sublime_backups",
+	"backup_on_open_file": true,
+	"backup_per_day": true,
+	"backup_per_time": "file",
+	"max_backup_file_size_bytes": 262144, // = 256 KB
+	"delete_old_backups": 0,
+	"open_in_same_line": true,
+	"show_previews": true
+}
