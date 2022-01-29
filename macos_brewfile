@@ -32,6 +32,7 @@ brew 'opencv'
 brew 'rsync'
 brew 'rclone'
 brew 'cmake'
+berw 'node'
 
 # Python....
 brew 'pyenv'
@@ -56,6 +57,7 @@ unless ENV.has_key?('FAST') || ENV.has_key?('CI') then
   cask 'docker' # The annoying containers
   cask 'github' # The gits
   cask 'google-chrome' # The webs
+  cask 'google-chrome-canary'
   cask 'iina' # VLC that looks pretty
   cask 'istat-menus' # All the graphs
   cask 'iterm2' # Best terminal
@@ -67,9 +69,7 @@ unless ENV.has_key?('FAST') || ENV.has_key?('CI') then
   cask 'visual-studio-code' # All the random code
   cask 'upic' # Image Uploader, primarily for Typora
   cask 'mactex-no-gui' # MacTeX without the GUI applications. I use Texpad
-  cask 'pycharm' #  Best C/C++/Java IDE if it's not a super quick edit
   cask 'alfred' # Spotlight but way better
-
   cask 'temurin'
   cask 'temurin8'
   cask 'julia'
@@ -88,6 +88,7 @@ unless ENV.has_key?('FAST') || ENV.has_key?('CI') then
   # cask 'intellij-idea'
   # cask 'aerial' # Sweet screensaver videos taken from tvOS
   # cask 'monitorcontrol' # External Monitor Brightness Control
+  # cask 'pycharm' #  Best C/C++/Java IDE if it's not a super quick edit
 
   # Quicklook
   cask 'qlcolorcode'
