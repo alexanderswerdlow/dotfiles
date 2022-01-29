@@ -4,44 +4,43 @@ tap 'homebrew/cask-versions'
 tap 'homebrew/bundle'
 tap 'homebrew/cask-fonts'
 tap 'homebrew/autoupdate'
-tap 'AdoptOpenJDK/openjdk'
 
 # Binaries
 brew 'bash' # Latest Bash version
 brew 'zsh'
-brew 'coreutils' # Those that come with macOS are outdated
 brew 'ffmpeg' # Audio/Video Transcoding/Streaming
 brew 'git' # Git gud
-brew 'grep' # You know...grep
-brew 'mackup' # Syncs mac preferences
 brew 'mas' # Mac App Store manager
 brew 'pkg-config' # https://github.com/driesvints/dotfiles/issues/20
 
 # Development
-brew 'imagemagick' # CLI image optimizer/transformer
-brew 'python' # When you need the super new syntactical sugar
 brew 'exa' # ls alternative
 brew 'bat' # cat alternative
 brew 'wget' # Sometimes you gotta wget things
 brew 'iperf3' # Testing LAN Speeds. Useful for getting your *actual* WiFi speed and not just the WAN/internet speed
-brew 'wireguard-tools' # VPN
 brew 'rga' # Search utility based off of ripgrep
 brew 'pandoc' # File conversion utility
 
 brew 'fzf' # Fuzzy finder
-brew 'pyenv' # Python version manager
 brew 'starship' # Terminal prompt
 brew 'zoxide' # Z 
 brew 'wgcf' # Cloudflare Warp
-brew 'pyenv'
-brew 'pyenv-virtualenv'
 brew 'curl'
 brew 'gh'
 brew 'opencv'
 
-cask 'font-fira-code-nerd-font' # Font for starship
-cask 'adoptopenjdk' # Latest JDK
-cask 'adoptopenjdk/openjdk/adoptopenjdk8' # JDK 8 will never die
+brew 'rsync'
+brew 'rclone'
+brew 'cmake'
+
+# Python....
+brew 'pyenv'
+brew 'pyenv-virtualenv'
+brew 'openssl'
+brew 'readline'
+brew 'sqlite3'
+brew 'xz'
+brew 'zlib'
 
 # Retired (currently on leave pending return)
 # brew 'yarn' # When npm is too annoying
@@ -53,7 +52,7 @@ unless ENV.has_key?('FAST') || ENV.has_key?('CI') then
   cask 'authy' # Shhhhh
   cask 'appcleaner' # Removes trace files while deleting apps
   cask 'coderunner' # Quickly run/debug code in a bunch of languages, don't even need to save a file
-  cask 'discord' # Goddamn discord
+  cask 'discord-canary' # Goddamn discord
   cask 'docker' # The annoying containers
   cask 'github' # The gits
   cask 'google-chrome' # The webs
@@ -68,9 +67,13 @@ unless ENV.has_key?('FAST') || ENV.has_key?('CI') then
   cask 'visual-studio-code' # All the random code
   cask 'upic' # Image Uploader, primarily for Typora
   cask 'mactex-no-gui' # MacTeX without the GUI applications. I use Texpad
-  cask 'daisydisk'
   cask 'pycharm' #  Best C/C++/Java IDE if it's not a super quick edit
   cask 'alfred' # Spotlight but way better
+
+  cask 'temurin'
+  cask 'temurin8'
+  cask 'julia'
+  cask 'font-fira-code-nerd-font' # Font for starship
 
   # Wolfram Desktop - Mathematica basically
   # PDFSearch - Excellent PDF Searching + can index a whole folder of various text files
@@ -100,11 +103,13 @@ unless ENV.has_key?('FAST') || ENV.has_key?('CI') then
   cask 'openinterminal-lite'
   cask 'openineditor-lite'
 
-  # mas 'Speedtest', id: 1153157709 # Get that speed
   mas 'Notability', id: 736189492 # favorite iPad note taking app, syncs notes to iCloud
   mas 'Magnet', id: 441258766 # macOS window manager
   mas 'Newton - Supercharged emailing', id: 1059655371 # Dope email client
   mas 'nPlayer', id: 1451273814 # Plays back some video files smoother than IINA + better FTP/AFP playback
   mas "FSNotes", id: 1277179284
   mas "Xcode", id: 497799835
+  mas "WireGuard", id: 1451685025
+  mas "Slack", id: 803453959
+  mas "Wipr", id: 1320666476
 end

@@ -26,10 +26,10 @@ export PYENV_VIRTUALENV_DISABLE_PROMPT=1
 
 # Java
 export JAVA_8_HOME=$(/usr/libexec/java_home -v1.8)
-export JAVA_16_HOME=$(/usr/libexec/java_home -v16)
+export JAVA_17_HOME=$(/usr/libexec/java_home -v17)
 
 alias java8='export JAVA_HOME=$JAVA_8_HOME && java -version'
-alias java16='export JAVA_HOME=$JAVA_16_HOME && java -version'
+alias java17='export JAVA_HOME=$JAVA_17_HOME && java -version'
 
 # Chrome
 export CHROME="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
@@ -61,6 +61,7 @@ alias awake='caffeinate -d -i -s -u'
 
 # Random
 alias carbon="carbon-now -h -c"
+alias ffind='mdfind -onlyin . -name'
 
 if [[ "$MACHINE" == "X86" ]]; then
     alias unifi='JAVA_VERSION=1.8 java -jar /Applications/UniFi.app/Contents/Resources/lib/ace.jar ui'
@@ -87,8 +88,24 @@ function touchid() {
     # sudo "$@"
 }
 
+function encodeuri {
+  local string="${@}"
+  local strlen=${#string}
+  local encoded=""
+
+  for (( pos = 0; pos < strlen; pos ++ )); do
+    c=${string:$pos:1}
+    case "$c" in
+      [-_.~a-zA-Z0-9]) o="${c}" ;;
+      *) printf -v o '%%%02x' "'$c"
+    esac
+    encoded+="${o}"
+  done
+  echo "${encoded}"
+}
+
 function man {
-  if [[ -d /Applications/Dash.app && -d "$HOME/Library/Application Support/Dash/DocSets/Man_Pages" ]]; then
+  if [[ (-d /Applications/Dash.app || -d /Applications/Setapp/Dash.app) && -d "$HOME/Library/Application Support/Dash/DocSets/Man_Pages" ]]; then
     query=`encodeuri ${@}`
     /usr/bin/open "dash-plugin://keys=manpages&query=$query"
   else
@@ -96,9 +113,7 @@ function man {
   fi
 }
 
-
 # UCLA Specific
-
 alias seas="ssh -R 52698:localhost:52698 swerdlow@lnxsrv09.seas.ucla.edu"
 alias run_rsync='rsync -azP --exclude ".*/" --exclude ".*"'
 function abspath() {

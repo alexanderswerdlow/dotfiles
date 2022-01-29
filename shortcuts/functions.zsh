@@ -41,6 +41,7 @@ function upgrade() {
 }
 
 function sman() {
+    unset PAGER
     man $1 | col -b | subl
 }
 
@@ -48,29 +49,9 @@ function take() {
   mkdir $1 && cd $1
 }
 
-function encodeuri {
-  local string="${@}"
-  local strlen=${#string}
-  local encoded=""
-
-  for (( pos = 0; pos < strlen; pos ++ )); do
-    c=${string:$pos:1}
-    case "$c" in
-      [-_.~a-zA-Z0-9]) o="${c}" ;;
-      *) printf -v o '%%%02x' "'$c"
-    esac
-    encoded+="${o}"
-  done
-  echo "${encoded}"
-}
-
 # Example Usage: matlabr script.m
 function matlabr {
   matlabb -nodisplay -nosplash -nodesktop -r "run('$1');"
-}
-
-function ffind {
-  find . -name "*$1*" -print
 }
 
 function venv {

@@ -22,7 +22,6 @@ alias st='subl'
 alias home="cd ~/"
 alias search="rga --no-messages"
 alias ssearch="rga --rga-adapters=+pdfpages,tesseract --no-messages"
-alias findf='mdfind -onlyin . -name'
 export FZF_DEFAULT_COMMAND='fd --type file -E "*.jpg" -E "*.html" -E "*.htm" -E "*.txt"'
 
 # Python
