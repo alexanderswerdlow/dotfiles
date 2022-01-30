@@ -50,7 +50,6 @@ brew 'zlib'
 
 unless ENV.has_key?('FAST') || ENV.has_key?('CI') then
   cask '1password' # Shhhhh
-  cask 'authy' # Shhhhh
   cask 'appcleaner' # Removes trace files while deleting apps
   cask 'coderunner' # Quickly run/debug code in a bunch of languages, don't even need to save a file
   cask 'discord-canary' # Goddamn discord
