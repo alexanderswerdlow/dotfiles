@@ -32,7 +32,7 @@ brew 'opencv'
 brew 'rsync'
 brew 'rclone'
 brew 'cmake'
-berw 'node'
+brew 'node'
 
 # Python....
 brew 'pyenv'
