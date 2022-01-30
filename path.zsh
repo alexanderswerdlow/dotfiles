@@ -1,6 +1,5 @@
 export HOMEBREW_NO_ANALYTICS=1
 export HOMEBREW_NO_INSECURE_REDIRECT=1
-export HOMEBREW_CASK_OPTS=--require-sha
 export HOMEBREW_AUTO_UPDATE_SECS="604800"
 
 # Remove duplicates
