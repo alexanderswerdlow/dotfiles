@@ -23,7 +23,6 @@ alias bgcc="$BREWPREFIX/bin/gcc-11"
 
 export PYENV_VIRTUALENV_DISABLE_PROMPT=1
 
-
 # Java
 export JAVA_8_HOME=$(/usr/libexec/java_home -v1.8)
 export JAVA_17_HOME=$(/usr/libexec/java_home -v17)
