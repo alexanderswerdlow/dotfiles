@@ -6,7 +6,6 @@ alias brews="brew search"
 alias brewu="brew update && brew upgrade && brew cleanup"
 alias ibrewu="ibrew update && ibrew upgrade && ibrew cleanup"
 
-
 alias subl="/Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl"
 
 # Python
@@ -48,7 +47,7 @@ alias cleardns="dscacheutil -flushcache && sudo killall -HUP mDNSResponder"
 alias wifi="/usr/bin/python3 $DOTFILES/scripts/func.py change_network_order 'Wi-Fi'"
 alias ethernet="/usr/bin/python3 $DOTFILES/scripts/func.py change_network_order 'Ethernet'"
 alias local-ip="ipconfig getifaddr en0"
-alias imac="ssh aswerdlow@Alexanders-iMac.local"
+alias pop="ssh 192.168.88.254"
 
 # VPN
 alias qvpn="launchctl unload ~/Library/LaunchAgents/local.vpn.plist && networksetup -disconnectpppoeservice 'TorGuard Dedicated' && dns"

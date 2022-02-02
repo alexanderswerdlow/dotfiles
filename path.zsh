@@ -29,6 +29,7 @@ if [[ "$OS" == "macOS" ]]; then
             "/bin"
             "/usr/sbin"
             "/sbin"
+            "/opt/homebrew/anaconda3/bin"
             $path)
 
     # "$BREWPREFIX/coreutils/libexec/gnubin"
