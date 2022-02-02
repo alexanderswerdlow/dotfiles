@@ -8,14 +8,11 @@ typeset -U path
 # Global macOS exports/paths here
 if [[ "$OS" == "macOS" ]]; then
     export PYENV_ROOT="$HOME/.pyenv"
-    path+=("$PYENV_ROOT/bin")
     export ZSH_PYENV_LAZY_VIRTUALENV=true
     export SECRETS="$HOME/Documents/Programs/secrets.ini"
-    
     export PAGER="col -b  | open -a /Applications/Google\ Chrome.app -f"
-    export STREET_VIEW_DATA_DIR="/Volumes/GoogleDrive/Shared drives/EE209AS/data"
 
-    path+=(  "$DOTFILES/scripts"
+    path=(  "$DOTFILES/scripts"
             "$HOME/bin"
             "$HOME/Documents/Programs/bin"
             "$HOME/.local/bin"
@@ -30,12 +27,10 @@ if [[ "$OS" == "macOS" ]]; then
             "/usr/sbin"
             "/sbin"
             "/opt/homebrew/anaconda3/bin"
+            "$HOME/.node/bin"
+            "$PYENV_ROOT/bin"
             $path)
 
-    # "$BREWPREFIX/coreutils/libexec/gnubin"
-    # "$BREWPREFIX/opt/grep/libexec/gnubin"
-    # "$BREWPREFIX/opt/gnu-tar/libexec/gnubin"
-    # "$BREWPREFIX/opt/make/libexec/gnubin"
 elif [[ "$OS" == "Linux" ]]; then
     export SECRETS="$DOTFILES/secrets.ini"
     # export LD_LIBRARY_PATH=$LD_LIBRARY_PATH/usr/local/cuda-11.5/lib64
@@ -49,20 +44,6 @@ elif [[ "$OS" == "Linux" ]]; then
             # "/usr/local/cuda-11.5/bin"
             "/home/aswerdlow/.local/bin"
         )
-fi
-
-# Machine specific exports
-if [[ "$MACHINE" == "X86" ]]; then
-    # path+=("$HOME/go/bin")
-
-elif [[ "$MACHINE" == "ARM64" ]]; then
-    path+=( "$INTEL_BREW_PREFIX/opt/python@3.9/libexec/bin"
-            "$INTEL_BREW_PREFIX/bin"
-            "$INTEL_BREW_PREFIX/sbin"
-            "$HOME/.node/bin" )
-    
-    export GEM_HOME="$HOME/.gem"
-    export ZPYI_IMPORTS="requests numpy"
 fi
 
 export PATH
