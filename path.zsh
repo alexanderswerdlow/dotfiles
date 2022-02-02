@@ -32,7 +32,7 @@ if [[ "$OS" == "macOS" ]]; then
             $path)
 
 elif [[ "$OS" == "Linux" ]]; then
-    export SECRETS="$DOTFILES/secrets.ini"
+    export SECRETS="$HOME/Documents/Programs/secrets.ini"
     # export LD_LIBRARY_PATH=$LD_LIBRARY_PATH/usr/local/cuda-11.5/lib64
     export MUJOCO_PY_MUJOCO_PATH="$HOME/.mujoco/mujoco210"
     export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$MUJOCO_PY_MUJOCO_PATH/bin"
