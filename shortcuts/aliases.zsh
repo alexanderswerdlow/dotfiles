@@ -15,7 +15,7 @@ alias size='du -h -d 1'
 
 # Files
 alias untar="tar -xvzf"
-alias ls='exa'
+alias ls='exa -lam --group-directories-first'
 alias cat='bat --paging=never'
 alias st='subl'
 
