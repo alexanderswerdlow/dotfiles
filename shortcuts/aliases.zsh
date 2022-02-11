@@ -7,6 +7,7 @@ alias reload="exec zsh"
 # Directories
 alias library="cd $HOME/Library"
 alias dotfiles="code $DOTFILES"
+alias notes="code $HOME/Documents/Notes"
 alias aliases="subl $DOTFILES/aliases.zsh"
 alias paths="subl $DOTFILES/path.zsh"
 alias '..'="cd .."

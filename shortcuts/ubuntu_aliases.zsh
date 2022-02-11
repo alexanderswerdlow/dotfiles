@@ -16,7 +16,12 @@ function localcode() (
     setopt ksh_arrays 2> /dev/null || true
 
     CMD=ITERM-TRIGGER-open-with-local-vscode-remote
-    LOCALCODE_MACHINE='ssh.aswerdlow.com'
+    SSH_IP=$(echo $SSH_CLIENT | awk '{ print $1}')
+    if [[ $SSH_IP == '::1']]; then
+        LOCALCODE_MACHINE='ssh.aswerdlow.com'
+    else
+        LOCALCODE_MACHINE=$(echo $SSH_CONNECTION | awk '{print $3}')
+    fi
     MACHINE=${LOCALCODE_MACHINE-submit}
     FILENAMES=( "$@" )
 
