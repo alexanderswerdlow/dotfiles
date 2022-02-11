@@ -17,7 +17,7 @@ function localcode() (
 
     CMD=ITERM-TRIGGER-open-with-local-vscode-remote
     SSH_IP=$(echo $SSH_CLIENT | awk '{ print $1}')
-    if [[ $SSH_IP == '::1']]; then
+    if [[ "$SSH_IP" == "::1" ]]; then
         LOCALCODE_MACHINE='ssh.aswerdlow.com'
     else
         LOCALCODE_MACHINE=$(echo $SSH_CONNECTION | awk '{print $3}')
