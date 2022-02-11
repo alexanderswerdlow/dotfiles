@@ -37,10 +37,6 @@ if [[ "$OS" == "macOS" ]]; then
   
 elif [[ "$OS" == "Linux" ]]; then
   export $(awk '{print $0}' $SECRETS | grep -E '^\w' | sed 's/ = /=/')
-  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-  # eval "$(pyenv init --path)"
-  # eval "$(pyenv virtualenv-init -)"
-  # source $HOME/.cargo/env
 
   HISTFILE=~/.zsh_history
   HISTSIZE=10000
@@ -65,3 +61,20 @@ fi
 eval "$(starship init zsh)"
 eval "$(zoxide init zsh)"
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/home/aswerdlow/anaconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/home/aswerdlow/anaconda3/etc/profile.d/conda.sh" ]; then
+        . "/home/aswerdlow/anaconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="/home/aswerdlow/anaconda3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+

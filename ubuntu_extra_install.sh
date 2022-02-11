@@ -9,7 +9,6 @@ sudo dpkg -i --force-depends google-chrome-stable_current_amd64.deb
 rm google-chrome-stable_current_amd64.deb
 
 
-
 # 1Passowrd
 curl -sS https://downloads.1password.com/linux/keys/1password.asc | sudo gpg --dearmor --output /usr/share/keyrings/1password-archive-keyring.gpg
 echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/1password-archive-keyring.gpg] https://downloads.1password.com/linux/debian/amd64 stable main' | sudo tee /etc/apt/sources.list.d/1password.list
