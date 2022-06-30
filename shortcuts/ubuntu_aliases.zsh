@@ -49,3 +49,30 @@ function localcode() (
 
     echo ${CMD} ${FTYPE} ${MACHINE} ${FILENAMES[@]}
 )
+
+function cd() {
+  builtin cd "$@"
+
+  if [[ ! -z "$VIRTUAL_ENV" ]] ; then
+    # If the current directory is not contained
+    # within the venv parent directory -> deactivate the venv.
+    cur_dir=$(pwd -P)
+    venv_dir="$(dirname "$VIRTUAL_ENV")"
+    if [[ "$cur_dir"/ != "$venv_dir"/* ]] ; then
+      deactivate
+    fi
+  fi
+
+  if [[ -z "$VIRTUAL_ENV" ]] ; then
+    # If config file is found -> activate the vitual environment
+    venv_cfg_filepath=$(find . -maxdepth 2 -type f -name 'pyvenv.cfg' 2> /dev/null)
+    if [[ -z "$venv_cfg_filepath" ]]; then
+      return # no config file found
+    fi
+
+    venv_filepath=$(cut -d '/' -f -2 <<< ${venv_cfg_filepath})
+    if [[ -d "$venv_filepath" ]] ; then
+      source "${venv_filepath}"/bin/activate
+    fi
+  fi
+}

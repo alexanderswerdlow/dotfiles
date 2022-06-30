@@ -37,7 +37,7 @@ elif [[ "$OS" == "Linux" ]]; then
     export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$MUJOCO_PY_MUJOCO_PATH/bin"
     export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/lib/nvidia"
     export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$CUDA_HOME/lib64"
-    export LD_PRELOAD="/usr/lib/x86_64-linux-gnu/libGLEW.so"
+    # export LD_PRELOAD="/usr/lib/x86_64-linux-gnu/libGLEW.so"
     export CPATH="$CUDA_HOME/include:$CPATH"
     export CONDA_AUTO_ACTIVATE_BASE=false
     path=( "$MUJOCO_PY_MUJOCO_PATH/bin"
