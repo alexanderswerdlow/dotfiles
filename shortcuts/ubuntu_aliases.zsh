@@ -2,6 +2,12 @@ alias dash='gotop --nvidia'
 alias doctor='sudo apt-get update && sudo apt-get upgrade -y && sudo apt-get autoclean && sudo apt-get clean && sudo apt-get autoremove -y'
 alias code-ssh="$DOTFILES/scripts/code_connect.py"
 
+alias tn='tmux new -s'
+alias tr='tmux attach -t'
+alias trr='tmux -CC attach -t'
+alias ts='tmux ls'
+alias tk='tmux kill-session -t'
+
 function ffind {
   find . -name "*$1*" -print
 }
@@ -75,4 +81,8 @@ function cd() {
       source "${venv_filepath}"/bin/activate
     fi
   fi
+}
+
+function kg(){
+  for i ($argv) lsof -t "/dev/nvidia$i" | xargs -I {} kill -9 {}
 }
