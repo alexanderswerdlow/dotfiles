@@ -12,7 +12,7 @@ alias aliases="subl $DOTFILES/aliases.zsh"
 alias paths="subl $DOTFILES/path.zsh"
 alias '..'="cd .."
 alias '...'="cd ../../"
-alias size='du -h -d 1'
+alias size='du -h -d 1 | sort -h'
 
 # Files
 alias untar="tar -xvzf"
@@ -56,6 +56,16 @@ alias resolve="git add . && git commit --no-edit"
 alias stash="git stash -u"
 alias unstage="git restore --staged ."
 alias wip="commit wip"
+
+alias tn='tmux new -s'
+alias tr='tmux attach -t'
+alias ts='tmux ls'
+alias tk='tmux kill-session -t'
+
+alias s2='ssh $S2_HOSTNAME'
+alias s3='ssh $S3_HOSTNAME'
+alias sp='ssh pop-os'
+alias work="ssh home"
 
 source $DOTFILES/shortcuts/functions.zsh
 

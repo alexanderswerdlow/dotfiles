@@ -49,3 +49,8 @@ function localcode() (
 
     echo ${CMD} ${FTYPE} ${MACHINE} ${FILENAMES[@]}
 )
+
+# TODO: Can kill processes on other GPUs
+function kg(){
+  for i ($argv) lsof -t "/dev/nvidia$i" | xargs -I {} kill -9 {}
+}
