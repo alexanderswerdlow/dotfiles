@@ -12,7 +12,8 @@ alias aliases="subl $DOTFILES/aliases.zsh"
 alias paths="subl $DOTFILES/path.zsh"
 alias '..'="cd .."
 alias '...'="cd ../../"
-alias size='du -h -d 1 | sort -h'
+alias size='gdu'
+alias ssize='du -h -d 1 | sort -h'
 
 # Files
 alias untar="tar -xvzf"
@@ -21,7 +22,7 @@ alias cat='bat --paging=never'
 alias st='subl'
 
 alias home="cd ~/"
-alias search="rga --no-messages"
+alias search="rga --rga-cache-max-blob-len=50000000 --no-messages --rga-adapters=-decompress,zip,tar"
 alias ssearch="rga --rga-adapters=+pdfpages,tesseract --no-messages"
 export FZF_DEFAULT_COMMAND='fd --type file -E "*.jpg" -E "*.html" -E "*.htm" -E "*.txt"'
 

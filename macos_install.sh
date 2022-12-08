@@ -2,7 +2,7 @@
 
 set -e
 
-brew autoupdate start
+brew autoupdate start --upgrade --cleanup 604800
 
 # Symlink the Mackup config file to the home directory
 ln -s "$DOTFILES/.mackup.cfg" "$HOME/.mackup.cfg"

@@ -29,6 +29,7 @@ if [[ "$OS" == "macOS" ]]; then
             "/opt/homebrew/anaconda3/bin"
             "$HOME/.node/bin"
             "$PYENV_ROOT/bin"
+            "$HOME/.cargo/bin"
             $path)
 
 elif [[ "$OS" == "Linux" ]]; then

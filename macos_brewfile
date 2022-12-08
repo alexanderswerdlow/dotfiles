@@ -20,6 +20,7 @@ brew 'wget' # Sometimes you gotta wget things
 brew 'iperf3' # Testing LAN Speeds. Useful for getting your *actual* WiFi speed and not just the WAN/internet speed
 brew 'rga' # Search utility based off of ripgrep
 brew 'pandoc' # File conversion utility
+brew 'gdu'
 
 brew 'fzf' # Fuzzy finder
 brew 'starship' # Terminal prompt
@@ -89,11 +90,8 @@ unless ENV.has_key?('FAST') || ENV.has_key?('CI') then
   # cask 'pycharm' #  Best C/C++/Java IDE if it's not a super quick edit
 
   # Quicklook
-  cask 'qlcolorcode'
   cask 'qlmarkdown'
-  cask 'quicklook-json'
   cask 'quicklook-csv'
-  cask 'qlstephen'
   cask 'qlimagesize'
   cask 'quicklookase'
   cask 'qlvideo'

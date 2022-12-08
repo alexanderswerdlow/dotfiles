@@ -1,5 +1,5 @@
 function rga-fzf() {
-	RG_PREFIX="rga --files-with-matches"
+	RG_PREFIX="rga --files-with-matches --rga-cache-max-blob-len=50000000 --rga-adapters=-decompress,zip,tar"
 	local file
 	file="$(
 		FZF_DEFAULT_COMMAND="$RG_PREFIX '$1'" \
