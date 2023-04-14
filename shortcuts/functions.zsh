@@ -90,3 +90,12 @@ function xkcd {
 
   kitty +kitten icat $img
 }
+
+function vpn-up() {
+  echo "Starting the vpn ..."
+  echo $UCLA_PASSWORD | sudo openconnect --background --passwd-on-stdin --user=$UCLA_USERNAME $UCLA_VPN_URL
+}
+
+function vpn-down() {
+  sudo kill -2 `pgrep openconnect`
+}

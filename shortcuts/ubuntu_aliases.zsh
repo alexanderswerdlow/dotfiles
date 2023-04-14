@@ -87,3 +87,17 @@ function cd() {
 function kg(){
   for i ($argv) lsof -t "/dev/nvidia$i" | xargs -I {} kill -9 {}
 }
+
+function pp(){
+  # Get the PIDs of all GPU processes
+  pids=($(nvidia-smi --query-compute-apps=pid --format=csv,noheader))
+  
+  # Loop through each PID and get the username and process command
+  for pid in $pids
+  do
+      # Get the process information using ps
+      info=$(ps -p $pid -o user,%cpu,%mem,cmd --no-headers)
+      # Print the process information
+      echo "$pid $info"
+  done
+}

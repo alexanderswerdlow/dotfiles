@@ -11,6 +11,7 @@ if [[ "$OS" == "macOS" ]]; then
     export PYENV_ROOT="$HOME/.pyenv"
     export ZSH_PYENV_LAZY_VIRTUALENV=true
     export PAGER="col -b  | open -a /Applications/Google\ Chrome.app -f"
+    export NVM_DIR="$HOME/.nvm"
 
     path=(  "$DOTFILES/scripts"
             "$HOME/bin"
@@ -30,6 +31,9 @@ if [[ "$OS" == "macOS" ]]; then
             "$HOME/.node/bin"
             "$PYENV_ROOT/bin"
             "$HOME/.cargo/bin"
+            "$HOME/go/bin"
+            "$HOME/.bun/bin:$PATH"
+            "$HOME/.nvm/versions/node/v16.20.0/bin"
             $path)
 
 elif [[ "$OS" == "Linux" ]]; then
@@ -50,7 +54,16 @@ elif [[ "$OS" == "Linux" ]]; then
             $path
             "$HOME/anaconda3/bin"
         )
-    
+
+    if [[ $(hostname) =~ gpu[0-9]{2} ]]; then
+        export TMPDIR=$HOME/tmp
+        export NUSCENES_DATA_DIR=/data/datasets/nuscenes
+        export ARGOVERSE_DATA_DIR=/data/datasets/av2
+        export WAYMO_DATA_DIR=/data1/datasets/waymo_open_dataset_v_1_4_2
+        export SAVE_DATA_DIR=/data/datasets
+        export TORCH_CUDNN_V8_API_ENABLED=1
+        export NCCL_P2P_DISABLE=1
+    fi
 fi
 
 export PATH
