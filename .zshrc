@@ -89,8 +89,6 @@ fi
 znap eval starship 'starship init zsh --print-full-init'
 znap prompt
 
-# znap source marlonrichert/zsh-autocomplete
-
 znap install zsh-users/zsh-completions
 
 ZSH_AUTOSUGGEST_STRATEGY=( history )
@@ -110,4 +108,24 @@ compctl -K    _pip_completion pip
 eval "$(zoxide init zsh)"
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
+# cd $DOTFILES/plugins && git clone --depth 2 -- https://github.com/marlonrichert/zsh-autocomplete.git
+# cd $DOTFILES/plugins/zsh-autocomplete && git checkout 86ffb11c7186664a71fd36742f3148628c4b85cb;
 source $DOTFILES/plugins/zsh-autocomplete/zsh-autocomplete.plugin.zsh
+
++autocomplete:recent-directories() {
+   reply=( [] )
+}
+zstyle -e ':autocomplete:*' list-lines 'reply=( $(( LINES / 3 )) )'
+
+() {
+   local -a prefix=( '\e'{\[,O} )
+   local -a up=( ${^prefix}A ) down=( ${^prefix}B )
+   local key=
+   for key in $up[@]; do
+      bindkey "$key" up-line-or-history
+   done
+   for key in $down[@]; do
+      bindkey "$key" down-line-or-history
+   done
+}
+
