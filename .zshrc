@@ -109,13 +109,21 @@ eval "$(zoxide init zsh)"
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # cd $DOTFILES/plugins && git clone --depth 2 -- https://github.com/marlonrichert/zsh-autocomplete.git
-# cd $DOTFILES/plugins/zsh-autocomplete && git checkout 86ffb11c7186664a71fd36742f3148628c4b85cb;
+# cd $DOTFILES/plugins/zsh-autocomplete && git checkout 86ffb11c7186664a71fd36742f3148628c4b85cb
+# echo "skip_global_compinit=1" > ~/.zshenv
 source $DOTFILES/plugins/zsh-autocomplete/zsh-autocomplete.plugin.zsh
 
-+autocomplete:recent-directories() {
-   reply=( [] )
-}
+if [[ $(hostname) =~ gpu[0-9]{2} ]]; then
+  +autocomplete:recent-directories() {
+    reply=( [] )
+  }
+fi
+
 zstyle -e ':autocomplete:*' list-lines 'reply=( $(( LINES / 3 )) )'
+bindkey '\t' menu-select "$terminfo[kcbt]" menu-select
+bindkey -M menuselect '\t' menu-complete "$terminfo[kcbt]" reverse-menu-complete
+zstyle ':autocomplete:*complete*:*' insert-unambiguous yes
+bindkey -M menuselect '\r' .accept-line
 
 () {
    local -a prefix=( '\e'{\[,O} )
