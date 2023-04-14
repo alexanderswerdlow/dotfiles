@@ -2,6 +2,7 @@ export HOMEBREW_NO_ANALYTICS=1
 export HOMEBREW_NO_INSECURE_REDIRECT=1
 export HOMEBREW_AUTO_UPDATE_SECS="604800"
 export SECRETS="$HOME/Documents/Programs/secrets.ini"
+export PYTHONSTARTUP=$DOTFILES/scripts/pythonrc.py
 
 # Remove duplicates
 typeset -U path

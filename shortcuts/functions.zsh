@@ -91,6 +91,10 @@ function xkcd {
   kitty +kitten icat $img
 }
 
+function fn {
+  find "$1" -type f | wc -l
+}
+
 function vpn-up() {
   echo "Starting the vpn ..."
   echo $UCLA_PASSWORD | sudo openconnect --background --passwd-on-stdin --user=$UCLA_USERNAME $UCLA_VPN_URL
