@@ -7,7 +7,7 @@ if [ "$(uname)" = "Darwin" ]; then
   export SETUP_OS="macos"
 else
   export SETUP_OS="ubuntu"
-  sudo apt-get update && sudo apt-get install curl git
+  sudo apt-get update && sudo apt-get install -y curl git
 fi
 
 sudo echo "Setting up your $OS machine..."
