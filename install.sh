@@ -54,12 +54,12 @@ if ! $NON_ROOT_INSTALL; then
 fi
 
 # Generate SSH Keys
-if [[ ! -f ~/.ssh/id_rsa ]]; then
+if [ ! -f "$HOME/.ssh/id_rsa" ]; then
     echo "Generating SSH Keys..."
-    ssh-keygen -t rsa -b 4096 -N "" -f ~/.ssh/id_rsa
+    ssh-keygen -t rsa -b 4096 -N "" -f "$HOME/.ssh/id_rsa"
     eval "$(ssh-agent -s)"
-    echo "Host *\n AddKeysToAgent yes\n UseKeychain yes\n IdentityFile ~/.ssh/id_rsa" | tee ~/.ssh/config
-    ssh-add ~/.ssh/id_rsa
+    echo "Host *\n AddKeysToAgent yes\n UseKeychain yes\n IdentityFile $HOME/.ssh/id_rsa" | tee "$HOME/.ssh/config"
+    ssh-add "$HOME/.ssh/id_rsa"
 fi
 
 echo "Cloning repositories..."
@@ -74,4 +74,4 @@ fi
 
 sh "${SETUP_OS}_install.sh"
 
-cat ~/.ssh/id_rsa.pub
+cat "$HOME/.ssh/id_rsa.pub"
