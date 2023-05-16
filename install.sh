@@ -15,6 +15,8 @@ sudo echo "Setting up your $OS machine..."
 export DOTFILES="$HOME/dotfiles"
 export GITHUB="$HOME/github"
 
+test -d $DOTFILES && echo "Cloning dotfiles to $DOTFILES" && git clone "https://github.com/alexanderswerdlow/dotfiles" "$DOTFILES"
+
 # Copy .zshrc if it previously existed
 test -r "$HOME/.zshrc" && mv "$HOME/.zshrc" "$HOME/.zshrc_default"
 
@@ -23,17 +25,16 @@ ln -s "$DOTFILES/.zshrc" "$HOME/.zshrc"
 
 if sudo -v >/dev/null 2>&1; then
   export NON_ROOT_INSTALL=false
-  echo "We have sudo!"
 else
   export NON_ROOT_INSTALL=true
-  echo "We don't appear to have sudo."
 fi
 
-if ! $NON_ROOT_INSTALL; then
-  echo "Root permissions...Installing homebrew"
+echo "Performing Non-Root Install: $NON_ROOT_INSTALL"
 
+if ! $NON_ROOT_INSTALL; then
   # Check for Homebrew and install if we don't have it
   if test ! "$(which brew)"; then
+    echo "Brew not found... Installing"
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
   fi
 
@@ -42,6 +43,7 @@ if ! $NON_ROOT_INSTALL; then
     eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
   fi
 
+  echo "Installing and Updating from Brewfile"
   brew update # Update Homebrew recipes
   brew tap homebrew/bundle
   brew bundle --file="${SETUP_OS}_brewfile" # Install all our dependencies with bundle
@@ -50,6 +52,7 @@ fi
 
 # Generate SSH Keys
 if [ ! -f ~/.ssh/id_rsa ]; then
+    echo "Generating SSH Keys..."
     ssh-keygen -t rsa -b 4096 -N "" -f ~/.ssh/id_rsa
     eval "$(ssh-agent -s)"
     echo "Host *\n AddKeysToAgent yes\n UseKeychain yes\n IdentityFile ~/.ssh/id_rsa" | tee ~/.ssh/config
