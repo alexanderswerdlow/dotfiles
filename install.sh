@@ -3,7 +3,7 @@
 set -e
 
 # Determine what type of machine we're running on
-if [[ "$(uname)" = "Darwin" ]]; then
+if [ "$(uname)" = "Darwin" ]; then
   export SETUP_OS="macos"
 else
   export SETUP_OS="ubuntu"
@@ -15,7 +15,7 @@ sudo echo "Setting up your $OS machine..."
 export DOTFILES="$HOME/dotfiles"
 export GITHUB="$HOME/github"
 
-if [[ ! -d "$DOTFILES" ]]; then
+if [ ! -d "$DOTFILES" ]; then
   echo "Cloning dotfiles to $DOTFILES"
   git clone --recurse-submodules "https://github.com/alexanderswerdlow/dotfiles" "$DOTFILES"
 fi
