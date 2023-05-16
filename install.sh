@@ -17,7 +17,7 @@ export GITHUB="$HOME/github"
 
 if [[ ! -d "$DOTFILES" ]]; then
   echo "Cloning dotfiles to $DOTFILES"
-  git clone "https://github.com/alexanderswerdlow/dotfiles" "$DOTFILES"
+  git clone --recurse-submodules "https://github.com/alexanderswerdlow/dotfiles" "$DOTFILES"
 fi
 
 # Copy .zshrc if it previously existed
@@ -50,7 +50,6 @@ if ! $NON_ROOT_INSTALL; then
   brew update # Update Homebrew recipes
   brew tap homebrew/bundle
   brew bundle --file="${SETUP_OS}_brewfile" # Install all our dependencies with bundle
-  brew autoupdate delete
   brew cleanup
 fi
 
