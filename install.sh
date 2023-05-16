@@ -3,7 +3,7 @@
 set -e
 
 # Determine what type of machine we're running on
-if [ "$(uname)" = "Darwin" ]; then
+if [[ "$(uname)" = "Darwin" ]]; then
   export SETUP_OS="macos"
 else
   export SETUP_OS="ubuntu"
@@ -15,7 +15,10 @@ sudo echo "Setting up your $OS machine..."
 export DOTFILES="$HOME/dotfiles"
 export GITHUB="$HOME/github"
 
-test -d $DOTFILES && echo "Cloning dotfiles to $DOTFILES" && git clone "https://github.com/alexanderswerdlow/dotfiles" "$DOTFILES"
+if [[ ! -d "$DOTFILES" ]]; then
+  echo "Cloning dotfiles to $DOTFILES"
+  git clone "https://github.com/alexanderswerdlow/dotfiles" "$DOTFILES"
+fi
 
 # Copy .zshrc if it previously existed
 test -r "$HOME/.zshrc" && mv "$HOME/.zshrc" "$HOME/.zshrc_default"
@@ -47,11 +50,12 @@ if ! $NON_ROOT_INSTALL; then
   brew update # Update Homebrew recipes
   brew tap homebrew/bundle
   brew bundle --file="${SETUP_OS}_brewfile" # Install all our dependencies with bundle
+  brew autoupdate delete
   brew cleanup
 fi
 
 # Generate SSH Keys
-if [ ! -f ~/.ssh/id_rsa ]; then
+if [[ ! -f ~/.ssh/id_rsa ]]; then
     echo "Generating SSH Keys..."
     ssh-keygen -t rsa -b 4096 -N "" -f ~/.ssh/id_rsa
     eval "$(ssh-agent -s)"
@@ -63,9 +67,11 @@ echo "Cloning repositories..."
 test -d "$GITHUB" || mkdir "$GITHUB"
 test -d "$GITHUB/f1tenth" || git clone https://github.com/alexanderswerdlow/f1tenth.git "$GITHUB/f1tenth" # Personal
 
-cd $DOTFILES/plugins && git clone --depth 2 -- https://github.com/marlonrichert/zsh-autocomplete.git
-cd $DOTFILES/plugins/zsh-autocomplete && git checkout 86ffb11c7186664a71fd36742f3148628c4b85cb
-echo "skip_global_compinit=1" > ~/.zshenv && cd $DOTFILES
+if [[ ! -d "$DOTFILES/plugins/zsh-autocomplete" ]]; then
+  cd "$DOTFILES/plugins" && git clone --depth 2 -- 'https://github.com/marlonrichert/zsh-autocomplete.git'
+  cd "$DOTFILES/plugins/zsh-autocomplete" && git checkout '86ffb11c7186664a71fd36742f3148628c4b85cb'
+  echo "skip_global_compinit=1" > ~/.zshenv && cd $DOTFILES
+fi
 
 sh "${SETUP_OS}_install.sh"
 

@@ -3,6 +3,7 @@
 set -e
 
 # Fix name conflict: https://github.com/dundee/gdu/issues/48
+brew unlink gdu
 brew install --force gdu
 brew link --overwrite gdu
 
