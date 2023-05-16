@@ -41,11 +41,14 @@ fi
 # Random
 if [[ "$OS" == "macOS" ]]; then
   source $DOTFILES/plugins/pyenv-lazy/pyenv-lazy.plugin.zsh
+  
   # [ -s "/Users/aswerdlow/.bun/_bun" ] && source "/Users/aswerdlow/.bun/_bun" # bun completions
   # [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
   # [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-  eval "$(github-copilot-cli alias -- "$0")"
 
+  # To install copilot:
+  # npm install -g @githubnext/github-copilot-cli; github-copilot-cli auth
+  eval "$(github-copilot-cli alias -- "$0")"
 elif [[ "$OS" == "Linux" ]]; then
   HISTFILE=~/.zsh_history
   HISTSIZE=10000
@@ -90,6 +93,7 @@ if [[ $(hostname) =~ gpu[0-9]{2} ]]; then
 fi
 
 # Znap
+# To clear cache: rm -rf ${XDG_CACHE_HOME:-$HOME/.cache}/zsh-snap/eval
 znap eval starship 'starship init zsh --print-full-init'
 znap prompt
 

@@ -24,6 +24,7 @@ else
     test ! -r bat && eget sharkdp/bat --to bat && chmod +x bat;
     test ! -r starship && eget starship/starship --to starship && chmod +x starship;
     test ! -r gh && eget cli/cli --to gh && chmod +x gh;
+    test ! -r fzf && eget junegunn/fzf --to fzf && chmod +x fzf;
     command -v zsh >/dev/null 2>&1 || eget romkatv/zsh-bin --to zsh && chmod +x zsh;
 
     # Load zsh. TODO: Use a real multiline string that doesn't break things
