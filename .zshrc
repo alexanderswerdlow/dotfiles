@@ -112,9 +112,6 @@ compctl -K    _pip_completion pip
 eval "$(zoxide init zsh)"
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-# cd $DOTFILES/plugins && git clone --depth 2 -- https://github.com/marlonrichert/zsh-autocomplete.git
-# cd $DOTFILES/plugins/zsh-autocomplete && git checkout 86ffb11c7186664a71fd36742f3148628c4b85cb
-# echo "skip_global_compinit=1" > ~/.zshenv
 source $DOTFILES/plugins/zsh-autocomplete/zsh-autocomplete.plugin.zsh
 
 # This is a hack to enable the localcode function to work properly

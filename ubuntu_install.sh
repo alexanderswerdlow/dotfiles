@@ -4,7 +4,7 @@ set -e
 
 test -r "$HOME/.bash_profile" && cp "$HOME/.bash_profile" "$HOME/.bash_profile_default"
 
-if ! $NON_ROOT_INSTALL; then
+if ! ${NON_ROOT_INSTALL:-false}; then
     sudo apt-get update
     sudo apt-get install -y zsh fzf wget unzip curl sudo git gcc g++ cmake build-essential
     sudo apt-get autoclean
@@ -26,14 +26,12 @@ else
     test ! -r gh && eget cli/cli --to gh && chmod +x gh;
     command -v zsh >/dev/null 2>&1 || eget romkatv/zsh-bin --to zsh && chmod +x zsh;
 
-    # Load zsh
-    cat <<'EOF' >> ~/.profile
-    export SHELL=$(which zsh)
-    if [ -x "$ZSH_PATH" ]; then
-        ZSH_PATH=$SHELL
-        exec "$ZSH_PATH" -l
-    fi
-    EOF
+    # Load zsh. TODO: Use a real multiline string that doesn't break things
+    echo 'export SHELL=$(which zsh)' >> ~/.profile
+    echo 'if [ -x "$ZSH_PATH" ]; then' >> ~/.profile
+    echo '    ZSH_PATH=$SHELL' >> ~/.profile
+    echo '    exec "$ZSH_PATH" -l' >> ~/.profile
+    echo 'fi' >> ~/.profile
 fi
 
 exec zsh
