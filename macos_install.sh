@@ -2,6 +2,10 @@
 
 set -e
 
+# Fix name conflict: https://github.com/dundee/gdu/issues/48
+brew install --force gdu
+brew link --overwrite gdu
+
 brew autoupdate start --upgrade --cleanup 604800
 
 # Symlink the Mackup config file to the home directory

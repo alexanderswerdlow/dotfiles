@@ -20,7 +20,6 @@ brew 'wget' # Sometimes you gotta wget things
 brew 'iperf3' # Testing LAN Speeds. Useful for getting your *actual* WiFi speed and not just the WAN/internet speed
 brew 'rga' # Search utility based off of ripgrep
 brew 'pandoc' # File conversion utility
-brew 'gdu'
 
 brew 'fzf' # Fuzzy finder
 brew 'starship' # Terminal prompt

@@ -8,15 +8,42 @@ alias trr='tmux -CC attach -t'
 alias ts='tmux ls'
 alias tk='tmux kill-session -t'
 
-function ffind {
-  find . -name "*$1*" -print
-}
-
 # Preferred editor for local and remote sessions
 if [[ -n $SSH_CONNECTION ]]; then
   alias code='localcode'
 fi
 
+# Simple find command
+function ffind {
+  find . -name "*$1*" -print
+}
+
+# Kills stubborn processes. Will kill processes on all GPUs
+function kg(){
+  for i ($argv) lsof -t "/dev/nvidia$i" | xargs -I {} kill -9 {}
+}
+
+# Lists all processes running on all GPUs and relevant info
+function pp(){
+  # Get the PIDs of all GPU processes
+  pids=($(nvidia-smi --query-compute-apps=pid --format=csv,noheader))
+  
+  # Loop through each PID and get the username and process command
+  for pid in $pids
+  do
+      # Get the process information using ps
+      info=$(ps -p $pid -o user,%cpu,%mem,cmd --no-headers)
+      # Print the process information
+      echo "$pid $info"
+  done
+}
+
+# This initiates an iTerm2 Trigger on the Server Side
+# The client (iTerm2) then calls $DOTFILES/scripts/trigger_vscode.sh
+# iTerm2 uses the following regular expression:
+# .*ITERM-TRIGGER-open-with-local-vscode-remote ([^ ]+) ([^ ]+) (([^ ]+ ?)+)
+# and then calls ->
+# ~/dotfiles/scripts/trigger_vscode.sh \1 \2 \3
 function localcode() (
     # Tell zsh to use bash-style arrays
     setopt ksh_arrays 2> /dev/null || true
@@ -56,6 +83,7 @@ function localcode() (
     echo ${CMD} ${FTYPE} ${MACHINE} ${FILENAMES[@]}
 )
 
+# Auto-activates a local venv if present
 function cd() {
   builtin cd "$@"
 
@@ -81,23 +109,4 @@ function cd() {
       source "${venv_filepath}"/bin/activate
     fi
   fi
-}
-
-# TODO: Can kill processes on other GPUs
-function kg(){
-  for i ($argv) lsof -t "/dev/nvidia$i" | xargs -I {} kill -9 {}
-}
-
-function pp(){
-  # Get the PIDs of all GPU processes
-  pids=($(nvidia-smi --query-compute-apps=pid --format=csv,noheader))
-  
-  # Loop through each PID and get the username and process command
-  for pid in $pids
-  do
-      # Get the process information using ps
-      info=$(ps -p $pid -o user,%cpu,%mem,cmd --no-headers)
-      # Print the process information
-      echo "$pid $info"
-  done
 }

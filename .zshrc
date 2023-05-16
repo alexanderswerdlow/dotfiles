@@ -1,7 +1,12 @@
 #!/bin/zsh
 
 export DOTFILES=$HOME/dotfiles
-source $DOTFILES/local/zsh-snap/znap.zsh
+
+[[ -r "$DOTFILES/local/zsh-snap/znap.zsh" ]] ||
+    git clone --depth 1 -- https://github.com/marlonrichert/zsh-snap.git "$DOTFILES/local/zsh-snap"
+
+source "$DOTFILES/local/zsh-snap/znap.zsh"
+
 
 # Determine what type of machine we're running on
 # This affects what we source, put on our path, and which aliases we use
@@ -19,16 +24,16 @@ if [[ "$(uname)" == "Darwin" ]]; then
 else
   export OS='Linux'
   export MACHINE='Other'
-
 fi
 
-export INTEL_BREW_PREFIX='/usr/local'
 export ARM_BREW_PREFIX='/opt/homebrew'
 export LINUX_BREW_PREFIX='/home/linuxbrew/.linuxbrew'
+export INTEL_BREW_PREFIX='/usr/local' # Rarely used but here just in case
 
 source $DOTFILES/path.zsh
 source $DOTFILES/shortcuts/aliases.zsh
 
+# We load our secrets from a toml format
 if [[ -f "$SECRETS" ]]; then
     export $(awk '{print $0}' $SECRETS | grep -E '^\w' | sed 's/ = /=/')
 fi
@@ -84,8 +89,7 @@ if [[ $(hostname) =~ gpu[0-9]{2} ]]; then
     fi
 fi
 
-# Starship alternative: znap prompt sindresorhus/pure
-
+# Znap
 znap eval starship 'starship init zsh --print-full-init'
 znap prompt
 
@@ -113,18 +117,28 @@ eval "$(zoxide init zsh)"
 # echo "skip_global_compinit=1" > ~/.zshenv
 source $DOTFILES/plugins/zsh-autocomplete/zsh-autocomplete.plugin.zsh
 
-if [[ $(hostname) =~ gpu[0-9]{2} ]]; then
+# This is a hack to enable the localcode function to work properly
+if [[ -n $SSH_CONNECTION ]]; then
   +autocomplete:recent-directories() {
     reply=( [] )
   }
 fi
 
+# For reference, see: https://github.com/marlonrichert/zsh-autocomplete
+# Limit the number of lines shown
 zstyle -e ':autocomplete:*' list-lines 'reply=( $(( LINES / 3 )) )'
+
+# Make Tab go straight to the menu and cycle there
 bindkey '\t' menu-select "$terminfo[kcbt]" menu-select
 bindkey -M menuselect '\t' menu-complete "$terminfo[kcbt]" reverse-menu-complete
-zstyle ':autocomplete:*complete*:*' insert-unambiguous yes
-bindkey -M menuselect '\r' .accept-line
 
+# First insert the common substring
+zstyle ':autocomplete:*complete*:*' insert-unambiguous yes
+
+# Make Enter submit the command line straight from the menu
+# bindkey -M menuselect '\r' .accept-line
+
+# Reset history key bindings to Zsh default
 () {
    local -a prefix=( '\e'{\[,O} )
    local -a up=( ${^prefix}A ) down=( ${^prefix}B )
@@ -136,4 +150,3 @@ bindkey -M menuselect '\r' .accept-line
       bindkey "$key" down-line-or-history
    done
 }
-

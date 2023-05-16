@@ -63,8 +63,10 @@ alias tr='tmux attach -t'
 alias ts='tmux ls'
 alias tk='tmux kill-session -t'
 
+alias s1='ssh $S1_HOSTNAME'
 alias s2='ssh $S2_HOSTNAME'
 alias s3='ssh $S3_HOSTNAME'
+alias s4='ssh $S4_HOSTNAME'
 alias sp='ssh pop-os'
 alias work="ssh home"
 
