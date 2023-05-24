@@ -14,6 +14,9 @@ sudo echo "Setting up your $OS machine..."
 if [ ! -d "$DOTFILES" ]; then
   echo "Cloning dotfiles to $DOTFILES"
   git clone --recurse-submodules "https://github.com/alexanderswerdlow/dotfiles" "$DOTFILES"
+else
+  git -C $DOTFILES fetch origin
+  git -C $DOTFILES reset --hard origin/master
 fi
 
 . "$DOTFILES/constants.sh"
