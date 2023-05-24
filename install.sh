@@ -2,7 +2,7 @@
 
 set -e
 
-source constants.sh
+export DOTFILES=$HOME/dotfiles
 
 # Determine what type of machine we're running on
 if [ "$OS" = "linux" ]; then
@@ -15,6 +15,8 @@ if [ ! -d "$DOTFILES" ]; then
   echo "Cloning dotfiles to $DOTFILES"
   git clone --recurse-submodules "https://github.com/alexanderswerdlow/dotfiles" "$DOTFILES"
 fi
+
+source "$DOTFILES/constants.sh"
 
 # Copy .zshrc if it previously existed
 test -r "$HOME/.zshrc" && mv "$HOME/.zshrc" "$HOME/.zshrc_default"
