@@ -6,7 +6,7 @@ test -r "$HOME/.bash_profile" && cp "$HOME/.bash_profile" "$HOME/.bash_profile_d
 
 if ! ${NON_ROOT_INSTALL:-false}; then
     sudo apt-get update
-    sudo apt-get install -y zsh fzf wget unzip curl sudo git gcc g++ cmake build-essential
+    sudo apt-get install -y zsh wget unzip curl sudo git gcc g++ cmake build-essential
     sudo apt-get autoclean
     sudo apt-get clean
     sudo apt-get autoremove -y

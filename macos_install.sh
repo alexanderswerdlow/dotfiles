@@ -20,8 +20,6 @@ if [ -z "${CI}" ]; then
   sudo sh -c 'echo "0.0.0.0  ocsp.apple.com" >> /etc/hosts'
   
   . "$DOTFILES/.macos"
-  
-  mkdir -p ~/bin
 else
   echo "In Testing, not setting macOS Preferences"
 fi

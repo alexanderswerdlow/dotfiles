@@ -63,14 +63,21 @@ if [ ! -f "$HOME/.ssh/id_rsa" ]; then
 fi
 
 echo "Cloning repositories..."
-test -d "$GITHUB" || mkdir "$GITHUB"
-test -d "$GITHUB/f1tenth" || git clone https://github.com/alexanderswerdlow/f1tenth.git "$GITHUB/f1tenth" # Personal
+
+if [ ! -d "$HOME/Documents/github" ]; then
+  test -d "$GITHUB" || mkdir "$GITHUB"
+  test -d "$GITHUB/f1tenth" || git clone https://github.com/alexanderswerdlow/f1tenth.git "$GITHUB/f1tenth" # Personal
+else
+  ln -s "$HOME/Documents/github" "$GITHUB"
+fi
 
 if [[ ! -d "$DOTFILES/plugins/zsh-autocomplete" ]]; then
   cd "$DOTFILES/plugins" && git clone --depth 2 -- 'https://github.com/marlonrichert/zsh-autocomplete.git'
   cd "$DOTFILES/plugins/zsh-autocomplete" && git checkout '86ffb11c7186664a71fd36742f3148628c4b85cb'
   echo "skip_global_compinit=1" > ~/.zshenv && cd $DOTFILES
 fi
+
+mkdir -p "$HOME/bin"
 
 sh "${SETUP_OS}_install.sh"
 
