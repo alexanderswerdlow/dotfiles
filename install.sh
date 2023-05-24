@@ -27,7 +27,7 @@ test -r "$HOME/.zshrc" && mv "$HOME/.zshrc" "$HOME/.zshrc_default"
 # Softlink .zshrc to dotfiles
 ln -s "$DOTFILES/.zshrc" "$HOME/.zshrc"
 
-if sudo -v >/dev/null 2>&1; then
+if sudo -v >/dev/null 2>&1 && !( [ "$(uname -m)" = "aarch64" ] && [ "$OS" = "linux" ] ); then
   export NON_ROOT_INSTALL=false
 else
   export NON_ROOT_INSTALL=true
