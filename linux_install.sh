@@ -16,6 +16,7 @@ if ! ${NON_ROOT_INSTALL:-false}; then
 else
     # In cases we don't have sudo access (e.g. on a cluster) we can use eget to install binaries
     mkdir -p "$HOME/bin" && cd "$HOME/bin";
+    export PATH="$HOME/bin:$PATH";
     test ! -r eget && curl https://zyedidia.github.io/eget.sh | sh;
     test ! -r gdu && eget dundee/gdu --to gdu && chmod +x gdu;
     test ! -r zoxide && eget ajeetdsouza/zoxide --to zoxide && chmod +x zoxide;

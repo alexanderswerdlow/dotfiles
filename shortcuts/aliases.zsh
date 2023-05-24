@@ -75,5 +75,5 @@ source $DOTFILES/shortcuts/functions.zsh
 if [[ "$OS" == "macos" ]]; then
   source $DOTFILES/shortcuts/mac_aliases.zsh
 elif [[ "$OS" == "linux" ]]; then
-  source $DOTFILES/shortcuts/ubuntu_aliases.zsh
+  source $DOTFILES/shortcuts/linux_aliases.zsh
 fi
