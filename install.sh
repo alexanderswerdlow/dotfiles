@@ -39,13 +39,7 @@ if ! $NON_ROOT_INSTALL; then
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
   fi
 
-  # Init homebrew on linux
-  if [ "$OS" = "ubuntu" ]; then
-    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-  else
-    eval "$(/opt/homebrew/bin/brew shellenv)"
-  fi
-
+  eval "$($BREWPREFIX/bin/brew shellenv)"
   echo "Installing and Updating from Brewfile"
   brew update # Update Homebrew recipes
   brew tap homebrew/bundle
