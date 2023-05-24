@@ -68,7 +68,7 @@ else
   ln -sf "$HOME/Documents/github" "$GITHUB"
 fi
 
-if [[ ! -d "$DOTFILES/plugins/zsh-autocomplete" ]]; then
+if [ ! -d "$DOTFILES/plugins/zsh-autocomplete" ]; then
   cd "$DOTFILES/plugins" && git clone --depth 2 -- 'https://github.com/marlonrichert/zsh-autocomplete.git'
   cd "$DOTFILES/plugins/zsh-autocomplete" && git checkout '86ffb11c7186664a71fd36742f3148628c4b85cb'
   echo "skip_global_compinit=1" > ~/.zshenv && cd $HOME
