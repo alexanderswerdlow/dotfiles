@@ -1,6 +1,8 @@
 #!/bin/zsh
 
-. constants.sh
+export DOTFILES=$HOME/dotfiles
+
+. $DOTFILES/constants.sh
 
 [[ -r "$DOTFILES/local/zsh-snap/znap.zsh" ]] ||
     git clone --depth 1 -- https://github.com/marlonrichert/zsh-snap.git "$DOTFILES/local/zsh-snap"

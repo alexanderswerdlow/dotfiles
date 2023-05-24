@@ -20,7 +20,7 @@ else
     test ! -r eget && curl https://zyedidia.github.io/eget.sh | sh;
     test ! -r gdu && eget dundee/gdu --to gdu && chmod +x gdu;
     test ! -r zoxide && eget ajeetdsouza/zoxide --to zoxide && chmod +x zoxide;
-    test ! -r gotop && eget xxxserxxx/gotop --asset '.tar.gz' --to gotop && chmod +x gotop;
+    test ! -r gotop && eget xxxserxxx/gotop --asset '.tgz' --to gotop && chmod +x gotop;
     test ! -r exa && eget ogham/exa --to exa && chmod +x exa;
     test ! -r bat && eget sharkdp/bat --to bat && chmod +x bat;
     test ! -r starship && eget starship/starship --to starship && chmod +x starship;
