@@ -68,7 +68,7 @@ if [ ! -d "$HOME/Documents/github" ]; then
   test -d "$GITHUB" || mkdir "$GITHUB"
   test -d "$GITHUB/f1tenth" || git clone https://github.com/alexanderswerdlow/f1tenth.git "$GITHUB/f1tenth" # Personal
 else
-  ln -s "$HOME/Documents/github" "$GITHUB"
+  ln -sf "$HOME/Documents/github" "$GITHUB"
 fi
 
 if [[ ! -d "$DOTFILES/plugins/zsh-autocomplete" ]]; then
