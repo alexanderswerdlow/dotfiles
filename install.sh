@@ -16,7 +16,7 @@ if [ ! -d "$DOTFILES" ]; then
   git clone --recurse-submodules "https://github.com/alexanderswerdlow/dotfiles" "$DOTFILES"
 fi
 
-source "$DOTFILES/constants.sh"
+. "$DOTFILES/constants.sh"
 
 # Copy .zshrc if it previously existed
 test -r "$HOME/.zshrc" && mv "$HOME/.zshrc" "$HOME/.zshrc_default"
