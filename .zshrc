@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-source constants.sh
+. constants.sh
 
 [[ -r "$DOTFILES/local/zsh-snap/znap.zsh" ]] ||
     git clone --depth 1 -- https://github.com/marlonrichert/zsh-snap.git "$DOTFILES/local/zsh-snap"

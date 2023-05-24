@@ -7,7 +7,7 @@ export INTEL_BREW_PREFIX='/usr/local' # Rarely used but here just in case
 
 # Determine what type of machine we're running on
 # This affects what we source, put on our path, and which aliases we use
-if [[ "$(uname)" == "Darwin" ]]; then
+if [ "$(uname)" = "Darwin" ]; then
   export OS='macos'
   cpu_str=$(sysctl -a | grep 'machdep.cpu.brand_string')
   arm64_cpu="Apple M1"
