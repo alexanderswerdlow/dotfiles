@@ -1,35 +1,11 @@
 #!/bin/zsh
 
-export DOTFILES=$HOME/dotfiles
+source constants.sh
 
 [[ -r "$DOTFILES/local/zsh-snap/znap.zsh" ]] ||
     git clone --depth 1 -- https://github.com/marlonrichert/zsh-snap.git "$DOTFILES/local/zsh-snap"
 
 source "$DOTFILES/local/zsh-snap/znap.zsh"
-
-
-# Determine what type of machine we're running on
-# This affects what we source, put on our path, and which aliases we use
-if [[ "$(uname)" == "Darwin" ]]; then
-  export OS='macOS'
-  cpu_str=$(sysctl -a | grep 'machdep.cpu.brand_string')
-  arm64_cpu="Apple M1"
-  if [[ "$cpu_str" == *"$arm64_cpu"* ]]; then
-    export MACHINE='ARM64'
-    export BREWPREFIX='/opt/homebrew'
-  else
-    export MACHINE='X86'
-    export BREWPREFIX='/usr/local'
-  fi
-else
-  export OS='Linux'
-  export MACHINE='Other'
-fi
-
-export ARM_BREW_PREFIX='/opt/homebrew'
-export LINUX_BREW_PREFIX='/home/linuxbrew/.linuxbrew'
-export INTEL_BREW_PREFIX='/usr/local' # Rarely used but here just in case
-
 source $DOTFILES/path.zsh
 source $DOTFILES/shortcuts/aliases.zsh
 
@@ -39,7 +15,7 @@ if [[ -f "$SECRETS" ]]; then
 fi
 
 # Random
-if [[ "$OS" == "macOS" ]]; then
+if [[ "$OS" == "macos" ]]; then
   source $DOTFILES/plugins/pyenv-lazy/pyenv-lazy.plugin.zsh
   
   # [ -s "/Users/aswerdlow/.bun/_bun" ] && source "/Users/aswerdlow/.bun/_bun" # bun completions

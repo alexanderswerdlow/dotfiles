@@ -72,8 +72,8 @@ alias work="ssh home"
 
 source $DOTFILES/shortcuts/functions.zsh
 
-if [[ "$OS" == "macOS" ]]; then
+if [[ "$OS" == "macos" ]]; then
   source $DOTFILES/shortcuts/mac_aliases.zsh
-elif [[ "$OS" == "Linux" ]]; then
+elif [[ "$OS" == "linux" ]]; then
   source $DOTFILES/shortcuts/ubuntu_aliases.zsh
 fi

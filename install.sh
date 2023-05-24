@@ -2,18 +2,14 @@
 
 set -e
 
+source constants.sh
+
 # Determine what type of machine we're running on
-if [ "$(uname)" = "Darwin" ]; then
-  export SETUP_OS="macos"
-else
-  export SETUP_OS="ubuntu"
+if [ "$OS" = "linux" ]; then
   sudo apt-get update && sudo apt-get install -y curl git
 fi
 
 sudo echo "Setting up your $OS machine..."
-
-export DOTFILES="$HOME/dotfiles"
-export GITHUB="$HOME/github"
 
 if [ ! -d "$DOTFILES" ]; then
   echo "Cloning dotfiles to $DOTFILES"
@@ -42,14 +38,16 @@ if ! $NON_ROOT_INSTALL; then
   fi
 
   # Init homebrew on linux
-  if [ "$SETUP_OS" = "ubuntu" ]; then
+  if [ "$OS" = "ubuntu" ]; then
     eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+  else
+    eval "$(/opt/homebrew/bin/brew shellenv)"
   fi
 
   echo "Installing and Updating from Brewfile"
   brew update # Update Homebrew recipes
   brew tap homebrew/bundle
-  brew bundle --file="${SETUP_OS}_brewfile" # Install all our dependencies with bundle
+  brew bundle --file="$DOTFILES/${OS}_brewfile" # Install all our dependencies with bundle
   brew cleanup
 fi
 
@@ -74,11 +72,11 @@ fi
 if [[ ! -d "$DOTFILES/plugins/zsh-autocomplete" ]]; then
   cd "$DOTFILES/plugins" && git clone --depth 2 -- 'https://github.com/marlonrichert/zsh-autocomplete.git'
   cd "$DOTFILES/plugins/zsh-autocomplete" && git checkout '86ffb11c7186664a71fd36742f3148628c4b85cb'
-  echo "skip_global_compinit=1" > ~/.zshenv && cd $DOTFILES
+  echo "skip_global_compinit=1" > ~/.zshenv && cd $HOME
 fi
 
 mkdir -p "$HOME/bin"
 
-sh "${SETUP_OS}_install.sh"
+sh "$DOTFILES/${OS}_install.sh"
 
 cat "$HOME/.ssh/id_rsa.pub"

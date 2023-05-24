@@ -8,7 +8,7 @@ export PYTHONSTARTUP=$DOTFILES/scripts/pythonrc.py
 typeset -U path
 
 # Global macOS exports/paths here
-if [[ "$OS" == "macOS" ]]; then
+if [[ "$OS" == "macos" ]]; then
     export PYENV_ROOT="$HOME/.pyenv"
     export ZSH_PYENV_LAZY_VIRTUALENV=true
     export PAGER="col -b  | open -a /Applications/Google\ Chrome.app -f"
@@ -37,7 +37,7 @@ if [[ "$OS" == "macOS" ]]; then
             "$HOME/.nvm/versions/node/v16.20.0/bin"
             $path)
 
-elif [[ "$OS" == "Linux" ]]; then
+elif [[ "$OS" == "linux" ]]; then
     export MUJOCO_PY_MUJOCO_PATH="$HOME/.mujoco/mujoco210"
     export CUDA_HOME="/usr/local/cuda-11"
     export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$MUJOCO_PY_MUJOCO_PATH/bin"
