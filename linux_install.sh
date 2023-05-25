@@ -18,15 +18,18 @@ else
     mkdir -p "$HOME/bin" && cd "$HOME/bin";
     export PATH="$HOME/bin:$PATH";
     test ! -r eget && curl https://zyedidia.github.io/eget.sh | sh;
-    test ! -r gdu && eget dundee/gdu --to gdu && chmod +x gdu;
+    test ! -r gdu && eget dundee/gdu --asset 'static' --to gdu && chmod +x gdu;
     test ! -r zoxide && eget ajeetdsouza/zoxide --to zoxide && chmod +x zoxide;
     test ! -r gotop && eget xxxserxxx/gotop --asset '.tgz' --to gotop && chmod +x gotop;
-    test ! -r exa && eget ogham/exa --to exa && chmod +x exa;
-    test ! -r bat && eget sharkdp/bat --to bat && chmod +x bat;
-    test ! -r starship && eget starship/starship --to starship && chmod +x starship;
+    test ! -r exa && eget ogham/exa --asset 'musl' --to exa && chmod +x exa;
+    test ! -r bat && eget sharkdp/bat --asset 'musl' --to bat && chmod +x bat;
+    test ! -r starship && eget starship/starship --asset 'musl' --to starship && chmod +x starship;
     test ! -r gh && eget cli/cli --asset '.tar.gz' --to gh && chmod +x gh;
     test ! -r fzf && eget junegunn/fzf --to fzf && chmod +x fzf;
-    command -v zsh >/dev/null 2>&1 || eget romkatv/zsh-bin --asset '^.asc' --file 'bin/zsh' --to zsh && chmod +x zsh;
+    if ! command -v zsh &> /dev/null; then
+        eget romkatv/zsh-bin --asset '^.asc' --file 'bin/zsh' --to zsh && chmod +x zsh
+    fi
+    cd "$HOME"
 
     # Load zsh. TODO: Use a real multiline string that doesn't break things
     echo 'export SHELL=$(which zsh)' >> ~/.profile

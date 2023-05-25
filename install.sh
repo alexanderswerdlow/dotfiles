@@ -20,8 +20,10 @@ fi
 
 echo "Running on $OS"
 
-# Copy .zshrc if it previously existed
-test -r "$HOME/.zshrc" && mv "$HOME/.zshrc" "$HOME/.zshrc_default"
+# Copy .zshrc if it previously existed and isn't a softlink
+if [ -e "$HOME/.zshrc" ] && [ ! -h "$HOME/.zshrc" ]; then
+  mv "$HOME/.zshrc" "$HOME/.zshrc_default"
+fi
 
 # Softlink .zshrc to dotfiles
 ln -s "$DOTFILES/.zshrc" "$HOME/.zshrc"

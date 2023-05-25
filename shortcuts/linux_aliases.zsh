@@ -53,7 +53,7 @@ function localcode() (
     if [[ "$SSH_IP" == "::1" ]]; then
         LOCALCODE_MACHINE='ssh.aswerdlow.com'
     else
-        LOCALCODE_MACHINE=$(echo $SSH_CONNECTION | awk '{print $3}')
+        LOCALCODE_MACHINE="$(whoami)@$(echo $SSH_CONNECTION | awk '{print $3}')"
     fi
     MACHINE=${LOCALCODE_MACHINE-submit}
     FILENAMES=( "$@" )
