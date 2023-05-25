@@ -29,12 +29,21 @@ else
     if ! command -v zsh > /dev/null 2>&1; then
         eget romkatv/zsh-bin --asset '^.asc' --file 'bin/zsh' --to zsh && chmod +x zsh
     fi
+
     cd "$HOME"
 
     # Load zsh. TODO: Use a real multiline string that doesn't break things
-    echo 'export SHELL=$(which zsh)' >> ~/.profile
-    echo 'if [ -x "$ZSH_PATH" ]; then' >> ~/.profile
-    echo '    ZSH_PATH=$SHELL' >> ~/.profile
-    echo '    exec "$ZSH_PATH" -l' >> ~/.profile
-    echo 'fi' >> ~/.profile
+    # Check if the commands are already in the .profile
+    if [ ! -f ~/.profile ] || ! grep -qF "exec" ~/.profile; then
+        echo "Adding to ~/.profile"
+        cat <<- EOF >> ~/.profile
+		if [ -n "\$ZSH_VERSION" ]; then
+		    : 
+		elif [ -x "\$(command -v zsh)" ]; then
+		    export SHELL=\$(which zsh)
+		    exec \$SHELL
+		fi
+		EOF
+    fi
+
 fi
