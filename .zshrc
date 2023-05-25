@@ -26,7 +26,6 @@ if [[ "$OS" == "macos" ]]; then
 
   # To install copilot:
   # npm install -g @githubnext/github-copilot-cli; github-copilot-cli auth
-  eval "$(github-copilot-cli alias -- "$0")"
 elif [[ "$OS" == "Linux" ]]; then
   HISTFILE=~/.zsh_history
   HISTSIZE=10000
@@ -69,6 +68,8 @@ if [[ $(hostname) =~ gpu[0-9]{2} ]]; then
     conda activate ips
     fi
 fi
+
+command -v github-copilot-cli >/dev/null 2>&1 && eval "$(github-copilot-cli alias -- "$0")"
 
 # Znap
 # To clear cache: rm -rf ${XDG_CACHE_HOME:-$HOME/.cache}/zsh-snap/eval
