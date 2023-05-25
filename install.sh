@@ -2,14 +2,11 @@
 
 set -e
 
+# Pre-requisites are git and curl
+
 export DOTFILES=$HOME/dotfiles
 
-# Determine what type of machine we're running on
-if [ "$OS" = "linux" ]; then
-  sudo apt-get update && sudo apt-get install -y curl git
-fi
-
-sudo echo "Setting up your $OS machine..."
+echo "Setting up your machine..."
 
 if [ ! -d "$DOTFILES" ]; then
   echo "Cloning dotfiles to $DOTFILES"
@@ -20,6 +17,8 @@ else
 fi
 
 . "$DOTFILES/constants.sh"
+
+echo "Running on $OS"
 
 # Copy .zshrc if it previously existed
 test -r "$HOME/.zshrc" && mv "$HOME/.zshrc" "$HOME/.zshrc_default"
