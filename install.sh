@@ -80,3 +80,5 @@ mkdir -p "$HOME/bin"
 sh "$DOTFILES/${OS}_install.sh"
 
 cat "$HOME/.ssh/id_rsa.pub"
+
+echo "Done!"

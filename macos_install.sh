@@ -23,5 +23,3 @@ if [ -z "${CI}" ]; then
 else
   echo "In Testing, not setting macOS Preferences"
 fi
-
-echo "Done!"

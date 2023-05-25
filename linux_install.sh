@@ -26,7 +26,7 @@ else
     test ! -r starship && eget starship/starship --asset 'musl' --to starship && chmod +x starship;
     test ! -r gh && eget cli/cli --asset '.tar.gz' --to gh && chmod +x gh;
     test ! -r fzf && eget junegunn/fzf --to fzf && chmod +x fzf;
-    if ! command -v zsh &> /dev/null; then
+    if ! command -v zsh > /dev/null 2>&1; then
         eget romkatv/zsh-bin --asset '^.asc' --file 'bin/zsh' --to zsh && chmod +x zsh
     fi
     cd "$HOME"
@@ -38,5 +38,3 @@ else
     echo '    exec "$ZSH_PATH" -l' >> ~/.profile
     echo 'fi' >> ~/.profile
 fi
-
-exec zsh
