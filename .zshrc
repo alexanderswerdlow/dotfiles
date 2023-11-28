@@ -48,7 +48,7 @@ fi
 
 
 if [[ -v MATRIX_NODE ]]; then
-    source "$DOTFILES/matrix.zsh"
+    source "$DOTFILES/shortcuts/matrix.zsh"
     if [ $SSH_TTY ]; then 
         # sattach "$(getjobid).0"
     fi
@@ -67,7 +67,6 @@ if [[ -v MATRIX_NODE ]]; then
     
     alias xserver="Xorg -noreset +extension GLX +extension RANDR +extension RENDER &"
     export CUDA_VISIBLE_DEVICES=8
-    source "$DOTFILES/shortcuts/completions.zsh"
     export PATH="/home/aswerdlo/anaconda3/bin:$PATH"
 fi
 
@@ -141,4 +140,8 @@ bindkey -M menuselect '\r' .accept-line
 
 if [[ "$OS" == "linux" ]]; then
   source "$DOTFILES/shortcuts/conda.zsh"
+fi
+
+if [[ -v MATRIX_NODE ]]; then
+  source "$DOTFILES/shortcuts/completions.zsh"
 fi

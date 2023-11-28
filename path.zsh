@@ -127,6 +127,7 @@ elif [[ "$OS" == "linux" ]]; then
     else
         path=(        
             "/home/linuxbrew/.linuxbrew/bin"
+            $path
         )
     fi
 
