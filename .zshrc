@@ -1,13 +1,10 @@
 #!/bin/zsh
 
 export DOTFILES=$HOME/dotfiles
+export STARSHIP_CONFIG="$DOTFILES/misc/starship.toml"
 
 . $DOTFILES/constants.sh
 
-[[ -r "$DOTFILES/local/zsh-snap/znap.zsh" ]] ||
-    git clone --depth 1 -- https://github.com/marlonrichert/zsh-snap.git "$DOTFILES/local/zsh-snap"
-
-source "$DOTFILES/local/zsh-snap/znap.zsh"
 source $DOTFILES/path.zsh
 source $DOTFILES/shortcuts/aliases.zsh
 
@@ -19,14 +16,10 @@ fi
 # Random
 if [[ "$OS" == "macos" ]]; then
   source $DOTFILES/plugins/pyenv-lazy/pyenv-lazy.plugin.zsh
-  
   # [ -s "/Users/aswerdlow/.bun/_bun" ] && source "/Users/aswerdlow/.bun/_bun" # bun completions
   # [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
   # [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
-  # To install copilot:
-  # npm install -g @githubnext/github-copilot-cli; github-copilot-cli auth
-elif [[ "$OS" == "Linux" ]]; then
+elif [[ "$OS" == "linux" ]]; then
   HISTFILE=~/.zsh_history
   HISTSIZE=10000
   SAVEHIST=10000
@@ -47,34 +40,49 @@ else
   fi
 fi
 
-if [[ $(hostname) =~ gpu[0-9]{2} ]]; then
-    # >>> conda initialize >>>
-    # !! Contents within this block are managed by 'conda init' !!
-    __conda_setup="$('/home/aswerdlow/anaconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-    if [ $? -eq 0 ]; then
-        eval "$__conda_setup"
-    else
-        if [ -f "/home/aswerdlow/anaconda3/etc/profile.d/conda.sh" ]; then
-            . "/home/aswerdlow/anaconda3/etc/profile.d/conda.sh"
-        else
-            export PATH="/home/aswerdlow/anaconda3/bin:$PATH"
-        fi
-    fi
-    unset __conda_setup
-    # <<< conda initialize <<<
-
-    if [ $SSH_TTY ];then 
-    cd ~/github/multi_view_generation
-    conda activate ips
-    fi
+if [[ $MACHINE_NAME =~ gpu[0-9]{2} ]]; then
+  if [ $SSH_TTY ];then 
+    echo "SSH"
+  fi
 fi
 
+
+if [[ -v MATRIX_NODE ]]; then
+    source "$DOTFILES/matrix.zsh"
+    if [ $SSH_TTY ]; then 
+        # sattach "$(getjobid).0"
+    fi
+
+    if [[ -v MATRIX_COMPUTE_NODE ]]; then
+      if [[ -v SLURM_JOB_ID ]]; then
+        get_ids
+      fi
+    fi
+
+    # eval "$(/home/aswerdlo/perm/homebrew/bin/brew shellenv)"
+    # ls cat /usr/share/Modules/modulefiles
+
+    # znap eval iterm2 'curl -fsSL https://iterm2.com/shell_integration/zsh'
+    # znap source "$HOME/.iterm2_shell_integration.zsh"
+    
+    alias xserver="Xorg -noreset +extension GLX +extension RANDR +extension RENDER &"
+    export CUDA_VISIBLE_DEVICES=8
+    source "$DOTFILES/shortcuts/completions.zsh"
+    export PATH="/home/aswerdlo/anaconda3/bin:$PATH"
+fi
+
+# To install copilot: npm install -g @githubnext/github-copilot-cli; github-copilot-cli auth
 command -v github-copilot-cli >/dev/null 2>&1 && eval "$(github-copilot-cli alias -- "$0")"
 
-# Znap
-# To clear cache: rm -rf ${XDG_CACHE_HOME:-$HOME/.cache}/zsh-snap/eval
+# # Znap
+
+[[ -r "$DOTFILES/local/zsh-snap/znap.zsh" ]] ||
+    git clone --depth 1 -- https://github.com/marlonrichert/zsh-snap.git "$DOTFILES/local/zsh-snap"
+
+source "$DOTFILES/local/zsh-snap/znap.zsh"
+
+# # To clear cache: rm -rf ${XDG_CACHE_HOME:-$HOME/.cache}/zsh-snap/eval
 znap eval starship 'starship init zsh --print-full-init'
-znap prompt
 
 znap install zsh-users/zsh-completions
 
@@ -92,7 +100,7 @@ compctl -K    _pyenv pyenv
 znap function _pip_completion pip       'eval "$( pip completion --zsh )"'
 compctl -K    _pip_completion pip
 
-eval "$(zoxide init zsh)"
+znap eval zoxide 'zoxide init zsh'
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 source $DOTFILES/plugins/zsh-autocomplete/zsh-autocomplete.plugin.zsh
@@ -116,7 +124,7 @@ bindkey -M menuselect '\t' menu-complete "$terminfo[kcbt]" reverse-menu-complete
 zstyle ':autocomplete:*complete*:*' insert-unambiguous yes
 
 # Make Enter submit the command line straight from the menu
-# bindkey -M menuselect '\r' .accept-line
+bindkey -M menuselect '\r' .accept-line
 
 # Reset history key bindings to Zsh default
 () {
@@ -130,3 +138,7 @@ zstyle ':autocomplete:*complete*:*' insert-unambiguous yes
       bindkey "$key" down-line-or-history
    done
 }
+
+if [[ "$OS" == "linux" ]]; then
+  source "$DOTFILES/shortcuts/conda.zsh"
+fi

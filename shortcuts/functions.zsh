@@ -103,3 +103,7 @@ function vpn-up() {
 function vpn-down() {
   sudo kill -2 `pgrep openconnect`
 }
+
+function download() {
+  wget -i - <<< $1
+}

@@ -18,7 +18,7 @@ alias ssize='du -h -d 1 | sort -h'
 # Files
 alias untar="tar -xvzf"
 alias ls='exa -lam --group-directories-first'
-alias cat='bat --paging=never'
+alias cat='bat --paging=never --plain'
 alias st='subl'
 
 alias home="cd ~/"
@@ -32,6 +32,11 @@ alias dact="deactivate"
 alias rpy="pyenv uninstall"
 alias cpy="pyenv virtualenv"
 alias spy="pyenv shell"
+
+## Conda
+alias ca='conda activate'
+alias condad='conda deactivate'
+alias ce='conda env list'
 
 
 alias torguard="sudo wg-quick up wg0 >/dev/null 2>&1"
@@ -59,9 +64,10 @@ alias unstage="git restore --staged ."
 alias wip="commit wip"
 
 alias tn='tmux new -s'
-alias tr='tmux attach -t'
+alias r='tmux attach -t'
 alias ts='tmux ls'
 alias tk='tmux kill-session -t'
+alias trn='tmux rename-session -t'
 
 alias s1='ssh $S1_HOSTNAME'
 alias s2='ssh $S2_HOSTNAME'

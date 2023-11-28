@@ -23,3 +23,8 @@ else
   export MACHINE='Other'
   export BREWPREFIX=$LINUX_BREW_PREFIX
 fi
+
+export MACHINE_NAME=$(hostname | sed 's/\.eth$//')
+[[ "$(hostname)" == matrix* ]] && export MATRIX_NODE=1
+[[ "$(hostname)" =~ ^matrix-[0-9]-[0-9][0-9] ]] && MATRIX_COMPUTE_NODE=1
+[[ "$(hostname)" == "matrix.ml.cmu.edu" ]] && export MATRIX_HEAD_NODE=1

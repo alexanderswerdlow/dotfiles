@@ -2,12 +2,14 @@ alias dash='gotop --nvidia'
 alias doctor='sudo apt-get update && sudo apt-get upgrade -y && sudo apt-get autoclean && sudo apt-get clean && sudo apt-get autoremove -y'
 alias code-ssh="$DOTFILES/scripts/code_connect.py"
 
-alias tn='tmux new -s'
-alias tr='tmux attach -t'
-alias trr='tmux -CC attach -t'
-alias ts='tmux ls'
-alias tk='tmux kill-session -t'
-alias gdu='gdu-go'
+alias rr='tmux -CC attach -t'
+
+alias enableconda='export PATH="/home/aswerdlo/anaconda3/bin:$PATH" && source ~/anaconda3/etc/profile.d/conda.sh'
+alias nfs='nfsiostat 2 /home/aswerdlo /projects/katefgroup'
+alias nfsa='watch -n1 nfsiostat'
+alias dl="$HOME/.iterm2/it2dl"
+alias kwandb="ps aux | grep wandb | grep -v grep | awk '{print \$2}' | xargs kill -9"
+
 
 # Preferred editor for local and remote sessions
 if [[ -n $SSH_CONNECTION ]]; then
@@ -54,7 +56,7 @@ function localcode() (
     if [[ "$SSH_IP" == "::1" ]]; then
         LOCALCODE_MACHINE='ssh.aswerdlow.com'
     else
-        LOCALCODE_MACHINE="$(whoami)@$(echo $SSH_CONNECTION | awk '{print $3}')"
+        LOCALCODE_MACHINE="$(whoami)@$(hostname | sed 's/\.eth$//')"
     fi
     MACHINE=${LOCALCODE_MACHINE-submit}
     FILENAMES=( "$@" )
@@ -98,6 +100,15 @@ function cd() {
     fi
   fi
 
+  # Check for .python_version file
+  if [[ -f ".python_version" ]] ; then
+    venv_dir=$(<.python_version)
+    if [[ -d "$venv_dir" ]] ; then
+      source "${venv_dir}/bin/activate"
+      return
+    fi
+  fi
+
   if [[ -z "$VIRTUAL_ENV" ]] ; then
     # If config file is found -> activate the vitual environment
     venv_cfg_filepath=$(find . -maxdepth 2 -type f -name 'pyvenv.cfg' 2> /dev/null)
@@ -111,3 +122,25 @@ function cd() {
     fi
   fi
 }
+
+function kg(){
+  lsof -t "/dev/nvidia$1" | xargs -I {} kill -9 {}
+}
+
+if [[ -n $SSH_CONNECTION ]]; then
+  alias cat='cat_func'
+  iterm2check_path="$HOME/.iterm2/it2check"
+  iterm2imgcat_path="$HOME/.iterm2/imgcat"
+  function cat_func() {
+    # Check if iterm2
+    if test -e $iterm2check_path && $iterm2check_path && test -e ; then
+      # Check if the first argument is a file and an image
+      if [[ -f "$1" && "$(file --mime-type -b "$1")" == image/* ]]; then
+        $iterm2imgcat_path "$1"
+        return
+      fi
+    fi
+    # Fallback to bat if not iterm2 or not an image file
+    bat --paging=never --plain "$@"
+  }
+fi
