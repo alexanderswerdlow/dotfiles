@@ -15,7 +15,6 @@ fi
 
 # Random
 if [[ "$OS" == "macos" ]]; then
-  source $DOTFILES/plugins/pyenv-lazy/pyenv-lazy.plugin.zsh
   # [ -s "/Users/aswerdlow/.bun/_bun" ] && source "/Users/aswerdlow/.bun/_bun" # bun completions
   # [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
   # [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
@@ -24,6 +23,7 @@ elif [[ "$OS" == "linux" ]]; then
   HISTSIZE=10000
   SAVEHIST=10000
   setopt appendhistory
+  export NUSCENES_DATA_DIR="$HOME/datasets/nuscenes"
 fi
 
 export LC_ALL=en_US.UTF-8
@@ -95,6 +95,8 @@ znap eval iterm2 'curl -fsSL https://iterm2.com/shell_integration/zsh'
 
 znap function _pyenv pyenv              'eval "$( pyenv init - --no-rehash )"'
 compctl -K    _pyenv pyenv
+
+source $DOTFILES/plugins/pyenv-lazy/pyenv-lazy.plugin.zsh
 
 znap function _pip_completion pip       'eval "$( pip completion --zsh )"'
 compctl -K    _pip_completion pip

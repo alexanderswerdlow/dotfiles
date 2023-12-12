@@ -50,14 +50,19 @@ elif [[ "$OS" == "linux" ]]; then
         # export CUDA_HOME="/projects/katefgroup/cuda_home/cuda/11.6"
         export CUDA_HOME="/opt/cuda/11.8"
     else
-        export CUDA_HOME="/usr/local/cuda-11"
-        export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/lib/nvidia"
-        export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$CUDA_HOME/lib64"
+        export CUDA_HOME="/usr/local/cuda"
 
         # For MuJoCo:
         # export MUJOCO_PY_MUJOCO_PATH="$HOME/.mujoco/mujoco210"
         # export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$MUJOCO_PY_MUJOCO_PATH/bin"
         # export LD_PRELOAD="/usr/lib/x86_64-linux-gnu/libGLEW.so"
+
+        ld_library_path=(
+            "$CUDA_HOME/lib64"
+            "/usr/lib/nvidia"
+            $ld_library_path
+        )
+
     fi
 
     export CPATH="$CUDA_HOME/include:$CPATH"
