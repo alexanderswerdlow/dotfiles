@@ -3,6 +3,7 @@ export HOMEBREW_NO_INSECURE_REDIRECT=1
 export HOMEBREW_AUTO_UPDATE_SECS="604800"
 export SECRETS="$HOME/Documents/Programs/secrets.ini"
 export PYTHONSTARTUP=$DOTFILES/scripts/pythonrc.py
+export ITERM_ENABLE_SHELL_INTEGRATION_WITH_TMUX=YES
 
 # Remove duplicates
 typeset -U path PATH
@@ -47,7 +48,7 @@ if [[ "$OS" == "macos" ]]; then
 
 elif [[ "$OS" == "linux" ]]; then
     if [[ -v MATRIX_NODE ]]; then
-        # export CUDA_HOME="/projects/katefgroup/cuda_home/cuda/11.6"
+        # export CUDA_HOME="/projects/katefgroup/cuda_home/cuda/12.3"
         export CUDA_HOME="/opt/cuda/11.8"
     else
         export CUDA_HOME="/usr/local/cuda"

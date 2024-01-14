@@ -76,6 +76,8 @@ alias s4='ssh $S4_HOSTNAME'
 alias sp='ssh pop-os'
 alias work="ssh home"
 
+alias rs="rsync -ah --info=progress2"
+
 source $DOTFILES/shortcuts/functions.zsh
 
 if [[ "$OS" == "macos" ]]; then
