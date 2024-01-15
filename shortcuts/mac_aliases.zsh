@@ -15,8 +15,8 @@ alias spip="/usr/bin/python3 -m pip"
 alias bpython="$BREWPREFIX/bin/python3"
 alias bpip="$BREWPREFIX/bin/python3 -m pip"
 
-alias ipython="$INTEL_BREW_PREFIX/bin/python3"
-alias ipip="$INTEL_BREW_PREFIX/bin/python3 -m pip"
+alias intelpython="$INTEL_BREW_PREFIX/bin/python3"
+alias intelpip="$INTEL_BREW_PREFIX/bin/python3 -m pip"
 
 alias bgcc="$BREWPREFIX/bin/gcc-11"
 

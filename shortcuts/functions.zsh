@@ -107,3 +107,7 @@ function vpn-down() {
 function download() {
   wget -i - <<< $1
 }
+
+function tt() {
+  ssh -t $1 'LD_LIBRARY_PATH=$HOME/local/lib $HOME/local/bin/tmux -CC new -A -s main'
+}
