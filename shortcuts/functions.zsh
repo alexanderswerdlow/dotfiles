@@ -109,5 +109,27 @@ function download() {
 }
 
 function tt() {
-  ssh -t $1 'LD_LIBRARY_PATH=$HOME/local/lib $HOME/local/bin/tmux -CC new -A -s main'
+  ssh -t $(matrix_normalize $1) 'LD_LIBRARY_PATH=$HOME/local/lib $HOME/local/bin/tmux -CC new -A -s main'
+}
+
+function sm() {
+  if (( $# > 0 )); then
+    ssh $(matrix_normalize $1)
+  else
+    ssh matrix
+  fi
+}
+
+function matrix_normalize() {
+  NODE_NAME=$1
+  
+  if [[ $NODE_NAME =~ ^[0-9]{3}$ ]]; then
+    NODE_NAME="matrix-${NODE_NAME:0:1}-${NODE_NAME:1:2}"
+  elif [[ $NODE_NAME =~ ^[0-9]{1}-[0-9]{2}$ ]]; then
+    NODE_NAME="matrix-$NODE_NAME"
+  fi
+
+  if [[ $NODE_NAME =~ ^matrix-[0-9]{1}-[0-9]{2}$ ]]; then
+    echo $NODE_NAME
+  fi
 }

@@ -23,20 +23,6 @@ function cudavisibledevices() {
   echo "$gpu_ids"
 }
 
-function normalize() {
-  NODE_NAME=$1
-  
-  if [[ $NODE_NAME =~ ^[0-9]{3}$ ]]; then
-    NODE_NAME="matrix-${NODE_NAME:0:1}-${NODE_NAME:1:2}"
-  elif [[ $NODE_NAME =~ ^[0-9]{1}-[0-9]{2}$ ]]; then
-    NODE_NAME="matrix-$NODE_NAME"
-  fi
-
-  if [[ $NODE_NAME =~ ^matrix-[0-9]{1}-[0-9]{2}$ ]]; then
-    echo $NODE_NAME
-  fi
-}
-
 function get_ids(){
   echo "export CUDA_VISIBLE_DEVICES=$(grep -F -f <(nvidia-smi --query-gpu=uuid --format=csv,noheader) ~/perm/scripts/gpu_data/uuids.txt | cut -d, -f1 | paste -sd,)"
 }
