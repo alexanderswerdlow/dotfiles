@@ -1,7 +1,10 @@
 # Matrix-specific
-alias jobs='squeue -u aswerdlo'
-alias cluster='gpu-usage-by-node -p; whoson; /home/aswerdlo/dotfiles/venv/bin/slurm_gpustat --partition kate_reserved'
+export PARTITION='kate_reserved'
+
+alias jobs='squeue -o "%.18i %.9P %.25j %.8u %.2t %.10M %.6D %C %m %b %R" -u aswerdlo'
+alias cluster='gpu-usage-by-node -p; whoson; $DOTFILES/venv/bin/slurm_gpustat --partition $PARTITION'
 alias kj='scancel'
+alias kjn='scancel --name'
 alias sb='sbatch.py'
 alias mn='matrix_node.py'
 alias tailm='tail -f "$(/usr/bin/ls -t ~/logs/*.out | head -n 1)"'

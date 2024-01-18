@@ -90,7 +90,9 @@ elif [[ "$OS" == "linux" ]]; then
             "$HOME/.pyenv/bin"
             "$CUDA_HOME/bin"
             "$DOTFILES/scripts/matrix"
+            "$DOTFILES/scripts/matrix/disk_utils"
             "$HOME/.npm-packages/bin"
+            "$HOME/local/bin"
             $path
         )
 
@@ -100,6 +102,7 @@ elif [[ "$OS" == "linux" ]]; then
             "/opt/git/2.30/lib"
             "/opt/gcc/9.2.0/lib64"
             "/opt/gcc/9.2.0/lib"
+            "$HOME/local/lib"
             $ld_library_path
         )
 
@@ -107,7 +110,7 @@ elif [[ "$OS" == "linux" ]]; then
         export CPPFLAGS="-I$HOME/include $CPPFLAGS"
         export LDFLAGS="-L$HOME/lib $LDFLAGS"
 
-        export MANPATH="${MANPATH-$(manpath)}:$NPM_PACKAGES/share/man:/opt/gcc/9.2.0/share/man"
+        export MANPATH="${MANPATH-$(manpath)}:$NPM_PACKAGES/share/man:/opt/gcc/9.2.0/share/man:$HOME/local/share/man"
         
         export TORCH_CUDA_ARCH_LIST="6.1;7.0;7.5;8.0;8.6"
         # export CUDA_VISIBLE_DEVICES=$(cudavisibledevices)

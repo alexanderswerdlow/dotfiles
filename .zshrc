@@ -2,7 +2,6 @@
 
 export DOTFILES=$HOME/dotfiles
 export STARSHIP_CONFIG="$DOTFILES/misc/starship.toml"
-export FAST_PROMPT=true
 
 . $DOTFILES/constants.sh
 
@@ -51,6 +50,7 @@ fi
 
 
 if [[ -v MATRIX_NODE ]]; then
+    export FAST_PROMPT=true
     source "$DOTFILES/shortcuts/matrix.zsh"
     if [ $SSH_TTY ]; then 
         # sattach "$(getjobid).0"
@@ -83,14 +83,14 @@ source "$DOTFILES/local/zsh-snap/znap.zsh"
 
 znap install zsh-users/zsh-completions
 
+# znap eval iterm2 'curl -fsSL https://iterm2.com/shell_integration/zsh'
+
 if [[ ! -v FAST_PROMPT ]]; then
   # # To clear cache: rm -rf ${XDG_CACHE_HOME:-$HOME/.cache}/zsh-snap/eval
   znap eval starship 'starship init zsh --print-full-init'
 
   ZSH_AUTOSUGGEST_STRATEGY=( history )
   znap source zsh-users/zsh-autosuggestions
-
-  znap eval iterm2 'curl -fsSL https://iterm2.com/shell_integration/zsh'
 
   # This is a hack to enable the localcode function to work properly
   if [[ -n $SSH_CONNECTION ]]; then
