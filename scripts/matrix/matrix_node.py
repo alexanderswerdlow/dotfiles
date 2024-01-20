@@ -17,7 +17,7 @@ def main(
     node_name: str,
     attach: bool = True,
     gpus: int = 1,
-    echo_ids: bool = False,
+    echo_ids: bool = False, # Used to export GPU UUIDs
 ):
 
     if re.match(r"^[0-9]{3}$", node_name):
