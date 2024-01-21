@@ -9,6 +9,7 @@ alias nfs='nfsiostat 2 /home/aswerdlo /projects/katefgroup'
 alias nfsa='watch -n1 nfsiostat'
 alias dl="$HOME/.iterm2/it2dl"
 alias kwandb="ps aux | grep wandb | grep -v grep | awk '{print \$2}' | xargs kill -9"
+alias psi='ps -u -p'
 
 
 # Preferred editor for local and remote sessions
@@ -121,10 +122,6 @@ function cd() {
       source "${venv_filepath}"/bin/activate
     fi
   fi
-}
-
-function kg(){
-  lsof -t "/dev/nvidia$1" | xargs -I {} kill -9 {}
 }
 
 if [[ -n $SSH_CONNECTION ]]; then

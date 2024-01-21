@@ -57,10 +57,14 @@ if [[ -v MATRIX_NODE ]]; then
     fi
 
     if [[ -v MATRIX_COMPUTE_NODE ]]; then
-      if [[ -v SLURM_JOB_ID ]]; then
-        get_ids
-      else
-        export CUDA_VISIBLE_DEVICES=8
+      if [[ -v SLURM_JOB_ID ]] && [[ -n SUBMITIT ]]; then
+        ids=$(get_ids)
+        echo "export CUDA_VISIBLE_DEVICES=$ids"
+        job_database.py add_job "$SLURM_JOB_ID" "$MACHINE_NAME" "$ids"
+      elif [[ -n SUBMITIT ]]; then
+        devs=$(job_database.py get_gpus "$MACHINE_NAME")
+        echo "Setting CUDA_VISIBLE_DEVICES=$devs"
+        export CUDA_VISIBLE_DEVICES=$devs
       fi
     fi
 
@@ -68,7 +72,6 @@ if [[ -v MATRIX_NODE ]]; then
     # ls cat /usr/share/Modules/modulefiles
     
     alias xserver="Xorg -noreset +extension GLX +extension RANDR +extension RENDER &"
-    export CUDA_VISIBLE_DEVICES=8
     export PATH="/home/aswerdlo/anaconda3/bin:$PATH"
 fi
 

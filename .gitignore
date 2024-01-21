@@ -3,3 +3,4 @@ secrets.ini
 local/
 .history/
 venv/
+*.db
