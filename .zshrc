@@ -19,6 +19,7 @@ if [[ "$OS" == "macos" ]]; then
   # [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
   # [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 elif [[ "$OS" == "linux" ]]; then
+  # source $DOTFILES/idempotent_install.zsh
   if [[ ! -v FAST_PROMPT ]]; then
     HISTFILE=~/.zsh_history
     HISTSIZE=10000

@@ -76,6 +76,14 @@ alias s4='ssh $S4_HOSTNAME'
 alias sp='ssh pop-os'
 alias work="ssh home"
 
+# Docker
+alias drr="docker compose down && docker compose up -d"
+alias dr="docker compose restart"
+alias dup="docker compose pull && docker compose up --force-recreate --build -d"
+
+# Tmux
+alias sm='ssh matrix'
+
 alias rs="rsync -ah --info=progress2"
 alias nv="nvidia-smi"
 
