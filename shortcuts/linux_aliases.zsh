@@ -42,6 +42,12 @@ function pp(){
   done
 }
 
+# cv 0123 -> export CUDA_VISIBLE_DEVICES=0,1,2,3
+cv() {
+  export CUDA_VISIBLE_DEVICES=$(echo $1 | sed 's/./&,/g' | sed 's/,$//')
+}
+
+
 # This initiates an iTerm2 Trigger on the Server Side
 # The client (iTerm2) then calls $DOTFILES/scripts/trigger_vscode.sh
 # iTerm2 uses the following regular expression:

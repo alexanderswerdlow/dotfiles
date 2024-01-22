@@ -10,10 +10,6 @@ alias mn='matrix_node.py'
 alias tailm='tail -f "$(/usr/bin/ls -t ~/logs/*.out | head -n 1)"'
 alias bench='sb --gpu_count=0 benchmark_server.py'
 
-# Tmp alias
-alias ac='conda activate gen_nightly && cd $HOME/repos/gen'
-
-
 function getjobid(){
   jobid=$(squeue -u aswerdlo -w "$MACHINE_NAME" --Format='JobID' | sed -n '2p' | /bin/tr -d '[:space:]')
   echo "$jobid"
@@ -31,5 +27,5 @@ function cudavisibledevices() {
 }
 
 function get_ids(){
-  echo "$(grep -F -f <(nvidia-smi --query-gpu=uuid --format=csv,noheader) ~/perm/scripts/gpu_data/uuids.txt | cut -d, -f1 | paste -sd,)"
+  echo "$(grep -F -f <(nvidia-smi --query-gpu=uuid --format=csv,noheader) $HOME/perm/scripts/gpu_data/uuids.txt | cut -d, -f1 | paste -sd,)"
 }

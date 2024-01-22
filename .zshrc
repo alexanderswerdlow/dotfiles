@@ -8,6 +8,11 @@ export STARSHIP_CONFIG="$DOTFILES/misc/starship.toml"
 source $DOTFILES/path.zsh
 source $DOTFILES/shortcuts/aliases.zsh
 
+# File for temporary definitions on a per-machine basis
+if [[ -f "$DOTFILES/local.zsh" ]]; then
+  source "$DOTFILES/local.zsh"
+fi
+
 # We load our secrets from a toml format
 if [[ -f "$SECRETS" ]]; then
     export $(awk '{print $0}' $SECRETS | grep -E '^\w' | sed 's/ = /=/')
@@ -61,11 +66,15 @@ if [[ -v MATRIX_NODE ]]; then
       if [[ -v SLURM_JOB_ID ]] && [[ -n SUBMITIT ]]; then
         ids=$(get_ids)
         echo "export CUDA_VISIBLE_DEVICES=$ids"
-        job_database.py add_job "$SLURM_JOB_ID" "$MACHINE_NAME" "$ids"
-      elif [[ -n SUBMITIT ]]; then
+        if [[ ! -v FAST_PROMPT ]]; then
+          job_database.py add_job "$SLURM_JOB_ID" "$MACHINE_NAME" "$ids"
+        fi
+      elif [[ -n SUBMITIT ]] && [[ ! -v FAST_PROMPT ]]; then
         devs=$(job_database.py get_gpus "$MACHINE_NAME")
         echo "Setting CUDA_VISIBLE_DEVICES=$devs"
         export CUDA_VISIBLE_DEVICES=$devs
+      else
+          export CUDA_VISIBLE_DEVICES=8
       fi
     fi
 
