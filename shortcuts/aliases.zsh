@@ -64,7 +64,6 @@ alias unstage="git restore --staged ."
 alias wip="commit wip"
 
 alias tn='tmux new -s'
-alias r='tmux attach -t'
 alias ts='tmux ls'
 alias tk='tmux kill-session -t'
 alias trn='tmux rename-session -t'
@@ -82,7 +81,6 @@ alias dr="docker compose restart"
 alias dup="docker compose pull && docker compose up --force-recreate --build -d"
 
 # Tmux
-alias sm='ssh matrix'
 
 alias rs="rsync -ah --info=progress2"
 alias nv="nvidia-smi"

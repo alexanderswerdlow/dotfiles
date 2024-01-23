@@ -120,6 +120,14 @@ function sm() {
   fi
 }
 
+function r() {
+  if (( $# > 0 )); then
+    tmux attach -t $1
+  else
+    tmux attach -t main
+  fi
+}
+
 function matrix_normalize() {
   NODE_NAME=$1
   
