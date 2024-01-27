@@ -12,6 +12,9 @@ alias tailm='tail -f "$(/usr/bin/ls -t ~/logs/*.out | head -n 1)"'
 alias bench='sb --gpu_count=0 benchmark_server.py'
 alias jn='getjobsonnode'
 
+alias nfs='nfsiostat 2 /home/aswerdlo /projects/katefgroup'
+alias nfsa='watch -n1 nfsiostat'
+
 # sinline -n matrix-1-24 -c 'echo "It'\''s so convenient!"'
 
 function getjobsonnode() {

@@ -1,16 +1,15 @@
-alias dash='gotop --nvidia'
+
 alias doctor='sudo apt-get update && sudo apt-get upgrade -y && sudo apt-get autoclean && sudo apt-get clean && sudo apt-get autoremove -y'
 alias code-ssh="$DOTFILES/scripts/code_connect.py"
 
-alias rr='tmux -CC attach -t'
-
 alias enableconda='export PATH="/home/aswerdlo/anaconda3/bin:$PATH" && source ~/anaconda3/etc/profile.d/conda.sh'
-alias nfs='nfsiostat 2 /home/aswerdlo /projects/katefgroup'
-alias nfsa='watch -n1 nfsiostat'
 alias dl="$HOME/.iterm2/it2dl"
-alias kwandb="ps aux | grep wandb | grep -v grep | awk '{print \$2}' | xargs kill -9"
 alias psi='ps -u -p'
 
+# Deep learning
+alias dash='gotop --nvidia'
+alias nv="nvidia-smi"
+alias kwandb="ps aux | grep wandb | grep -v grep | awk '{print \$2}' | xargs kill -9"
 
 # Preferred editor for local and remote sessions
 if [[ -n $SSH_CONNECTION ]]; then

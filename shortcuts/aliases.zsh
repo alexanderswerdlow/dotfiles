@@ -72,7 +72,7 @@ alias s1='ssh $S1_HOSTNAME'
 alias s2='ssh $S2_HOSTNAME'
 alias s3='ssh $S3_HOSTNAME'
 alias s4='ssh $S4_HOSTNAME'
-alias sp='ssh pop-os'
+alias sp='ssh $HOME_HOSTNAME'
 alias work="ssh home"
 
 # Docker
@@ -81,9 +81,10 @@ alias dr="docker compose restart"
 alias dup="docker compose pull && docker compose up --force-recreate --build -d"
 
 # Tmux
+alias rr='tmux -CC attach -t'
 
+# Other
 alias rs="rsync -ah --info=progress2"
-alias nv="nvidia-smi"
 
 source $DOTFILES/shortcuts/functions.zsh
 

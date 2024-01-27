@@ -112,6 +112,10 @@ function tt() {
   ssh -t $(matrix_normalize $1) 'LD_LIBRARY_PATH=$HOME/local/lib $HOME/local/bin/tmux -CC new -A -s main'
 }
 
+function tsp() {
+  ssh -t $HOME_HOSTNAME 'tmux -CC new -A -s main'
+}
+
 function sm() {
   if (( $# > 0 )); then
     ssh $(matrix_normalize $1)
