@@ -1,14 +1,26 @@
 # Matrix-specific
 export PARTITION='kate_reserved'
 
+# https://github.com/cdt-data-science/cluster-scripts
 alias jobs='squeue -o "%.18i %.9P %.35j %.8u %.2t %.10M %.6D %C %m %b %R" -u aswerdlo'
-alias cluster='gpu-usage-by-node -p; whoson; $DOTFILES/venv/bin/slurm_gpustat --partition $PARTITION'
+alias cluster='gpu-usage-by-node -p; whoson -g; $DOTFILES/venv/bin/slurm_gpustat --partition $PARTITION'
 alias kj='scancel'
 alias kjn='scancel --name'
 alias sb='sbatch.py'
 alias mn='matrix_node.py'
 alias tailm='tail -f "$(/usr/bin/ls -t ~/logs/*.out | head -n 1)"'
 alias bench='sb --gpu_count=0 benchmark_server.py'
+alias jn='getjobsonnode'
+
+# sinline -n matrix-1-24 -c 'echo "It'\''s so convenient!"'
+
+function getjobsonnode() {
+  matrixname=$(matrix_normalize $1)
+  for job in $(squeue -w $matrixname -o %i -h); 
+    do scontrol show job $job | egrep 'JobId|UserId|JobState|EndTime|TRES';
+    echo;
+  done
+}
 
 function getjobid(){
   jobid=$(squeue -u aswerdlo -w "$MACHINE_NAME" --Format='JobID' | sed -n '2p' | /bin/tr -d '[:space:]')
