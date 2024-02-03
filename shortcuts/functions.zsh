@@ -145,3 +145,7 @@ function matrix_normalize() {
     echo $NODE_NAME
   fi
 }
+
+function scratch() {
+  take "$HOME/Documents/scratch/$(date +%s)" && code . && ipython
+}

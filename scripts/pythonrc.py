@@ -1,17 +1,16 @@
-try:
-    import numpy as np
-except ImportError as e:
-    pass
+from importlib import import_module
 
-try:
-    import torch
-except ImportError as e:
-    pass
+def import_if_exists(module_name):
+    try:
+        return import_module(module_name)
+    except ModuleNotFoundError:
+        return None
 
-try:
-    from image_utils import library_ops
-except ImportError as e:
-    pass
+np = import_if_exists("numpy")
+torch = import_if_exists("torch")
+einx = import_if_exists("einx")
+library_ops = import_if_exists("image_utils.library_ops")
+Im = import_if_exists("image_utils.Im")
 
 try:
     import sys

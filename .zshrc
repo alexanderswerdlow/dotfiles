@@ -160,7 +160,9 @@ znap eval zoxide 'zoxide init zsh'
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 if [[ "$OS" == "linux" ]]; then
-  source "$DOTFILES/shortcuts/conda.zsh"
+  if [[ "$MACHINE_NAME" != "pop-os" ]]; then
+    source "$DOTFILES/shortcuts/conda.zsh"
+  fi
 fi
 
 if [[ -v MATRIX_NODE ]]; then
