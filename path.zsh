@@ -69,6 +69,7 @@ elif [[ "$OS" == "linux" ]]; then
 
     export CPATH="$CUDA_HOME/include:$CPATH"
     export CONDA_AUTO_ACTIVATE_BASE=false
+    export NUSCENES_DATA_DIR="$HOME/datasets/nuscenes"
 
     if [[ $(hostname) =~ gpu[0-9]{2} ]]; then
         export TMPDIR=$HOME/tmp
