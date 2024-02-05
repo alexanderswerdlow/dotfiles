@@ -58,9 +58,9 @@ def main(
     elif gpus == 6:
         resources = '--gres=gpu:6 -c48 --mem=288g'
     elif gpus == 7:
-        resources = '--gres=gpu:6 -c56 --mem=336g'
+        resources = '--gres=gpu:7 -c56 --mem=336g'
     elif gpus == 8:
-        resources = '--gres=gpu:6 -c64 --mem=384g'
+        resources = '--gres=gpu:8 -c64 --mem=384g'
     else:
         raise ValueError("Invalid number of GPUs")
 
