@@ -9,7 +9,7 @@ alias psi='ps -u -p'
 # Deep learning
 alias dash='gotop --nvidia'
 alias nv="nvidia-smi"
-alias kwandb="ps aux | grep wandb | grep -v grep | awk '{print \$2}' | xargs kill -9"
+alias kw="ps aux | grep wandb | grep -v grep | awk '{print \$2}' | xargs kill -9"
 
 # Preferred editor for local and remote sessions
 if [[ -n $SSH_CONNECTION ]]; then
