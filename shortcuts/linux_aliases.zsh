@@ -17,8 +17,16 @@ if [[ -n $SSH_CONNECTION ]]; then
 fi
 
 # Simple find command
-function ffind {
-  find . -name "*$1*" -print
+function find_files {
+  if [ -x $(command -v fd) ]; then
+		fd --type f $1
+  else
+    find . -name "*$1*" -print
+	fi
+}
+
+function find_folders {
+  fd --type d $1
 }
 
 # Kills stubborn processes. Will kill processes on all GPUs
