@@ -4,7 +4,7 @@ export HOMEBREW_AUTO_UPDATE_SECS="604800"
 export SECRETS="$HOME/Documents/Programs/secrets.ini"
 export PYTHONSTARTUP=$DOTFILES/scripts/pythonrc.py
 export ITERM_ENABLE_SHELL_INTEGRATION_WITH_TMUX=YES
-export EINX_WARN_ON_RETRACE=5
+export EINX_WARN_ON_RETRACE=25
 
 # Remove duplicates
 typeset -U path PATH
