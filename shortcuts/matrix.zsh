@@ -2,8 +2,8 @@
 export PARTITION='kate_reserved'
 
 # https://github.com/cdt-data-science/cluster-scripts
-alias jobs='squeue -o "%.18i %.9P %.35j %.8u %.2t %.10M %.6D %C %m %b %R" -u aswerdlo'
-alias cluster='gpu-usage-by-node -p; whoson -g; $DOTFILES/venv/bin/slurm_gpustat --partition $PARTITION'
+alias jobs='squeue -o "%.18i %.9P %.15j %.25k %.8u %.2t %.10M %.6D %C %m %b %R" -u aswerdlo'
+alias cluster='$DOTFILES/scripts/matrix/lib/gpu-usage-by-node -p; $DOTFILES/scripts/matrix/lib/whoson -g; $DOTFILES/venv/bin/slurm_gpustat --partition $PARTITION'
 alias kj='scancel'
 alias kjn='scancel --name'
 alias sb='sbatch.py'

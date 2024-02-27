@@ -20,9 +20,6 @@ fi
 
 # Random
 if [[ "$OS" == "macos" ]]; then
-  # [ -s "/Users/aswerdlow/.bun/_bun" ] && source "/Users/aswerdlow/.bun/_bun" # bun completions
-  # [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-  # [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 elif [[ "$OS" == "linux" ]]; then
   if [[ ! -v FAST_PROMPT ]]; then
     HISTFILE=~/.zsh_history
@@ -57,9 +54,6 @@ fi
 if [[ -v MATRIX_NODE ]]; then
     export FAST_PROMPT=true
     source "$DOTFILES/shortcuts/matrix.zsh"
-    if [ $SSH_TTY ]; then 
-        # sattach "$(getjobid).0"
-    fi
 
     if [[ -v MATRIX_COMPUTE_NODE ]]; then
       if [[ -v SLURM_JOB_ID ]] && [[ -n SUBMITIT ]]; then
@@ -77,9 +71,6 @@ if [[ -v MATRIX_NODE ]]; then
       fi
     fi
 
-    # eval "$(/home/aswerdlo/perm/homebrew/bin/brew shellenv)"
-    # ls cat /usr/share/Modules/modulefiles
-    
     alias xserver="Xorg -noreset +extension GLX +extension RANDR +extension RENDER &"
     export PATH="/home/aswerdlo/anaconda3/bin:$PATH"
 fi
@@ -95,9 +86,10 @@ source "$DOTFILES/local/zsh-snap/znap.zsh"
 
 znap install zsh-users/zsh-completions
 
-# znap eval iterm2 'curl -fsSL https://iterm2.com/shell_integration/zsh'
-
 if [[ ! -v FAST_PROMPT ]]; then
+  znap eval iterm2 'curl -fsSL https://iterm2.com/shell_integration/zsh'
+  source ~/.iterm2_shell_integration.zsh
+
   # # To clear cache: rm -rf ${XDG_CACHE_HOME:-$HOME/.cache}/zsh-snap/eval
   znap eval starship 'starship init zsh --print-full-init'
 
@@ -143,13 +135,14 @@ if [[ ! -v FAST_PROMPT ]]; then
   # END marlonrichert/zsh-autocomplete
 fi
 
+if [[ ! -v MATRIX_NODE ]]; then
+  znap function _pyenv pyenv              'eval "$( pyenv init - --no-rehash )"'
+  compctl -K    _pyenv pyenv
+  source $DOTFILES/plugins/pyenv-lazy/pyenv-lazy.plugin.zsh
+fi
+
 ZSH_HIGHLIGHT_HIGHLIGHTERS=( main brackets )
 znap source zsh-users/zsh-syntax-highlighting
-
-znap function _pyenv pyenv              'eval "$( pyenv init - --no-rehash )"'
-compctl -K    _pyenv pyenv
-
-source $DOTFILES/plugins/pyenv-lazy/pyenv-lazy.plugin.zsh
 
 znap function _pip_completion pip       'eval "$( pip completion --zsh )"'
 compctl -K    _pip_completion pip

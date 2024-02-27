@@ -61,7 +61,7 @@ def main(
         chdir=working_dir,
         output=f'{log_filename}.out',
         error=f'{log_filename}.out',
-        time=timedelta(days=3),
+        time=timedelta(hours=6) if partition == 'all' else timedelta(days=3),
     )
 
     if gpu_count > 0:
