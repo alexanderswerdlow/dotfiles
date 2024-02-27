@@ -24,7 +24,9 @@ alias st='subl'
 alias home="cd ~/"
 alias search="rga --rga-cache-max-blob-len=50000000 --no-messages --rga-adapters=-decompress,zip,tar"
 alias ssearch="rga --rga-adapters=+pdfpages,tesseract --no-messages"
-export FZF_DEFAULT_COMMAND='fd --type file -E "*.jpg" -E "*.html" -E "*.htm" -E "*.txt"'
+# export FZF_DEFAULT_COMMAND='fd --type file -E "*.jpg" -E "*.html" -E "*.htm" -E "*.txt"'
+export FZF_DEFAULT_COMMAND='fd --type file --follow --hidden --exclude .git --color=always'
+export FZF_DEFAULT_OPTS="--ansi"
 
 # Python
 alias act="source ./venv/bin/activate"
