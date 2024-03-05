@@ -74,7 +74,7 @@ alias s1='ssh $S1_HOSTNAME'
 alias s2='ssh $S2_HOSTNAME'
 alias s3='ssh $S3_HOSTNAME'
 alias s4='ssh $S4_HOSTNAME'
-alias sp='ssh $HOME_HOSTNAME'
+alias sp='et $HOME_HOSTNAME'
 alias work="ssh home"
 
 # Docker
