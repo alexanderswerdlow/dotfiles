@@ -4,34 +4,38 @@ import argparse
 import re
 import subprocess
 import random
+from typing import Optional
 import typer 
-
-import typer
+from typing_extensions import Annotated
 
 app = typer.Typer(pretty_exceptions_show_locals=False)
 
 typer.main.get_command_name = lambda name: name
 
-@app.command(context_settings={"allow_extra_args": True, "ignore_unknown_options": True})
+# @app.command(context_settings={"allow_extra_args": True, "ignore_unknown_options": True})
+
+@app.command()
 def main(
-    node_name: str,
+    node: Annotated[Optional[str], typer.Argument()] = None,
     attach: bool = True,
     gpus: int = 1,
     echo_ids: bool = False, # Used to export GPU UUIDs
+    big: bool = False,
 ):
-
-    if re.match(r"^[0-9]{3}$", node_name):
-        node_name = f"matrix-{node_name[0]}-{node_name[1:3]}"
-    elif re.match(r"^[0-9]{1}-[0-9]{2}$", node_name):
-        node_name = f"matrix-{node_name}"
-
-    match = re.match(r"matrix-([0-9])-([0-9]{2})", node_name)
-    if not node_name:
+    if node is None:
         session_name = f"{random.randint(1000, 9999)}"
-    elif match:
-        session_name = f"{match.group(1)}{match.group(2)}"
+        node = ''
     else:
-        session_name = node_name
+        if re.match(r"^[0-9]{3}$", node):
+            node = f"matrix-{node[0]}-{node[1:3]}"
+        elif re.match(r"^[0-9]{1}-[0-9]{2}$", node):
+            node = f"matrix-{node}"
+
+        match = re.match(r"matrix-([0-9])-([0-9]{2})", node)
+        if match:
+            session_name = f"{match.group(1)}{match.group(2)}"
+        else:
+            session_name = node
 
     try:
         subprocess.run(['tmux', 'has-session', '-t', session_name], check=True)
@@ -63,17 +67,23 @@ def main(
         resources = '--gres=gpu:8 -c64 --mem=384g'
     else:
         raise ValueError("Invalid number of GPUs")
+    
+    if big:
+        resources = f'{resources} --constraint=\'A100|6000ADA\''
+    
+    if re.match(r"^matrix-[0-9]{1}-[0-9]{2}$", node):
+        resources = f'{resources} --nodelist="{node}"'
 
-    if re.match(r"^matrix-[0-9]{1}-[0-9]{2}$", node_name):
-        id_str = ''
-        if echo_ids:
-            id_str = " -c '~/perm/scripts/gpu_data/run.sh'"
-        subprocess.run(['tmux', 'send-keys', '-t', session_name,
-                        f'srun_custom.sh -p $PARTITION --time=72:00:00 {resources} '
-                        f'--nodelist="{node_name}" --pty $SHELL{id_str}', 'C-m'])
-    else:
-        subprocess.run(['tmux', 'send-keys', '-t', session_name,
-                        f'srun -p $PARTITION --time=72:00:00 {resources} --pty $SHELL', 'C-m'])
+    id_str = ''
+    if echo_ids:
+        id_str = " -c '~/perm/scripts/gpu_data/run.sh'"
+
+    subprocess.run(['tmux', 'send-keys', '-t', session_name,
+                    f'srun_custom.sh -p $PARTITION --time=72:00:00 {resources} '
+                    f'--pty $SHELL{id_str}', 'C-m'])
+    # else:
+    #     subprocess.run(['tmux', 'send-keys', '-t', session_name,
+    #                     f'srun -p $PARTITION --time=72:00:00 {resources} --pty $SHELL', 'C-m'])
 
     if attach:
         subprocess.run(['tmux', 'attach', '-t', session_name])

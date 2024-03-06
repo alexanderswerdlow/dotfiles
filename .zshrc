@@ -21,11 +21,11 @@ fi
 # Random
 if [[ "$OS" == "macos" ]]; then
 elif [[ "$OS" == "linux" ]]; then
+  HISTFILE=~/.zsh_history
+  HISTSIZE=10000
+  SAVEHIST=10000
+  setopt appendhistory
   if [[ ! -v FAST_PROMPT ]]; then
-    HISTFILE=~/.zsh_history
-    HISTSIZE=10000
-    SAVEHIST=10000
-    setopt appendhistory
     source $DOTFILES/idempotent_install.zsh
   fi
 fi
@@ -56,13 +56,15 @@ if [[ -v MATRIX_NODE ]]; then
     source "$DOTFILES/shortcuts/matrix.zsh"
 
     if [[ -v MATRIX_COMPUTE_NODE ]]; then
-      if [[ -v SLURM_JOB_ID ]] && [[ -n SUBMITIT ]]; then
+      # [[ ! -n "${TMUX+1}" ]] && [[ ! -n "${STY+1}" ]];
+      if [[ -v SLURM_JOB_ID ]] && [[ ! -v SUBMITIT ]] then
         ids=$(get_ids)
         echo "export CUDA_VISIBLE_DEVICES=$ids"
+        echo "This is not actually set"
         if [[ ! -v FAST_PROMPT ]]; then
           job_database.py add_job "$SLURM_JOB_ID" "$MACHINE_NAME" "$ids"
         fi
-      elif [[ -n SUBMITIT ]] && [[ ! -v FAST_PROMPT ]]; then
+      elif [[ ! -v SUBMITIT ]] && [[ ! -v FAST_PROMPT ]]; then
         devs=$(job_database.py get_gpus "$MACHINE_NAME")
         echo "Setting CUDA_VISIBLE_DEVICES=$devs"
         export CUDA_VISIBLE_DEVICES=$devs
@@ -78,9 +80,11 @@ fi
 # To install copilot: npm install -g @githubnext/github-copilot-cli; github-copilot-cli auth
 command -v github-copilot-cli >/dev/null 2>&1 && eval "$(github-copilot-cli alias -- "$0")"
 
-# # Znap
-[[ -r "$DOTFILES/local/zsh-snap/znap.zsh" ]] ||
-    git clone --depth 1 -- https://github.com/marlonrichert/zsh-snap.git "$DOTFILES/local/zsh-snap"
+if [[ ! -v FAST_PROMPT ]]; then
+  # Znap
+  [[ -r "$DOTFILES/local/zsh-snap/znap.zsh" ]] ||
+      git clone --depth 1 -- https://github.com/marlonrichert/zsh-snap.git "$DOTFILES/local/zsh-snap"
+fi
 
 source "$DOTFILES/local/zsh-snap/znap.zsh"
 
