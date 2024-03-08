@@ -16,17 +16,13 @@ app = typer.Typer(pretty_exceptions_show_locals=False)
 typer.main.get_command_name = lambda name: name
 
 def get_all_nodes(partition):
-    # Run the sinfo command to get the list of nodes on the specified partition
     command = f'sinfo --partition={partition} --format="%n" --noheader'
     result = subprocess.run(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
-    # Check if the command was successful
     if result.returncode == 0:
-        # Split the output by newline to get a list of node names
         nodes = result.stdout.strip().split('\n')
         return nodes
     else:
-        # Print an error message if the command failed
         print(f"Error: {result.stderr}")
         return []
 

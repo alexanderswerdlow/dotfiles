@@ -1,6 +1,7 @@
 #!/home/aswerdlo/dotfiles/venv/bin/python
 
 import argparse
+import os
 import re
 import subprocess
 import random
@@ -21,6 +22,7 @@ def main(
     gpus: int = 1,
     echo_ids: bool = False, # Used to export GPU UUIDs
     big: bool = False,
+    partition: str = os.environ.get('PARTITION', ''),
 ):
     if node is None:
         session_name = f"{random.randint(1000, 9999)}"
@@ -78,13 +80,16 @@ def main(
     if echo_ids:
         id_str = " -c '~/perm/scripts/gpu_data/run.sh'"
 
-    subprocess.run(['tmux', 'send-keys', '-t', session_name,
-                    f'srun_custom.sh -p $PARTITION --time=72:00:00 {resources} '
-                    f'--pty $SHELL{id_str}', 'C-m'])
-    # else:
-    #     subprocess.run(['tmux', 'send-keys', '-t', session_name,
-    #                     f'srun -p $PARTITION --time=72:00:00 {resources} --pty $SHELL', 'C-m'])
+    if partition == 'all':
+        time_limit = '--time=06:00:00'
+    else:
+        time_limit = '--time=72:00:00'
 
+    srun_command = 'srun_custom.sh' # srun_custom.sh auto kills the tmux when srun stops. Use srun otherwise.
+    subprocess.run(['tmux', 'send-keys', '-t', session_name,
+                    f'{srun_command} -p {partition} {time_limit} {resources} '
+                    f'--pty $SHELL{id_str}', 'C-m'])
+    
     if attach:
         subprocess.run(['tmux', 'attach', '-t', session_name])
     else:
