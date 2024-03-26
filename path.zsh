@@ -95,6 +95,7 @@ elif [[ "$OS" == "linux" ]]; then
             "$DOTFILES/scripts/matrix/disk_utils"
             "$HOME/.npm-packages/bin"
             "$HOME/local/bin"
+            "$HOME/bin/tcpdump"
             $path
         )
 

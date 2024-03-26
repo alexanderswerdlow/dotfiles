@@ -23,6 +23,9 @@ def main(
     echo_ids: bool = False, # Used to export GPU UUIDs
     big: bool = False,
     partition: str = os.environ.get('PARTITION', ''),
+    no_exit: bool = False,
+    cpu: Optional[int] = None,
+    mem: Optional[int] = None,
 ):
     if node is None:
         session_name = f"{random.randint(1000, 9999)}"
@@ -70,6 +73,12 @@ def main(
     else:
         raise ValueError("Invalid number of GPUs")
     
+    if cpu is not None:
+        resources = re.sub(r'-c[0-9]+', f'-c{cpu}', resources)
+
+    if mem is not None:
+        resources = re.sub(r'--mem=[0-9]+g', f'--mem={mem}g', resources)
+    
     if big:
         resources = f'{resources} --constraint=\'A100|6000ADA\''
     
@@ -85,7 +94,7 @@ def main(
     else:
         time_limit = '--time=72:00:00'
 
-    srun_command = 'srun_custom.sh' # srun_custom.sh auto kills the tmux when srun stops. Use srun otherwise.
+    srun_command = 'srun' if no_exit else 'srun_custom.sh' # srun_custom.sh auto kills the tmux when srun stops. Use srun otherwise.
     subprocess.run(['tmux', 'send-keys', '-t', session_name,
                     f'{srun_command} -p {partition} {time_limit} {resources} '
                     f'--pty $SHELL{id_str}', 'C-m'])
