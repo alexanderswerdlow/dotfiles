@@ -86,7 +86,7 @@ alias dup="docker compose pull && docker compose up --force-recreate --build -d"
 alias rr='tmux -CC attach -t'
 
 # Other
-alias rs="rsync -ah --info=progress2"
+alias rs="rsync --archive --human-readable --verbose --info=progress2"
 
 source $DOTFILES/shortcuts/functions.zsh
 

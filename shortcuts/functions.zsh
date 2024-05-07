@@ -121,6 +121,10 @@ function tsp() {
   et $HOME_HOSTNAME -c 'tmux -CC new -A -s main'
 }
 
+function ttt() {
+  ssh $1 -t 'tmux -CC new -A -s main'
+}
+
 function sm() {
   if (( $# > 0 )); then
     ssh $(matrix_normalize $1)
