@@ -52,7 +52,6 @@ fi
 
 
 if [[ -v MATRIX_NODE ]]; then
-    export FAST_PROMPT=true
     source "$DOTFILES/shortcuts/matrix.zsh"
 
     if [[ -v MATRIX_COMPUTE_NODE ]]; then

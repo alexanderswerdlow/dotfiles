@@ -102,10 +102,13 @@ elif [[ "$OS" == "linux" ]]; then
         ld_library_path=(
             "$CUDA_HOME/lib64"
             "$HOME/lib"
+            "$HOME/lib64"
             "/opt/git/2.30/lib"
             "/opt/gcc/9.2.0/lib64"
             "/opt/gcc/9.2.0/lib"
             "$HOME/local/lib"
+            "/lib64"
+            "/lib"
             $ld_library_path
         )
 
@@ -135,6 +138,10 @@ elif [[ "$OS" == "linux" ]]; then
         alias python3.10="$HOME/perm/compiled/python-3.10.13/install/bin/python3.10"
         alias python3.11="$HOME/perm/compiled/python-3.11.5/install/bin/python3.11"
         export NGROK_AUTHTOKEN='2WNZUQfQnTnUQLqmMZtXBB4vbMs_7g7sqAewsnz86V5koxTZH'
+
+        export PKG_CONFIG_PATH=$HOME/lib/pkgconfig:$PKG_CONFIG_PATH
+        export PKG_CONFIG_PATH=$HOME/lib64/pkgconfig:$PKG_CONFIG_PATH
+        
     else
         path=(        
             "/home/linuxbrew/.linuxbrew/bin"

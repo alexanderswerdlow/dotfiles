@@ -34,6 +34,13 @@ function kg(){
   for i ($argv) lsof -t "/dev/nvidia$i" | xargs -I {} kill -9 {}
 }
 
+function kgg() {
+  local user=$(whoami)
+  for i ($argv); do
+    lsof -t "/dev/nvidia$i" | xargs -I {} ps -u $user -p {} | grep -v PID | awk '{print $1}' | xargs -r kill -9
+  done
+}
+
 # Lists all processes running on all GPUs and relevant info
 function pp(){
   # Get the PIDs of all GPU processes

@@ -26,6 +26,24 @@ def get_all_nodes(partition):
         print(f"Error: {result.stderr}")
         return []
 
+import time
+def tail_log_file(log_file_path_prefix):
+    max_retries = 60
+    retry_interval = 2
+    seen_files = set()
+
+    print(f"Looking for logs: {log_file_path_prefix}")
+    for _ in range(max_retries):
+        for log_file_path in Path(log_file_path_prefix.parent).glob(f'{log_file_path_prefix.stem}*'):
+            if log_file_path not in seen_files and os.path.exists(log_file_path):
+                with open(log_file_path, 'r') as f:
+                    print(f.read())
+
+                seen_files.add(log_file_path)
+        time.sleep(retry_interval)
+
+    print(f"File not found: {log_file_path} after {max_retries * retry_interval} seconds...")
+
 @app.command(context_settings={"allow_extra_args": True, "ignore_unknown_options": True})
 def main(
     ctx: typer.Context,
@@ -40,11 +58,28 @@ def main(
     job_name: Optional[str] = None,
     all_machines: bool = False,
     partition: str = os.environ.get('PARTITION', ''),
+    wait: bool = False,
+    quick: bool = False,
+    log_dir: Optional[Path] = None,
+    log_filename: Optional[str] = None,
 ):
+    if quick:
+        all_machines = True
+        cpu_count = 1
+        mem = 1
+        gpu_count = 0
+
     log_datetime = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
-    log_dir = Path.home() / 'logs'
+    
+    if log_dir is None:
+        log_dir = Path.home() / 'logs'
+        
     log_dir.mkdir(exist_ok=True)
-    log_filename = log_dir / f'{log_datetime}_{Slurm.JOB_NAME}_{Slurm.HOSTNAME}_{Slurm.JOB_ID}'
+    if log_filename is not None:
+        if quick:
+            log_filename = log_dir / f'{log_datetime}_{Slurm.JOB_NAME}_{Slurm.HOSTNAME}'
+        else:
+            log_filename = log_dir / f'{log_datetime}_{Slurm.JOB_NAME}_{Slurm.HOSTNAME}_{Slurm.JOB_ID}'
     print(f'Logging to: {log_filename}')
 
     if job_name is None:
@@ -97,14 +132,25 @@ def main(
     print(f"Extra args: {extra_args}")
 
     if all_machines:
+        if wait:
+            del task_def['output']
+            del task_def['error']
         for node in get_all_nodes(partition=partition):
             print(f'Submitting to node: {node}')
             task_def['nodelist'] = node
             slurm = Slurm(**task_def)
-            slurm.sbatch(extra_args)
+            if wait:
+                slurm.srun(extra_args)
+            else:
+                slurm.sbatch(extra_args)
     else:
         slurm = Slurm(**task_def)
         slurm.sbatch(extra_args)
+
+    if quick and not wait:
+        tail_log_file(log_dir / f'{log_datetime}_{job_name}')
+
+    
 
 if __name__ == "__main__":
     app()

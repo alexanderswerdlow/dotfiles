@@ -13,3 +13,10 @@ torch = import_if_exists("torch")
 einx = import_if_exists("einx")
 library_ops = import_if_exists("image_utils.library_ops")
 Im = getattr(import_if_exists("image_utils"), "Im")
+
+# try:
+#     import sys
+#     import IPython
+#     sys.breakpointhook = IPython.embed
+# except ImportError as e:
+#     pass
