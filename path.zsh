@@ -45,6 +45,7 @@ if [[ "$OS" == "macos" ]]; then
             "$HOME/go/bin"
             "$HOME/.bun/bin"
             "$HOME/.nvm/versions/node/v16.20.0/bin"
+            "$HOME/.iterm2"
             $path)
 
 elif [[ "$OS" == "linux" ]]; then
@@ -96,6 +97,7 @@ elif [[ "$OS" == "linux" ]]; then
             "$HOME/.npm-packages/bin"
             "$HOME/local/bin"
             "$HOME/bin/tcpdump"
+            "$HOME/.iterm2"
             $path
         )
 
@@ -155,6 +157,7 @@ elif [[ "$OS" == "linux" ]]; then
         "$HOME/bin/cluster-scripts"
         "$CUDA_HOME/bin"
         "$HOME/.local/bin"
+        "$HOME/.iterm2"
         # "/home/linuxbrew/.linuxbrew/bin"
         # "$HOME/anaconda3/bin"
         $path

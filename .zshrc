@@ -92,6 +92,7 @@ znap install zsh-users/zsh-completions
 if [[ ! -v FAST_PROMPT ]]; then
   znap eval iterm2 'curl -fsSL https://iterm2.com/shell_integration/zsh'
   source ~/.iterm2_shell_integration.zsh
+  unalias imgcat
 
   # # To clear cache: rm -rf ${XDG_CACHE_HOME:-$HOME/.cache}/zsh-snap/eval
   znap eval starship 'starship init zsh --print-full-init'
