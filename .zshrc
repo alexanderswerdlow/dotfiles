@@ -1,7 +1,14 @@
 #!/bin/zsh
 
+export PROFILE_ZSHRC=0
+
+if [[ "$PROFILE_ZSHRC" -eq 1 ]]; then
+  zmodload zsh/zprof
+fi
+
 export DOTFILES=$HOME/dotfiles
 export STARSHIP_CONFIG="$DOTFILES/misc/starship.toml"
+export ENABLE_ITERM2_SHELL_INTEGRATION=1
 
 . $DOTFILES/constants.sh
 
@@ -77,7 +84,8 @@ if [[ -v MATRIX_NODE ]]; then
 fi
 
 # To install copilot: npm install -g @githubnext/github-copilot-cli; github-copilot-cli auth
-command -v github-copilot-cli >/dev/null 2>&1 && eval "$(github-copilot-cli alias -- "$0")"
+# Warning, this adds 200ms to shell startup
+# command -v github-copilot-cli >/dev/null 2>&1 && eval "$(github-copilot-cli alias -- "$0")"
 
 if [[ ! -v FAST_PROMPT ]]; then
   # Znap
@@ -90,9 +98,11 @@ source "$DOTFILES/local/zsh-snap/znap.zsh"
 znap install zsh-users/zsh-completions
 
 if [[ ! -v FAST_PROMPT ]]; then
-  znap eval iterm2 'curl -fsSL https://iterm2.com/shell_integration/zsh'
-  source ~/.iterm2_shell_integration.zsh
-  unalias imgcat
+  if [[ "$ENABLE_ITERM2_SHELL_INTEGRATION" -eq 1 ]]; then
+    znap eval iterm2 'curl -fsSL https://iterm2.com/shell_integration/zsh'
+    source ~/.iterm2_shell_integration.zsh
+    unalias imgcat
+  fi
 
   # # To clear cache: rm -rf ${XDG_CACHE_HOME:-$HOME/.cache}/zsh-snap/eval
   znap eval starship 'starship init zsh --print-full-init'
@@ -163,4 +173,8 @@ fi
 
 if [[ -v MATRIX_NODE ]]; then
   source "$DOTFILES/shortcuts/completions.zsh"
+fi
+
+if [[ "$PROFILE_ZSHRC" -eq 1 ]]; then
+  zprof
 fi
