@@ -7,7 +7,13 @@ if [[ "$PROFILE_ZSHRC" -eq 1 ]]; then
 fi
 
 export DOTFILES=$HOME/dotfiles
-export STARSHIP_CONFIG="$DOTFILES/misc/starship.toml"
+
+if [[ -v MATRIX_NODE ]]; then
+  export STARSHIP_CONFIG="$DOTFILES/misc/starship_matrix.toml"
+else
+  export STARSHIP_CONFIG="$DOTFILES/misc/starship.toml"
+fi
+
 export ENABLE_ITERM2_SHELL_INTEGRATION=1
 
 . $DOTFILES/constants.sh

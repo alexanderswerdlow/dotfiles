@@ -98,6 +98,7 @@ elif [[ "$OS" == "linux" ]]; then
             "$HOME/local/bin"
             "$HOME/bin/tcpdump"
             "$HOME/.iterm2"
+            "/usr/sbin"
             $path
         )
 
