@@ -1,12 +1,17 @@
 import os
 
-if os.environ.get('GITHUB_COPILOT_ACCESS_TOKEN'):
-    try:
-        %load_ext copilot_completer
-    except ModuleNotFoundError:
-        version = "0.0.10"
-        wheel_url = f'https://github.com/bragradon/ipython-copilot-completer/releases/download/v{version}/IPython_Copilot_Completer-{version}-py3-none-any.whl'
-        print('Copilot completer not found...installing from github wheel')
-        %pip install $wheel_url
+if os.envion.get("FAST_IPYTHON", None) is not None:
+    if os.environ.get('GITHUB_COPILOT_ACCESS_TOKEN'):
+        try:
+            %load_ext copilot_completer
+        except ModuleNotFoundError:
+            version = "0.0.10"
+            wheel_url = f'https://github.com/bragradon/ipython-copilot-completer/releases/download/v{version}/IPython_Copilot_Completer-{version}-py3-none-any.whl'
+            print('Copilot completer not found...installing from github wheel')
+            %pip install $wheel_url
+
+
+    %load_ext autoreload
+    %autoreload 2
 
                 
