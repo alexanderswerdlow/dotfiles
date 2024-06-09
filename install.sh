@@ -81,4 +81,8 @@ sh "$DOTFILES/${OS}_install.sh"
 
 cat "$HOME/.ssh/id_rsa.pub"
 
+ln -sf "$DOTFILES/misc/ipython_config.py" "$HOME/.ipython/profile_default/ipython_config.py"
+ln -sf "$DOTFILES/misc/ipython_patch_history_command.py" "$HOME/.ipython/profile_default/startup/ipython_patch_history_command.py"
+ln -sf "$DOTFILES/misc/ipython_startup_commands.ipy" "$HOME/.ipython/profile_default/startup/ipython_startup_commands.ipy"
+
 echo "Done!"

@@ -19,7 +19,6 @@ image_utils = import_if_exists("image_utils")
 if image_utils:
     Im = getattr(image_utils, "Im")
 
-
 # try:
 #     import sys
 #     import IPython
