@@ -72,14 +72,18 @@ def main(
     log_datetime = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
     
     if log_dir is None:
-        log_dir = Path.home() / 'logs'
-        
-    log_dir.mkdir(exist_ok=True)
-    if log_filename is not None:
         if quick:
-            log_filename = log_dir / f'{log_datetime}_{Slurm.JOB_NAME}_{Slurm.HOSTNAME}'
+            log_dir = Path('output_logs')
         else:
-            log_filename = log_dir / f'{log_datetime}_{Slurm.JOB_NAME}_{Slurm.HOSTNAME}_{Slurm.JOB_ID}'
+            log_dir = Path.home() / 'logs'
+        
+    if log_filename is None:
+        if quick:
+            log_filename = log_dir / f'{Slurm.JOB_NAME}_{Slurm.HOSTNAME}_{Slurm.JOB_ID}.out'
+        else:
+            log_filename = log_dir / f'{log_datetime}_{Slurm.JOB_NAME}_{Slurm.HOSTNAME}_{Slurm.JOB_ID}.out'
+
+    log_filename.parent.mkdir(exist_ok=True)
     print(f'Logging to: {log_filename}')
 
     if job_name is None:
@@ -90,9 +94,9 @@ def main(
         partition=partition,
         job_name=job_name,
         chdir=working_dir,
-        output=f'{log_filename}.out',
-        error=f'{log_filename}.out',
-        time=timedelta(hours=6) if partition == 'all' else timedelta(days=3),
+        output=log_filename,
+        error=log_filename,
+        time=timedelta(minutes=2) if quick else (timedelta(hours=6) if partition == 'all' else timedelta(days=3)),
     )
 
     if gpu_count > 0:

@@ -6,6 +6,9 @@ def import_if_exists(module_name):
         return import_module(module_name)
     except ModuleNotFoundError:
         return None
+    except Exception as e:
+        print(f"Could not import {module_name}: {e}")
+        return None
 
 def _get_debugger():
     library_ops = import_if_exists("image_utils.library_ops")

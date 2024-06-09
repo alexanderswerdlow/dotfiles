@@ -7,6 +7,9 @@ def import_if_exists(module_name):
         return import_module(module_name)
     except ModuleNotFoundError:
         return None
+    except Exception as e:
+        print(f"Could not import {module_name}: {e}")
+        return None
 
 np = import_if_exists("numpy")
 torch = import_if_exists("torch")
