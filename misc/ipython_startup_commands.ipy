@@ -1,6 +1,6 @@
 import os
 
-if os.envion.get("FAST_IPYTHON", None) is not None:
+if os.environ.get("FAST_IPYTHON", None) is not None:
     if os.environ.get('GITHUB_COPILOT_ACCESS_TOKEN'):
         try:
             %load_ext copilot_completer
