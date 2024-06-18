@@ -70,9 +70,9 @@ elif [[ "$OS" == "linux" ]]; then
 
     export CPATH="$CUDA_HOME/include:$CPATH"
     export CONDA_AUTO_ACTIVATE_BASE=false
-    export NUSCENES_DATA_DIR="$HOME/datasets/nuscenes"
 
     if [[ $(hostname) =~ gpu[0-9]{2} ]]; then
+        export NUSCENES_DATA_DIR="$HOME/datasets/nuscenes"
         export TMPDIR=$HOME/tmp
         export NUSCENES_DATA_DIR=/data/datasets/nuscenes
         export ARGOVERSE_DATA_DIR=/data/datasets/av2
@@ -153,13 +153,17 @@ elif [[ "$OS" == "linux" ]]; then
         )
     fi
 
+    if [[ -v GROGU ]]; then
+        echo "GROGU is set"
+    fi
+
     path=(  
         "$DOTFILES/scripts"
-        "$HOME/bin"
-        "$HOME/bin/cluster-scripts"
+        "$HOMEDIR/bin"
+        "$HOMEDIR/bin/cluster-scripts"
         "$CUDA_HOME/bin"
-        "$HOME/.local/bin"
-        "$HOME/.iterm2"
+        "$HOMEDIR/.local/bin"
+        "$HOMEDIR/.iterm2"
         # "/home/linuxbrew/.linuxbrew/bin"
         # "$HOME/anaconda3/bin"
         $path

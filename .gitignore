@@ -6,3 +6,6 @@ venv/
 *.db
 local.zsh
 *.zwc
+*.pyc
+.nfs*
+*.log
