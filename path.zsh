@@ -152,11 +152,7 @@ elif [[ "$OS" == "linux" ]]; then
             $path
         )
     fi
-
-    if [[ -v GROGU ]]; then
-        echo "GROGU is set"
-    fi
-
+    
     path=(  
         "$DOTFILES/scripts"
         "$HOMEDIR/bin"

@@ -1,13 +1,12 @@
 #!/bin/zsh
-
 export PROFILE_ZSHRC=0
 
 if [[ "$PROFILE_ZSHRC" -eq 1 ]]; then
   zmodload zsh/zprof
 fi
 
-export HOMEDIR="$HOME"
-export DOTFILES=$HOMEDIR/dotfiles
+export HOMEDIR="$HOME/aswerdlo"
+export DOTFILES="$HOMEDIR/dotfiles"
 
 if [[ -v MATRIX_NODE ]]; then
   export STARSHIP_CONFIG="$DOTFILES/misc/starship_matrix.toml"
@@ -154,12 +153,6 @@ if [[ ! -v FAST_PROMPT ]]; then
     done
   }
   # END marlonrichert/zsh-autocomplete
-fi
-
-if [[ ! -v MATRIX_NODE ]]; then
-  znap function _pyenv pyenv              'eval "$( pyenv init - --no-rehash )"'
-  compctl -K    _pyenv pyenv
-  source $DOTFILES/plugins/pyenv-lazy/pyenv-lazy.plugin.zsh
 fi
 
 ZSH_HIGHLIGHT_HIGHLIGHTERS=( main brackets )

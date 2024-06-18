@@ -1,6 +1,5 @@
-export DOTFILES=$HOME/dotfiles
-export GITHUB="$HOME/github"
-
+export DOTFILES=$HOMEDIR/dotfiles
+export GITHUB="$HOMEDIR/github"
 export ARM_BREW_PREFIX='/opt/homebrew'
 export LINUX_BREW_PREFIX='/home/linuxbrew/.linuxbrew'
 export INTEL_BREW_PREFIX='/usr/local' # Rarely used but here just in case
