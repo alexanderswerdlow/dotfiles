@@ -1,17 +1,31 @@
 import os
-
-if os.environ.get("FAST_IPYTHON", None) is not None:
-    if os.environ.get('GITHUB_COPILOT_ACCESS_TOKEN'):
+import sys
+                
+try:
+    if os.environ.get("FAST_IPYTHON", None) is None and sys.version_info.minor > 8 and os.environ.get('GITHUB_COPILOT_ACCESS_TOKEN'):
+        import sys
+        import datetime
+        from datetime import timedelta, timezone
+        UTC = timezone.utc
+        setattr(sys.modules['datetime'], 'UTC', UTC)
+        datetime.__all__ = (list(datetime.__all__) if hasattr(datetime, '__all__') else []) + ['UTC']
         try:
-            %load_ext copilot_completer
+            print('Loading github copilot...')
+            get_ipython().run_line_magic('load_ext', 'copilot_completer')
         except ModuleNotFoundError:
+            print('Copilot completer not found...installing from github wheel')
             version = "0.0.10"
             wheel_url = f'https://github.com/bragradon/ipython-copilot-completer/releases/download/v{version}/IPython_Copilot_Completer-{version}-py3-none-any.whl'
-            print('Copilot completer not found...installing from github wheel')
             %pip install $wheel_url
+    else:
+        print("No github copilot access token found...")
+except:
+    print("Failed to load github copilot...")
+    
+if os.environ.get("FAST_IPYTHON", None) is None:
+    get_ipython().run_line_magic('load_ext', 'autoreload')
+    get_ipython().run_line_magic('autoreload', '2')
+    
+def ld():
+    eval("get_ipython().run_line_magic('load_ext', 'copilot_completer')")
 
-
-    %load_ext autoreload
-    %autoreload 2
-
-                

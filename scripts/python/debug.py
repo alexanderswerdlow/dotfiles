@@ -20,3 +20,4 @@ def _get_debugger():
         return import_module("pdb").set_trace
     
 custom_debugger = _get_debugger()
+print(f"Loaded custom debugger: {custom_debugger}")

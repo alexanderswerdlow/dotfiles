@@ -144,6 +144,7 @@ elif [[ "$OS" == "linux" ]]; then
 
         export PKG_CONFIG_PATH=$HOME/lib/pkgconfig:$PKG_CONFIG_PATH
         export PKG_CONFIG_PATH=$HOME/lib64/pkgconfig:$PKG_CONFIG_PATH
+        export SECRETS="$HOME/perm/secrets.ini"
         
     else
         path=(        

@@ -5,3 +5,4 @@ local/
 venv/
 *.db
 local.zsh
+*.zwc

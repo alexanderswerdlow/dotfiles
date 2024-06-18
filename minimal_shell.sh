@@ -24,7 +24,7 @@ alias size='gdu'
 alias ssize='du -h -d 1 | sort -h'
 
 # Files
-alias untar="tar -xvzf"
+alias untar="tar --extract --verbose --file"
 alias ls='exa -lam --group-directories-first'
 alias cat='bat --paging=never --plain'
 alias st='subl'

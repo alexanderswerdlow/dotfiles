@@ -25,3 +25,5 @@ if image_utils:
 #     sys.breakpointhook = IPython.embed
 # except ImportError as e:
 #     pass
+
+print("Loaded pythonrc...")

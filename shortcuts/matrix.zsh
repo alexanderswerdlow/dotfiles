@@ -7,8 +7,10 @@ alias watchx='watch -x '
 alias watchx5='watch -n5 -x '
 alias watchx10='watch -n10 -x '
 alias watchx60='watch -n60 -x '
-alias wnv='watch -n2 -x nvidia-smi'
-alias jobs='squeue -o "%.10i %3P %.18j %.2t %.10M %.2C %.3m %.4b %.11R" -u aswerdlo'
+alias wnv='~/anaconda3/envs/sedd/bin/gpustat --watch'
+alias wnvv='~/anaconda3/envs/sedd/bin/gpustat --watch --show-pid --show-user --show-power'
+alias wnvvv='watch -n2 -x nvidia-smi'
+alias jobs='squeue -o "%.10i %3P %.18j %.2t %.10M %.2C %.3m %.5b %.11R" -u aswerdlo'
 alias jobss='sacct -X -j' # --format=JobID,JobName,Partition,State,ExitCode,Start,End,Elapsed,AllocCPUS,ReqMem,Timelimit,NodeList,AveRSS,AveVMSize,MaxRSS,MaxVMSize,User 
 alias wjobs='watchx10 jobs'
 alias wcluster='watchx60 cluster'
@@ -25,6 +27,11 @@ alias gj='scontrol show job'
 
 alias nfs='nfsiostat 2 /home/aswerdlo /projects/katefgroup'
 alias nfsa='watch -n1 nfsiostat'
+
+alias kjp='squeue -u aswerdlo --state=PENDING -h -o "%i %t" | awk '\''$2=="PD"{print $1}'\'' | xargs -I {} scancel {}'
+
+alias sizee='nice -n 19 ionice -c 3 duc index . -p --database=$LOCAL_HOME/.duc.db'
+alias sizeee='duc ls -Fg . --database=$LOCAL_HOME/.duc.db'
 
 # sinline -n matrix-1-24 -c 'echo "It'\''s so convenient!"'
 
