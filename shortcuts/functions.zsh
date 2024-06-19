@@ -137,9 +137,9 @@ function ttt() {
 
 function sg() {
   if (( $# > 0 )); then
-    ssh $(cluster_normalize $1 "grogu")
+    ssh -t $(cluster_normalize $1 "grogu") "export ASWERDLO_GROGU=1; $SHELL"
   else
-    ssh grogu
+    ssh -t grogu "export ASWERDLO_GROGU=1; $SHELL"
   fi
 }
 
