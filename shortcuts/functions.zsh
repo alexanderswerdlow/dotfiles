@@ -115,7 +115,7 @@ function tg() {
     server="grogu.ri.cmu.edu"
   fi
   
-  ssh -t $server 'export ASWERDLO_GROGU=1; LD_LIBRARY_PATH=$HOME/local/lib $HOME/local/bin/tmux -L aswerdlo -CC new -A -s main'
+  ssh -t $server 'asw; export ASWERDLO_GROGU=1; LD_LIBRARY_PATH=$HOME/local/lib $HOME/local/bin/tmux -L aswerdlo -CC new -A -s main -e "ASWERDLO_GROGU=1"'
 }
 
 function tt() {

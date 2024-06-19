@@ -115,7 +115,7 @@ fi
 source "$DOTFILES/local/zsh-snap/znap.zsh"
 
 if [[ ! -n $GROGU_NODE ]]; then
-  snap install zsh-users/zsh-completions
+  znap install zsh-users/zsh-completions
 fi
 
 if [[ ! -v FAST_PROMPT ]]; then
