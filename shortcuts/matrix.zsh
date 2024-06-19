@@ -1,8 +1,10 @@
 # Matrix-specific
 if [[ -v GROGU_NODE ]]; then
   export PARTITION='deepaklong'
+  export SLURM_USER='mprabhud'
 else
   export PARTITION='kate_reserved'
+  export SLURM_USER=$USER
 fi
 
 # https://github.com/cdt-data-science/cluster-scripts
@@ -14,7 +16,7 @@ alias watchx60='watch -n60 -x '
 alias wnv='~/anaconda3/envs/sedd/bin/gpustat --watch'
 alias wnvv='~/anaconda3/envs/sedd/bin/gpustat --watch --show-pid --show-user --show-power'
 alias wnvvv='watch -n2 -x nvidia-smi'
-alias jobs='squeue -o "%.10i %3P %.18j %.2t %.10M %.2C %.3m %.5b %.11R" -u aswerdlo'
+alias jobs='squeue -o "%.10i %3P %.18j %.2t %.10M %.2C %.3m %.5b %.11R" -u $SLURM_USER'
 alias jobss='sacct -X -j' # --format=JobID,JobName,Partition,State,ExitCode,Start,End,Elapsed,AllocCPUS,ReqMem,Timelimit,NodeList,AveRSS,AveVMSize,MaxRSS,MaxVMSize,User 
 alias wjobs='watchx10 jobs'
 alias wcluster='watchx60 cluster'
@@ -29,10 +31,10 @@ alias bench='sb --gpu_count=0 benchmark_server.py'
 alias gjn='getjobsonnode'
 alias gj='scontrol show job'
 
-alias nfs='nfsiostat 2 /home/aswerdlo /projects/katefgroup'
+alias nfs='nfsiostat 2 $HOME /projects/katefgroup'
 alias nfsa='watch -n1 nfsiostat'
 
-alias kjp='squeue -u aswerdlo --state=PENDING -h -o "%i %t" | awk '\''$2=="PD"{print $1}'\'' | xargs -I {} scancel {}'
+alias kjp='squeue -u $SLURM_USER --state=PENDING -h -o "%i %t" | awk '\''$2=="PD"{print $1}'\'' | xargs -I {} scancel {}'
 
 alias sizee='nice -n 19 ionice -c 3 duc index . -p --database=$LOCAL_HOME/.duc.db'
 alias sizeee='duc ls -Fg . --database=$LOCAL_HOME/.duc.db'
@@ -48,7 +50,7 @@ function getjobsonnode() {
 }
 
 function getjobid(){
-  jobid=$(squeue -u aswerdlo -w "$MACHINE_NAME" --Format='JobID' | sed -n '2p' | /bin/tr -d '[:space:]')
+  jobid=$(squeue -u $SLURM_USER -w "$MACHINE_NAME" --Format='JobID' | sed -n '2p' | /bin/tr -d '[:space:]')
   echo "$jobid"
 }
 

@@ -1,9 +1,15 @@
 [submodule "plugins/pyenv-lazy"]
 	path = plugins/pyenv-lazy
-	url = https://github.com/davidparsson/zsh-pyenv-lazy.git
+	url = git@github.com:davidparsson/zsh-pyenv-lazy.git
 [submodule "plugins/alias-tips"]
 	path = plugins/alias-tips
-	url = https://github.com/djui/alias-tips.git
+	url = git@github.com:djui/alias-tips.git
 [submodule "plugins/zsh-autocomplete"]
 	path = plugins/zsh-autocomplete
-	url = https://github.com/marlonrichert/zsh-autocomplete
+	url = git@github.com:marlonrichert/zsh-autocomplete.git
+[submodule "plugins/zsh-autosuggestions"]
+	path = plugins/zsh-autosuggestions
+	url = git@github.com:zsh-users/zsh-autosuggestions.git
+[submodule "plugins/zsh-completions"]
+	path = plugins/zsh-completions
+	url = git@github.com:zsh-users/zsh-completions.git

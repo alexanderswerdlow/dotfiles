@@ -145,7 +145,26 @@ elif [[ "$OS" == "linux" ]]; then
         export PKG_CONFIG_PATH=$HOME/lib/pkgconfig:$PKG_CONFIG_PATH
         export PKG_CONFIG_PATH=$HOME/lib64/pkgconfig:$PKG_CONFIG_PATH
         export SECRETS="$HOME/perm/secrets.ini"
-        
+
+    elif [[ -v GROGU_NODE ]]; then
+        path=(  
+            "$HOME/.local/bin"
+            "$HOME/local/bin"
+            "$DOTFILES/scripts/matrix"
+            "$DOTFILES/scripts/matrix/disk_utils"
+            "/usr/sbin"
+            $path
+        )
+
+        ld_library_path=(
+            "$CUDA_HOME/lib64"
+            "$HOME/lib"
+            "$HOME/lib64"
+            "$HOME/local/lib"
+            "/lib64"
+            "/lib"
+            $ld_library_path
+        )
     else
         path=(        
             "/home/linuxbrew/.linuxbrew/bin"

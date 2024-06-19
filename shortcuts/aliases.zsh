@@ -66,6 +66,10 @@ alias stash="git stash -u"
 alias unstage="git restore --staged ."
 alias wip="commit wip"
 
+if [[ -n $GROGU_NODE ]]; then
+  alias tmux='tmux -L aswerdlo'
+fi
+
 alias tn='tmux new -s'
 alias ts='tmux ls'
 alias tk='tmux kill-session -t'

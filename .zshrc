@@ -5,10 +5,21 @@ if [[ "$PROFILE_ZSHRC" -eq 1 ]]; then
   zmodload zsh/zprof
 fi
 
-export ZSH_DIR="${0:a:h}"
-. "$ZSH_DIR/dotfiles/constants.sh"
+export MACHINE_NAME=$(hostname | sed 's/\.eth$//')
+[[ "$(hostname)" == matrix* ]] && export MATRIX_NODE=1
+[[ "$(hostname)" =~ ^matrix-[0-9]-[0-9][0-9] ]] && MATRIX_COMPUTE_NODE=1
+[[ "$(hostname)" == "matrix.ml.cmu.edu" ]] && export MATRIX_HEAD_NODE=1
+[[ "$(hostname)" == *grogu* ]] && export GROGU_NODE=1
 
-if [[ -v MATRIX_NODE ]]; then
+if [[ -n $GROGU_NODE ]]; then
+  export HOMEDIR="$HOME/aswerdlo"
+else
+  export HOMEDIR="$HOME"
+fi
+
+. "$HOMEDIR/dotfiles/constants.sh"
+
+if [[ -n $MATRIX_NODE || -n $MATRIX_COMPUTE_NODE ]]; then
   export STARSHIP_CONFIG="$DOTFILES/misc/starship_matrix.toml"
 else
   export STARSHIP_CONFIG="$DOTFILES/misc/starship.toml"
@@ -103,7 +114,9 @@ fi
 
 source "$DOTFILES/local/zsh-snap/znap.zsh"
 
-znap install zsh-users/zsh-completions
+if [[ ! -n $GROGU_NODE ]]; then
+  snap install zsh-users/zsh-completions
+fi
 
 if [[ ! -v FAST_PROMPT ]]; then
   if [[ "$ENABLE_ITERM2_SHELL_INTEGRATION" -eq 1 ]]; then
@@ -116,7 +129,12 @@ if [[ ! -v FAST_PROMPT ]]; then
   znap eval starship 'starship init zsh --print-full-init'
 
   ZSH_AUTOSUGGEST_STRATEGY=( history )
-  znap source zsh-users/zsh-autosuggestions
+  
+  if [[ -n $GROGU_NODE ]]; then
+    source $DOTFILES/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+  else
+    znap source zsh-users/zsh-autosuggestions
+  fi
 
   # This is a hack to enable the localcode function to work properly
   if [[ -n $SSH_CONNECTION ]]; then
@@ -158,7 +176,12 @@ if [[ ! -v FAST_PROMPT ]]; then
 fi
 
 ZSH_HIGHLIGHT_HIGHLIGHTERS=( main brackets )
-znap source zsh-users/zsh-syntax-highlighting
+
+if [[ -n $GROGU_NODE ]]; then
+  source $DOTFILES/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+else
+  znap source zsh-users/zsh-syntax-highlighting
+fi
 
 znap function _pip_completion pip       'eval "$( pip completion --zsh )"'
 compctl -K    _pip_completion pip

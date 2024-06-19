@@ -1,4 +1,4 @@
-export BIN="$HOME/bin"
+export BIN="$HOMEDIR/bin"
 
 command -v eget >/dev/null 2>&1 || curl https://zyedidia.github.io/eget.sh | sh;
 command -v gdu >/dev/null 2>&1 || (eget dundee/gdu --asset 'static' --to $BIN/gdu && chmod +x $BIN/gdu && echo "Installed gdu");
