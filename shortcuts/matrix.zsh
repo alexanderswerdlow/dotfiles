@@ -1,5 +1,9 @@
 # Matrix-specific
-export PARTITION='kate_reserved'
+if [[ -v GROGU_NODE ]]; then
+  export PARTITION='deepaklong'
+else
+  export PARTITION='kate_reserved'
+fi
 
 # https://github.com/cdt-data-science/cluster-scripts
 alias watchh='watch '

@@ -69,19 +69,19 @@ if [ "$pretty" = true ]; then
 fi
 
 # Count number of GPUs requested by running jobs
-USED=`squeue --partition='kate_reserved' -t R -o %b -w ${nodes} | awk -F':' '{sum+=$NF} END {print sum}'`
+USED=`squeue --partition=$PARTITION -t R -o %b -w ${nodes} | awk -F':' '{sum+=$NF} END {print sum}'`
 if [ "$USED" == '' ]; then
   USED=0
 fi
 
 # Count number of GPUS in nodes marked idle or mix
-USABLE=$(sinfo --partition='kate_reserved' -t idle,mix,alloc -r -N -o %G -n ${nodes} | awk -F':' '{sum+=$NF} END {print sum}')
+USABLE=$(sinfo --partition=$PARTITION -t idle,mix,alloc -r -N -o %G -n ${nodes} | awk -F':' '{sum+=$NF} END {print sum}')
 if [ "$USABLE" == '' ]; then
   USABLE=0
 fi
 
 # Count number of GPUs in all nodes
-TOTAL=$(sinfo --partition='kate_reserved' -N -o %G -n ${nodes} | awk -F':' '{sum+=$NF} END {print sum}')
+TOTAL=$(sinfo --partition=$PARTITION -N -o %G -n ${nodes} | awk -F':' '{sum+=$NF} END {print sum}')
 if [ "$TOTAL" == '' ]; then
   TOTAL=0
 fi

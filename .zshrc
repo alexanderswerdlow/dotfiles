@@ -64,6 +64,10 @@ if [[ $MACHINE_NAME =~ gpu[0-9]{2} ]]; then
 fi
 
 
+if [[ -v GROGU_NODE ]]; then
+    source "$DOTFILES/shortcuts/matrix.zsh"
+fi
+
 if [[ -v MATRIX_NODE ]]; then
     source "$DOTFILES/shortcuts/matrix.zsh"
 
