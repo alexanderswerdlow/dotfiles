@@ -1,3 +1,15 @@
+export MACHINE_NAME=$(hostname | sed 's/\.eth$//')
+[[ "$(hostname)" == matrix* ]] && export MATRIX_NODE=1
+[[ "$(hostname)" =~ ^matrix-[0-9]-[0-9][0-9] ]] && MATRIX_COMPUTE_NODE=1
+[[ "$(hostname)" == "matrix.ml.cmu.edu" ]] && export MATRIX_HEAD_NODE=1
+[[ "$(hostname)" == *grogu* ]] && export GROGU_NODE=1
+
+if [[ -v $GROGU_NODE ]]; then
+  export HOMEDIR="$HOME/aswerdlo"
+else
+  export HOMEDIR="$HOME"
+fi
+
 export DOTFILES=$HOMEDIR/dotfiles
 export GITHUB="$HOMEDIR/github"
 export ARM_BREW_PREFIX='/opt/homebrew'
@@ -24,8 +36,4 @@ else
   export BREWPREFIX=$LINUX_BREW_PREFIX
 fi
 
-export MACHINE_NAME=$(hostname | sed 's/\.eth$//')
-[[ "$(hostname)" == matrix* ]] && export MATRIX_NODE=1
-[[ "$(hostname)" =~ ^matrix-[0-9]-[0-9][0-9] ]] && MATRIX_COMPUTE_NODE=1
-[[ "$(hostname)" == "matrix.ml.cmu.edu" ]] && export MATRIX_HEAD_NODE=1
-[[ "$(hostname)" == *grogu* ]] && export GROGU_NODE=1
+

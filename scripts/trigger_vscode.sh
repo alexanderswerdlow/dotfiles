@@ -12,8 +12,7 @@ trigger_vscode_remote_editing() (
     # If you want git support when using remote SSH, then comment out this line.
     # See: https://github.com/microsoft/vscode-remote-release/issues/4073
     #  --disable-extension vscode.git --disable-extension vscode.github --disable-extension waderyan.gitblame
-    VSCODE=$(which $IDE)
-    VSCODE="${VSCODE}"
+    VSCODE="/usr/local/bin/cursor"
     LOGFILE=/tmp/iterm-vscode-trigger.log
     FTYPE=$1
     MACHINE=$2

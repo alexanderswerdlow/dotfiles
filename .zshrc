@@ -5,8 +5,8 @@ if [[ "$PROFILE_ZSHRC" -eq 1 ]]; then
   zmodload zsh/zprof
 fi
 
-export HOMEDIR="$HOME/aswerdlo"
-export DOTFILES="$HOMEDIR/dotfiles"
+export ZSH_DIR="${0:a:h}"
+. "$ZSH_DIR/dotfiles/constants.sh"
 
 if [[ -v MATRIX_NODE ]]; then
   export STARSHIP_CONFIG="$DOTFILES/misc/starship_matrix.toml"
@@ -15,8 +15,6 @@ else
 fi
 
 export ENABLE_ITERM2_SHELL_INTEGRATION=1
-
-. $DOTFILES/constants.sh
 
 source $DOTFILES/path.zsh
 source $DOTFILES/shortcuts/aliases.zsh

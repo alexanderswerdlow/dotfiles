@@ -40,7 +40,7 @@ alias sizeee='duc ls -Fg . --database=$LOCAL_HOME/.duc.db'
 # sinline -n matrix-1-24 -c 'echo "It'\''s so convenient!"'
 
 function getjobsonnode() {
-  matrixname=$(matrix_normalize $1)
+  matrixname=$(cluster_normalize $1)
   for job in $(squeue -w $matrixname -o %i -h); 
     do scontrol show job $job | egrep 'JobId|UserId|JobState|EndTime|TRES';
     echo;
