@@ -200,6 +200,12 @@ if [[ -v MATRIX_NODE ]]; then
   source "$DOTFILES/shortcuts/completions.zsh"
 fi
 
+# File for temporary definitions on a per-machine basis
+if [[ -f "$DOTFILES/final.zsh" ]]; then
+  source "$DOTFILES/final.zsh"
+fi
+
 if [[ "$PROFILE_ZSHRC" -eq 1 ]]; then
   zprof
 fi
+
