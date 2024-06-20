@@ -16,7 +16,11 @@ alias watchx60='watch -n60 -x '
 alias wnv='~/anaconda3/envs/sedd/bin/gpustat --watch'
 alias wnvv='~/anaconda3/envs/sedd/bin/gpustat --watch --show-pid --show-user --show-power'
 alias wnvvv='watch -n2 -x nvidia-smi'
-alias jobs='squeue -o "%.10i %3P %.18j %.2t %.10M %.2C %.3m %.5b %.11R" -u $SLURM_USER'
+if [[ -v GROGU_NODE ]]; then
+  alias jobs='squeue -o "%.10i %3P %.18j %.2t %.10M %.2C %.3m %.5b %.11R %.5k" -u $SLURM_USER'
+else
+  alias jobs='squeue -o "%.10i %3P %.18j %.2t %.10M %.2C %.3m %.5b %.11R" -u $SLURM_USER'
+fi
 alias jobss='sacct -X -j' # --format=JobID,JobName,Partition,State,ExitCode,Start,End,Elapsed,AllocCPUS,ReqMem,Timelimit,NodeList,AveRSS,AveVMSize,MaxRSS,MaxVMSize,User 
 alias wjobs='watchx10 jobs'
 alias wcluster='watchx60 cluster'
@@ -66,5 +70,5 @@ function cudavisibledevices() {
 }
 
 function get_ids(){
-  echo "$(grep -F -f <(nvidia-smi --query-gpu=uuid --format=csv,noheader) $HOME/perm/scripts/gpu_data/uuids.txt | cut -d, -f1 | paste -sd,)"
+  echo "$(grep -F -f <(nvidia-smi --query-gpu=uuid --format=csv,noheader) $HOMEDIR/perm/scripts/gpu_data/uuids.txt | cut -d, -f1 | paste -sd,)"
 }

@@ -7,9 +7,14 @@ fi
 
 export MACHINE_NAME=$(hostname | sed 's/\.eth$//')
 [[ "$(hostname)" == matrix* ]] && export MATRIX_NODE=1
+[[ "$(hostname)" == *grogu* ]] && export GROGU_NODE=1
+[[ "$(hostname)" =~ ^matrix-[0-9]-[0-9] ]] && MATRIX_COMPUTE_NODE=1
 [[ "$(hostname)" =~ ^matrix-[0-9]-[0-9][0-9] ]] && MATRIX_COMPUTE_NODE=1
 [[ "$(hostname)" == "matrix.ml.cmu.edu" ]] && export MATRIX_HEAD_NODE=1
-[[ "$(hostname)" == *grogu* ]] && export GROGU_NODE=1
+
+[[ "$(hostname)" =~ ^grogu-[0-9]-[0-9] ]] && GROGU_COMPUTE_NODE=1
+[[ "$(hostname)" =~ ^grogu-[0-9]-[0-9][0-9] ]] && GROGU_COMPUTE_NODE=1
+[[ "$(hostname)" == "grogu.ml.cmu.edu" ]] && export GROGU_HEAD_NODE=1
 
 if [[ -n $GROGU_NODE ]]; then
   export HOMEDIR="$HOME/aswerdlo"
@@ -72,16 +77,10 @@ if [[ $MACHINE_NAME =~ gpu[0-9]{2} ]]; then
   fi
 fi
 
-
-if [[ -v GROGU_NODE ]]; then
-    source "$DOTFILES/shortcuts/matrix.zsh"
-fi
-
-if [[ -v MATRIX_NODE ]]; then
+if [[ -v MATRIX_NODE || -v GROGU_NODE ]]; then
     source "$DOTFILES/shortcuts/matrix.zsh"
 
-    if [[ -v MATRIX_COMPUTE_NODE ]]; then
-      # [[ ! -n "${TMUX+1}" ]] && [[ ! -n "${STY+1}" ]];
+    if [[ -v MATRIX_COMPUTE_NODE || -v GROGU_COMPUTE_NODE ]]; then
       if [[ -v SLURM_JOB_ID ]] && [[ ! -v SUBMITIT ]] then
         ids=$(get_ids)
         echo "export CUDA_VISIBLE_DEVICES=$ids"
@@ -97,9 +96,12 @@ if [[ -v MATRIX_NODE ]]; then
           export CUDA_VISIBLE_DEVICES=8
       fi
     fi
-
+    
     alias xserver="Xorg -noreset +extension GLX +extension RANDR +extension RENDER &"
-    export PATH="/home/aswerdlo/anaconda3/bin:$PATH"
+
+    if [[ -v MATRIX_NODE ]]; then
+      export PATH="/home/aswerdlo/anaconda3/bin:$PATH"
+    fi
 fi
 
 # To install copilot: npm install -g @githubnext/github-copilot-cli; github-copilot-cli auth

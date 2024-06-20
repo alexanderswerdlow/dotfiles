@@ -52,6 +52,8 @@ elif [[ "$OS" == "linux" ]]; then
     if [[ -v MATRIX_NODE ]]; then
         # export CUDA_HOME="/projects/katefgroup/cuda_home/cuda/12.3"
         export CUDA_HOME="/opt/cuda/11.8"
+    elif [[ -v GROGU_NODE ]]; then
+        export CUDA_HOME="/usr/local/cuda-12"
     else
         export CUDA_HOME="/usr/local/cuda"
 
@@ -165,6 +167,8 @@ elif [[ "$OS" == "linux" ]]; then
             "/lib"
             $ld_library_path
         )
+
+        export TORCH_CUDA_ARCH_LIST='7.5;8.6'
     else
         path=(        
             "/home/linuxbrew/.linuxbrew/bin"

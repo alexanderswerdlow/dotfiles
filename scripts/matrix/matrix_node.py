@@ -1,4 +1,4 @@
-#!/home/aswerdlo/dotfiles/venv/bin/python
+#!/usr/bin/env -S sh -c '"`dirname $0`/../../venv/bin/python" "$0" "$@"'
 
 import argparse
 import os
@@ -27,30 +27,40 @@ def main(
     cpu: Optional[int] = None,
     mem: Optional[int] = None,
 ):
+    cluster_name = os.environ.get('CLUSTER_NAME', '')
+    dotfiles_dir = os.environ.get("DOTFILES")
+    extra_args = []
+    if cluster_name == "grogu":
+        extra_args = ["-L", "aswerdlo", "-f", f"{dotfiles_dir}/.tmux.conf"]
     if node is None:
         session_name = f"{random.randint(1000, 9999)}"
         node = ''
     else:
         if re.match(r"^[0-9]{3}$", node):
-            node = f"matrix-{node[0]}-{node[1:3]}"
+            node = f"{cluster_name}-{node[0]}-{node[1:3]}"
         elif re.match(r"^[0-9]{1}-[0-9]{2}$", node):
-            node = f"matrix-{node}"
+            node = f"{cluster_name}-{node}"
+        elif re.match(r"^[0-9]{1}-[0-9]{1}$", node):
+            node = f"{cluster_name}-{node[0]}-{node[1]}"
 
-        match = re.match(r"matrix-([0-9])-([0-9]{2})", node)
+        match = re.match(r"{cluster_name}-([0-9])-([0-9]{2})", node)
+        match2 = re.match(r"{cluster_name}-([0-9])-([0-9])", node)
         if match:
             session_name = f"{match.group(1)}{match.group(2)}"
+        elif match2:
+            session_name = f"{match2.group(1)}{match2.group(2)}"
         else:
             session_name = node
 
     try:
-        subprocess.run(['tmux', 'has-session', '-t', session_name], check=True)
+        subprocess.run(['tmux', *extra_args, 'has-session', '-t', session_name], check=True)
         session_name = f"{session_name}_{random.randint(100,999)}"
         print(f"Session already exists, Setting session name: {session_name}")
     except subprocess.CalledProcessError:
         pass
 
     print('Creating session: ', session_name)
-    subprocess.run(['tmux', 'new-session', '-d', '-s', session_name])
+    subprocess.run(['tmux', *extra_args, 'new-session', '-d', '-s', session_name])
 
     if gpus == 0:
         resources = '-c4 --mem=8g'
@@ -82,7 +92,9 @@ def main(
     if big:
         resources = f'{resources} --constraint=\'A100|6000ADA\''
     
-    if re.match(r"^matrix-[0-9]{1}-[0-9]{2}$", node):
+    if re.match(fr"^{cluster_name}-[0-9]{{1}}-[0-9]{{2}}$", node):
+        resources = f'{resources} --nodelist="{node}"'
+    elif re.match(fr"^{cluster_name}-[0-9]{{1}}-[0-9]{{1}}$", node):
         resources = f'{resources} --nodelist="{node}"'
 
     id_str = ''
@@ -91,16 +103,22 @@ def main(
 
     if partition == 'all':
         time_limit = '--time=06:00:00'
+    elif partition == 'deepaklong':
+        time_limit = '--time=48:00:00'
     else:
         time_limit = '--time=72:00:00'
 
+    comment = ''
+    if cluster_name == 'grogu':
+        comment = "--comment='aswerdlo' "
+
     srun_command = 'srun' if no_exit else 'srun_custom.sh' # srun_custom.sh auto kills the tmux when srun stops. Use srun otherwise.
-    subprocess.run(['tmux', 'send-keys', '-t', session_name,
-                    f'{srun_command} -p {partition} {time_limit} {resources} '
+    subprocess.run(['tmux', *extra_args, 'send-keys', '-t', session_name,
+                    f'{srun_command} -p {partition} {comment}{time_limit} {resources} '
                     f'--pty $SHELL{id_str}', 'C-m'])
     
     if attach:
-        subprocess.run(['tmux', 'attach', '-t', session_name])
+        subprocess.run(['tmux', *extra_args, 'attach', '-t', session_name])
     else:
         print(f"Session Created: {session_name}, to manually rename: tmux rename-session -t {session_name}")
 

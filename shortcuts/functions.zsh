@@ -163,28 +163,24 @@ function cluster_normalize() {
   NODE_NAME=$1
   
   if (( $# > 1 )); then
-    CLUSTER_NAME="${2}-"
+    CURRENT_CLUSTER_NAME="${2}-"
   else
-    if [[ -v GROGU_NODE ]]; then
-      CLUSTER_NAME="grogu-"
-    else
-      CLUSTER_NAME="matrix-"
-    fi
+    CURRENT_CLUSTER_NAME="${CLUSTER_NAME}-"
   fi
   
   if [[ $NODE_NAME =~ ^[0-9]{3}$ ]]; then
-    NODE_NAME="${CLUSTER_NAME}${NODE_NAME:0:1}-${NODE_NAME:1:2}"
+    NODE_NAME="${CURRENT_CLUSTER_NAME}${NODE_NAME:0:1}-${NODE_NAME:1:3}"
   elif [[ $NODE_NAME =~ ^[0-9]{1}-[0-9]{2}$ ]]; then
-    NODE_NAME="${CLUSTER_NAME}$NODE_NAME"
+    NODE_NAME="${CURRENT_CLUSTER_NAME}$NODE_NAME"
   elif [[ $NODE_NAME =~ ^[0-9]{1}-[0-9]{1}$ ]]; then
-    NODE_NAME="${CLUSTER_NAME}$NODE_NAME"
+    NODE_NAME="${CURRENT_CLUSTER_NAME}$NODE_NAME"
   elif [[ $NODE_NAME =~ ^[0-9]{2}$ ]]; then
-    NODE_NAME="${CLUSTER_NAME}${NODE_NAME:0:1}-${NODE_NAME:1:2}"
+    NODE_NAME="${CURRENT_CLUSTER_NAME}${NODE_NAME:0:1}-${NODE_NAME:1:2}"
   fi
 
-  if [[ $NODE_NAME =~ ^${CLUSTER_NAME}[0-9]{1}-[0-9]{2}$ ]]; then
+  if [[ $NODE_NAME =~ ^${CURRENT_CLUSTER_NAME}[0-9]{1}-[0-9]{2}$ ]]; then
     echo $NODE_NAME
-  elif [[ $NODE_NAME =~ ^${CLUSTER_NAME}[0-9]{1}-[0-9]{1}$ ]]; then
+  elif [[ $NODE_NAME =~ ^${CURRENT_CLUSTER_NAME}[0-9]{1}-[0-9]{1}$ ]]; then
     echo $NODE_NAME
   fi
 }

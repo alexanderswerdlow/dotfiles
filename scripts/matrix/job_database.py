@@ -1,4 +1,5 @@
-#!/home/aswerdlo/dotfiles/venv/bin/python
+#!/usr/bin/env -S sh -c '"`dirname $0`/../../venv/bin/python" "$0" "$@"'
+
 from typer import Typer, echo, main
 from json import dumps, loads
 from os import environ

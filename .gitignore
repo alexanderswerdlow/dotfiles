@@ -9,3 +9,5 @@ local.zsh
 *.pyc
 .nfs*
 *.log
+final.zsh
+output_logs/*

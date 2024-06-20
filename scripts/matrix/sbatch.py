@@ -1,4 +1,4 @@
-#!/home/aswerdlo/dotfiles/venv/bin/python
+#!/usr/bin/env -S sh -c '"`dirname $0`/../../venv/bin/python" "$0" "$@"'
 
 import os
 from simple_slurm import Slurm
@@ -8,6 +8,7 @@ from datetime import datetime, timedelta
 import typer
 from typing import List, Optional
 import subprocess
+import time
 
 gpu_ref_gb = {'A5500': 24, 'A100': 40, 'volta': 32, '6000ADA': 48, '2080Ti': 11, 'titanx': 12}
 
@@ -26,7 +27,7 @@ def get_all_nodes(partition):
         print(f"Error: {result.stderr}")
         return []
 
-import time
+
 def tail_log_file(log_file_path_prefix):
     max_retries = 60
     retry_interval = 2
@@ -90,13 +91,21 @@ def main(
         ms = datetime.now().strftime('%M%S')
         job_name = f'{working_dir.stem}_{ms}'
 
+    timelimit = timedelta(days=3)
+    if quick:
+        timelimit = timedelta(minutes=5)
+    elif partition == 'all':
+        timelimit = timedelta(hours=6)
+    elif partition == 'deepaklong':
+        timelimit = timedelta(hours=48)
+
     task_def = dict(
         partition=partition,
         job_name=job_name,
         chdir=working_dir,
         output=log_filename,
         error=log_filename,
-        time=timedelta(minutes=2) if quick else (timedelta(hours=6) if partition == 'all' else timedelta(days=3)),
+        time=timelimit,
     )
 
     if gpu_count > 0:

@@ -1,4 +1,4 @@
-export DOTFILES=$HOMEDIR/dotfiles
+export DOTFILES="$HOMEDIR/dotfiles"
 export GITHUB="$HOMEDIR/github"
 export ARM_BREW_PREFIX='/opt/homebrew'
 export LINUX_BREW_PREFIX='/home/linuxbrew/.linuxbrew'
@@ -25,3 +25,8 @@ else
 fi
 
 
+if [[ -n GROGU_NODE ]]; then
+  export CLUSTER_NAME="grogu"
+elif [[ -n MATRIX_NODE ]]; then
+  export CLUSTER_NAME="matrix"
+fi
