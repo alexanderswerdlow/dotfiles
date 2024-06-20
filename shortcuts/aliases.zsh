@@ -67,7 +67,7 @@ alias unstage="git restore --staged ."
 alias wip="commit wip"
 
 if [[ -n $GROGU_NODE ]]; then
-  alias tmux='tmux -L aswerdlo'
+  alias tmux='tmux -L aswerdlo -f "$DOTFILES/.tmux.conf"'
 fi
 
 alias tn='tmux new -s'
