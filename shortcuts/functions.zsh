@@ -114,8 +114,8 @@ function tg() {
   else
     server="grogu.ri.cmu.edu"
   fi
-  
-  ssh -t $server 'LD_LIBRARY_PATH=$HOME/local/lib $HOME/local/bin/tmux -L aswerdlo -CC new -A -s main -e "ASWERDLO_GROGU=1"'
+
+  LC_MESSAGES="TMUX" ssh -t $server 'LD_LIBRARY_PATH=$HOME/local/lib $HOME/local/bin/tmux -L aswerdlo -f "/home/mprabhud/aswerdlo/dotfiles/.tmux.conf" -CC new -A -s main'
 }
 
 function tt() {
@@ -137,9 +137,9 @@ function ttt() {
 
 function sg() {
   if (( $# > 0 )); then
-    ssh -t $(cluster_normalize $1 "grogu") "export ASWERDLO_GROGU=1; $SHELL"
+    ssh $(cluster_normalize $1 "grogu")
   else
-    ssh -t grogu "export ASWERDLO_GROGU=1; $SHELL"
+    ssh grogu
   fi
 }
 
