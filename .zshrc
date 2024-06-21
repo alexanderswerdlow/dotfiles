@@ -116,9 +116,7 @@ fi
 
 source "$DOTFILES/local/zsh-snap/znap.zsh"
 
-if [[ ! -n $GROGU_NODE ]]; then
-  znap install zsh-users/zsh-completions
-fi
+znap install zsh-users/zsh-completions
 
 if [[ ! -v FAST_PROMPT ]]; then
   if [[ "$ENABLE_ITERM2_SHELL_INTEGRATION" -eq 1 ]]; then
@@ -130,13 +128,10 @@ if [[ ! -v FAST_PROMPT ]]; then
   # # To clear cache: rm -rf ${XDG_CACHE_HOME:-$HOME/.cache}/zsh-snap/eval
   znap eval starship 'starship init zsh --print-full-init'
 
+  znap source djui/alias-tips
+
   ZSH_AUTOSUGGEST_STRATEGY=( history )
-  
-  if [[ -n $GROGU_NODE ]]; then
-    source $DOTFILES/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
-  else
-    znap source zsh-users/zsh-autosuggestions
-  fi
+  znap source zsh-users/zsh-autosuggestions
 
   # This is a hack to enable the localcode function to work properly
   if [[ -n $SSH_CONNECTION ]]; then
@@ -179,11 +174,7 @@ fi
 
 ZSH_HIGHLIGHT_HIGHLIGHTERS=( main brackets )
 
-if [[ -n $GROGU_NODE ]]; then
-  source $DOTFILES/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-else
-  znap source zsh-users/zsh-syntax-highlighting
-fi
+znap source zsh-users/zsh-syntax-highlighting
 
 znap function _pip_completion pip       'eval "$( pip completion --zsh )"'
 compctl -K    _pip_completion pip

@@ -188,3 +188,19 @@ function cluster_normalize() {
 function scratch() {
   take "$HOME/Documents/scratch/$(date +%s)" && code . && ipython
 }
+
+function ghcopilotinit() {
+  unalias ghe >/dev/null 2>&1
+  unalias ghc >/dev/null 2>&1
+  unalias ghcs >/dev/null 2>&1
+  unalias ghce >/dev/null 2>&1
+  eval "$(gh copilot alias -- zsh)"
+  alias ghe="ghce"
+  alias ghc="ghcs"
+}
+
+alias ghe="ghcopilotinit && ghce"
+alias ghc="ghcopilotinit && ghcs"
+
+alias ghce="ghcopilotinit && ghce"
+alias ghcs="ghcopilotinit && ghcs"

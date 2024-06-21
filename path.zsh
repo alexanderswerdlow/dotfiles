@@ -155,6 +155,7 @@ elif [[ "$OS" == "linux" ]]; then
             "$DOTFILES/scripts/matrix"
             "$DOTFILES/scripts/matrix/disk_utils"
             "/usr/sbin"
+            "$HOMEDIR/bin/go/bin"
             $path
         )
 
@@ -162,13 +163,15 @@ elif [[ "$OS" == "linux" ]]; then
             "$CUDA_HOME/lib64"
             "$HOME/lib"
             "$HOME/lib64"
-            "$HOME/local/lib"
             "/lib64"
             "/lib"
             $ld_library_path
+            "$HOME/local/lib"
         )
 
         export TORCH_CUDA_ARCH_LIST='7.5;8.6'
+        export GOBIN="$HOMEDIR/bin"
+        export GOPATH="$HOMEDIR/bin/go"
     else
         path=(        
             "/home/linuxbrew/.linuxbrew/bin"

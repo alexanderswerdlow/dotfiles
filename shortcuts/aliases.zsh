@@ -65,6 +65,8 @@ alias resolve="git add . && git commit --no-edit"
 alias stash="git stash -u"
 alias unstage="git restore --staged ."
 alias wip="commit wip"
+alias grao="git remote set-url origin https://github.com/alexanderswerdlow/${PWD##*/}.git"
+alias gcl="git config user.name 'Alexander Swerdlow' && git config user.email 'aswerdlow1@gmail.com' && git config url.'ssh://git@github.com'.insteadOf 'https://github.com'"
 
 if [[ -n $GROGU_NODE ]]; then
   alias tmux='tmux -L aswerdlo -f "$DOTFILES/.tmux.conf"'

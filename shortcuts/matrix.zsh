@@ -13,8 +13,13 @@ alias watchx='watch -x '
 alias watchx5='watch -n5 -x '
 alias watchx10='watch -n10 -x '
 alias watchx60='watch -n60 -x '
-alias wnv='~/anaconda3/envs/sedd/bin/gpustat --watch'
-alias wnvv='~/anaconda3/envs/sedd/bin/gpustat --watch --show-pid --show-user --show-power'
+if [[ -v GROGU_NODE ]]; then
+  export gpu_env='/home/mprabhud/micromamba/envs/sedd/bin/gpustat --watch'
+else
+  export gpu_env='~/anaconda3/envs/sedd/bin/gpustat --watch'
+fi
+alias wnv="$gpu_env"
+alias wnvv="$gpu_env --show-pid --show-user --show-power"
 alias wnvvv='watch -n2 -x nvidia-smi'
 if [[ -v GROGU_NODE ]]; then
   alias jobs='squeue -o "%.10i %3P %.18j %.2t %.10M %.2C %.3m %.5b %.11R %.5k" -u $SLURM_USER'
@@ -39,9 +44,6 @@ alias nfs='nfsiostat 2 $HOME /projects/katefgroup'
 alias nfsa='watch -n1 nfsiostat'
 
 alias kjp='squeue -u $SLURM_USER --state=PENDING -h -o "%i %t" | awk '\''$2=="PD"{print $1}'\'' | xargs -I {} scancel {}'
-
-alias sizee='nice -n 19 ionice -c 3 duc index . -p --database=$LOCAL_HOME/.duc.db'
-alias sizeee='duc ls -Fg . --database=$LOCAL_HOME/.duc.db'
 
 # sinline -n matrix-1-24 -c 'echo "It'\''s so convenient!"'
 

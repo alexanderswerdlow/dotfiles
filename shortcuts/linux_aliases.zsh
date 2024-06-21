@@ -10,6 +10,11 @@ alias psi='ps -u -p'
 alias dash='gotop --nvidia'
 alias nv="nvidia-smi"
 alias kw='lsof -t "/proc/$$/fd/1" | xargs -I {} ps -u -f {} | grep "$USER" | grep "wandb-service" | grep -v grep | awk '\''{print $2}'\'' | xargs kill -9'
+alias kp='pkill -f -u $(whoami) "python"'
+alias kcode='ps aux | grep .cursor-server | awk '\''{print $2}'\'' | xargs kill'
+
+alias sizee='nice -n 19 ionice -c 3 duc index . -p --database=$LOCAL_HOME/.duc.db'
+alias sizeee='duc ls -Fg . --database=$LOCAL_HOME/.duc.db'
 
 # Preferred editor for local and remote sessions
 if [[ -n $SSH_CONNECTION ]]; then
