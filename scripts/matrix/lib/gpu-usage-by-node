@@ -57,6 +57,10 @@ if [ "$header" = true ]; then
   echo "datetime,nodename,gpu,in_use,usable,total,free"
 fi
 for node in ${node_list}; do
-  gpu=$(sinfo --partition=$PARTITION -o "%b" -n $node | sed -n '2p' | cut -d':' -f2)
+  if [ "$CLUSTER_NAME" == "grogu" ]; then
+    gpu=$(sinfo --partition=$PARTITION -o "%b" -n $node | sed -n '2p' | cut -d':' -f2)
+  else
+    gpu=$(sinfo --partition=$PARTITION -o "%G" -n $node | sed -n '2p' | cut -d':' -f2)
+  fi
   echo "${dt},${node},${gpu// },`${this_dir}/gpu-usage -h -n $node`"
 done 
