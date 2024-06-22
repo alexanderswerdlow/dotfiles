@@ -24,7 +24,7 @@ fi
 
 . "$HOMEDIR/dotfiles/constants.sh"
 
-if [[ -n $MATRIX_NODE || -n $MATRIX_COMPUTE_NODE ]]; then
+if [[ -n $MATRIX_NODE || -n $GROGU_NODE ]]; then
   export STARSHIP_CONFIG="$DOTFILES/misc/starship_matrix.toml"
 else
   export STARSHIP_CONFIG="$DOTFILES/misc/starship.toml"
@@ -121,7 +121,7 @@ znap install zsh-users/zsh-completions
 if [[ ! -v FAST_PROMPT ]]; then
   if [[ "$ENABLE_ITERM2_SHELL_INTEGRATION" -eq 1 ]]; then
     znap eval iterm2 'curl -fsSL https://iterm2.com/shell_integration/zsh'
-    source ~/.iterm2_shell_integration.zsh
+    source $HOMEDIR/.iterm2_shell_integration.zsh
     unalias imgcat
   fi
 

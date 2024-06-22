@@ -1,4 +1,6 @@
-#!/usr/bin/env -S sh -c '"`dirname $0`/../../venv/bin/python" "$0" "$@"'
+#!/bin/sh
+'''exec' "$(dirname "$0")/../../venv/bin/python" "$0" "$@"
+' '''
 
 import argparse
 import os
@@ -40,7 +42,7 @@ def main(
             node = f"{cluster_name}-{node[0]}-{node[1:3]}"
         elif re.match(r"^[0-9]{1}-[0-9]{2}$", node):
             node = f"{cluster_name}-{node}"
-        elif re.match(r"^[0-9]{1}-[0-9]{1}$", node):
+        elif re.match(r"^[0-9]{1}-[0-9]{1}$", node) or re.match(r"^[0-9]{2}$", node):
             node = f"{cluster_name}-{node[0]}-{node[1]}"
 
         match = re.match(r"{cluster_name}-([0-9])-([0-9]{2})", node)

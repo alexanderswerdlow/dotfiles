@@ -1,4 +1,6 @@
-#!/usr/bin/env -S sh -c '"`dirname $0`/../../venv/bin/python" "$0" "$@"'
+#!/bin/sh
+'''exec' "$(dirname "$0")/../../venv/bin/python" "$0" "$@"
+' '''
 
 from typer import Typer, echo, main
 from json import dumps, loads
