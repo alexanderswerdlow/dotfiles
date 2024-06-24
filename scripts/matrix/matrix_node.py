@@ -28,6 +28,7 @@ def main(
     no_exit: bool = False,
     cpu: Optional[int] = None,
     mem: Optional[int] = None,
+    sbatch: bool = False,
 ):
     cluster_name = os.environ.get('CLUSTER_NAME', '')
     dotfiles_dir = os.environ.get("DOTFILES")
@@ -115,9 +116,11 @@ def main(
         comment = "--comment='aswerdlo' "
 
     srun_command = 'srun' if no_exit else 'srun_custom.sh' # srun_custom.sh auto kills the tmux when srun stops. Use srun otherwise.
+    if sbatch:
+        srun_command = 'sbatch_custom.sh'
     subprocess.run(['tmux', *extra_args, 'send-keys', '-t', session_name,
-                    f'{srun_command} -p {partition} {comment}{time_limit} {resources} '
-                    f'--pty $SHELL{id_str}', 'C-m'])
+                    f'{srun_command} -p {partition} {comment}{time_limit} {resources} ',
+                    *([f'--pty $SHELL{id_str}'] if sbatch is False else []), 'C-m'])
     
     if attach:
         subprocess.run(['tmux', *extra_args, 'attach', '-t', session_name])

@@ -152,6 +152,7 @@ function sm() {
 }
 
 function r() {
+  setopt aliases
   if (( $# > 0 )); then
     tmux attach -t $1
   else
@@ -204,3 +205,26 @@ alias ghc="ghcopilotinit && ghcs"
 
 alias ghce="ghcopilotinit && ghce"
 alias ghcs="ghcopilotinit && ghcs"
+
+
+function iterm_notify() {
+  if [[ $? -ne 0 ]]; then
+    BADEXIT="The program failed with exit code $?."
+  fi
+
+  if [ $# -eq 0 ]; then
+    if [[ -v BADEXIT ]]; then
+      MESSAGE="$BADEXIT"
+    else
+      MESSAGE="Process Finished"
+    fi
+  else
+    MESSAGE="$@"
+  fi
+
+  if [[ -v BADEXIT ]]; then
+    echo && echo -en iTerm""NotifyBadExit "$MESSAGE\r" && sleep 1 && echo "     "
+  else
+    echo && echo -en iTerm""Notify "$MESSAGE\r" && sleep 1 && echo "     "
+  fi
+}

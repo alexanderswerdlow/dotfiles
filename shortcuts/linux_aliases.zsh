@@ -35,6 +35,19 @@ function find_folders {
 }
 
 # Kills stubborn processes. Will kill processes on all GPUs
+
+function ggs() {
+  if [ -z "$2" ]; then
+    lsof -t "/dev/nvidia${1}" | xargs -I {} ps -u -f {}
+  else
+    lsof -t "/dev/nvidia${1}" | xargs -I {} ps -u -f {} | pgrep -f "$2" | xargs -I {} ps -u -p {}
+  fi
+}
+
+function kgs() {
+  ggs $1 $2 | grep -v PID | awk '{print $2}' | xargs -I {} kill {}
+}
+
 function kg(){
   for i ($argv) lsof -t "/dev/nvidia$i" | xargs -I {} kill -9 {}
 }
