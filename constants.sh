@@ -25,8 +25,8 @@ else
 fi
 
 
-if [[ -n GROGU_NODE ]]; then
+if [[ -n $GROGU_NODE ]]; then
   export CLUSTER_NAME="grogu"
-elif [[ -n MATRIX_NODE ]]; then
+elif [[ -n $MATRIX_NODE ]]; then
   export CLUSTER_NAME="matrix"
 fi
