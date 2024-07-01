@@ -28,5 +28,6 @@ fi
 if [[ -n $GROGU_NODE ]]; then
   export CLUSTER_NAME="grogu"
 elif [[ -n $MATRIX_NODE ]]; then
+  export LC_MONETARY=ASWERDLO_GROGU
   export CLUSTER_NAME="matrix"
 fi

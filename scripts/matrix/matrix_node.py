@@ -15,10 +15,9 @@ app = typer.Typer(pretty_exceptions_show_locals=False)
 
 typer.main.get_command_name = lambda name: name
 
-# @app.command(context_settings={"allow_extra_args": True, "ignore_unknown_options": True})
-
-@app.command()
+@app.command(context_settings={"allow_extra_args": True, "ignore_unknown_options": True})
 def main(
+    ctx: typer.Context,
     node: Annotated[Optional[str], typer.Argument()] = None,
     attach: bool = True,
     gpus: int = 1,
@@ -30,11 +29,16 @@ def main(
     mem: Optional[int] = None,
     sbatch: bool = False,
 ):
+    
+    if node is not None and "--" in node:
+        ctx.args = [node] + ctx.args
+        node = None
+
     cluster_name = os.environ.get('CLUSTER_NAME', '')
     dotfiles_dir = os.environ.get("DOTFILES")
-    extra_args = []
+    extra_tmux_args = []
     if cluster_name == "grogu":
-        extra_args = ["-L", "aswerdlo", "-f", f"{dotfiles_dir}/.tmux.conf"]
+        extra_tmux_args = ["-L", "aswerdlo", "-f", f"{dotfiles_dir}/.tmux.conf"]
     if node is None:
         session_name = f"{random.randint(1000, 9999)}"
         node = ''
@@ -55,15 +59,15 @@ def main(
         else:
             session_name = node
 
-    try:
-        subprocess.run(['tmux', *extra_args, 'has-session', '-t', session_name], check=True)
-        session_name = f"{session_name}_{random.randint(100,999)}"
-        print(f"Session already exists, Setting session name: {session_name}")
-    except subprocess.CalledProcessError:
-        pass
+    if sbatch is False:
+        try:
+            subprocess.run(['tmux', *extra_tmux_args, 'has-session', '-t', session_name], check=True)
+            session_name = f"{session_name}_{random.randint(100,999)}"
+        except subprocess.CalledProcessError:
+            pass
 
-    print('Creating session: ', session_name)
-    subprocess.run(['tmux', *extra_args, 'new-session', '-d', '-s', session_name])
+        print(f'Creating session: {session_name}')
+        subprocess.run(['tmux', *extra_tmux_args, 'new-session', '-d', '-s', session_name])
 
     if gpus == 0:
         resources = '-c4 --mem=8g'
@@ -93,7 +97,14 @@ def main(
         resources = re.sub(r'--mem=[0-9]+g', f'--mem={mem}g', resources)
     
     if big:
-        resources = f'{resources} --constraint=\'A100|6000ADA\''
+        if cluster_name == "grogu":
+            resources = f'{resources} --constraint=\'A5000|A6000\''
+        else:
+            resources = f'{resources} --constraint=\'A100|6000ADA\''
+
+    if big and gpus == 1:
+        partition = 'all'
+        print(f"Warning: using all partition!!!")
     
     if re.match(fr"^{cluster_name}-[0-9]{{1}}-[0-9]{{2}}$", node):
         resources = f'{resources} --nodelist="{node}"'
@@ -115,17 +126,28 @@ def main(
     if cluster_name == 'grogu':
         comment = "--comment='aswerdlo' "
 
-    srun_command = 'srun' if no_exit else 'srun_custom.sh' # srun_custom.sh auto kills the tmux when srun stops. Use srun otherwise.
+    extra_sbatch_args = ""
+    if ctx.args:
+        print(f"Args: {ctx.args}")
+        extra_sbatch_args = " ".join(ctx.args)
+        if len(extra_tmux_args) > 0:
+            extra_sbatch_args = f" {extra_sbatch_args}"
+
     if sbatch:
-        srun_command = 'sbatch_custom.sh'
-    subprocess.run(['tmux', *extra_args, 'send-keys', '-t', session_name,
-                    f'{srun_command} -p {partition} {comment}{time_limit} {resources} ',
-                    *([f'--pty $SHELL{id_str}'] if sbatch is False else []), 'C-m'])
-    
-    if attach:
-        subprocess.run(['tmux', *extra_args, 'attach', '-t', session_name])
+        cmd = f'sbatch -p {partition} {comment}{time_limit} {resources}{extra_sbatch_args} create_tmux_sleep.sh'
+        print(f'Running: {cmd}')
+        subprocess.run(cmd, shell=True)
     else:
-        print(f"Session Created: {session_name}, to manually rename: tmux rename-session -t {session_name}")
+        command = 'srun' if no_exit else 'srun_custom.sh' # srun_custom.sh auto kills the tmux when srun stops. Use srun otherwise.
+        subprocess.run(['tmux',  *extra_tmux_args, 'send-keys', '-t', session_name,
+                        f'{command} -p {partition} {comment}{time_limit}{extra_sbatch_args} {resources} ',
+                        f'--pty $SHELL{id_str}', 'C-m'])
+    
+        if attach and 'TMUX' not in os.environ:
+            print(f"Attaching to session: {session_name}")
+            subprocess.run(['tmux', *extra_tmux_args, 'attach', '-t', session_name])
+        else:
+            print(f"Session Created: {session_name}, to manually rename: tmux rename-session -t {session_name}")
 
 
 if __name__ == "__main__":

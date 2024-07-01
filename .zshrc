@@ -78,6 +78,7 @@ if [[ $MACHINE_NAME =~ gpu[0-9]{2} ]]; then
 fi
 
 if [[ -v MATRIX_NODE || -v GROGU_NODE ]]; then
+    check_home_usage
     source "$DOTFILES/shortcuts/matrix.zsh"
 
     if [[ -v MATRIX_COMPUTE_NODE || -v GROGU_COMPUTE_NODE ]]; then

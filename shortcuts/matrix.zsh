@@ -21,11 +21,13 @@ fi
 alias wnv="$gpu_env"
 alias wnvv="$gpu_env --show-pid --show-user --show-power"
 alias wnvvv='watch -n2 -x nvidia-smi'
+
 if [[ -v GROGU_NODE ]]; then
   alias jobs='squeue -o "%.10i %3P %.18j %.2t %.10M %.2C %.3m %.5b %.11R %.5k" -u $SLURM_USER'
 else
   alias jobs='squeue -o "%.10i %3P %.18j %.2t %.10M %.2C %.3m %.5b %.11R" -u $SLURM_USER'
 fi
+
 alias jobss='sacct -X -j' # --format=JobID,JobName,Partition,State,ExitCode,Start,End,Elapsed,AllocCPUS,ReqMem,Timelimit,NodeList,AveRSS,AveVMSize,MaxRSS,MaxVMSize,User 
 alias wjobs='watchx10 jobs'
 alias wcluster='watchx60 cluster'
@@ -42,10 +44,28 @@ alias gj='scontrol show job'
 
 alias nfs='nfsiostat 2 $HOME /projects/katefgroup'
 alias nfsa='watch -n1 nfsiostat'
-
 alias kjp='squeue -u $SLURM_USER --state=PENDING -h -o "%i %t" | awk '\''$2=="PD"{print $1}'\'' | xargs -I {} scancel {}'
 
 # sinline -n matrix-1-24 -c 'echo "It'\''s so convenient!"'
+
+function wf() {
+  local dir
+  if [[ -n $1 ]]; then
+    if [[ -f $1 ]]; then
+      dir=$(dirname "$1")
+    elif [[ -d $1 ]]; then
+      dir="$1"
+    else
+      dir=$(scontrol show job $1 | grep -oP "StdOut=\K[^ ]+" | xargs dirname)
+    fi
+  else
+    local jobid=$(squeue -u $USER --sort=-i | awk 'NR==2 {print $1}')
+    dir=$(scontrol show job $jobid | grep -oP "StdOut=\K[^ ]+" | xargs dirname)
+  fi
+
+  tail -n1000 -f "$dir"/*.out
+}
+
 
 function getjobsonnode() {
   matrixname=$(cluster_normalize $1)
