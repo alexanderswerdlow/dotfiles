@@ -79,7 +79,7 @@ fi
 
 if [[ -v MATRIX_NODE || -v GROGU_NODE ]]; then
     check_home_usage
-    source "$DOTFILES/shortcuts/matrix.zsh"
+    source "$DOTFILES/shortcuts/slurm.zsh"
 
     if [[ -v MATRIX_COMPUTE_NODE || -v GROGU_COMPUTE_NODE ]]; then
       if [[ -v SLURM_JOB_ID ]] && [[ ! -v SUBMITIT ]] then
@@ -90,11 +90,9 @@ if [[ -v MATRIX_NODE || -v GROGU_NODE ]]; then
           job_database.py add_job "$SLURM_JOB_ID" "$MACHINE_NAME" "$ids"
         fi
       elif [[ ! -v SUBMITIT ]] && [[ ! -v FAST_PROMPT ]]; then
-        devs=$(job_database.py get_gpus "$MACHINE_NAME")
-        echo "Setting CUDA_VISIBLE_DEVICES=$devs"
-        export CUDA_VISIBLE_DEVICES=$devs
+        scuda
       else
-          export CUDA_VISIBLE_DEVICES=8
+        export CUDA_VISIBLE_DEVICES=8
       fi
     fi
     

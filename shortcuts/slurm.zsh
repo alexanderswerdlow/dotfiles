@@ -33,7 +33,25 @@ alias wjobs='watchx10 jobs'
 alias wcluster='watchx60 cluster'
 alias cluster='$DOTFILES/scripts/matrix/lib/gpu-usage-by-node -p'
 alias cluster_all='$DOTFILES/venv/bin/slurm_gpustat --partition $PARTITION; $DOTFILES/scripts/matrix/lib/whoson -g; $DOTFILES/scripts/matrix/lib/gpu-usage-by-node -p'
-alias kj='scancel'
+
+if [[ -v GROGU_NODE ]]; then
+  # alias kj='squeue --me --states=RUNNING --Format=jobid,comment --noheader | grep "aswerdlo" | awk '\''{print $1}'\'' | xargs scancel'
+  function kj() {
+    local job_id=$1
+    local required_comment='aswerdlo'
+    local job_comment=$(squeue --job=$job_id --Format=jobid,comment --noheader | awk '{print $2}')
+
+    if [[ "$job_comment" == *"$required_comment"* ]]; then
+      scancel $job_id
+      echo "Job $job_id with comment '$required_comment' has been cancelled."
+    else
+      echo "WARNING: Job $job_id does not contain the required comment or does not exist."
+    fi
+  }
+else
+  alias kj='scancel'
+fi
+
 alias kjn='scancel --name'
 alias sb='sbatch.py'
 alias mn='matrix_node.py'
@@ -54,7 +72,8 @@ function wf() {
     if [[ -f $1 ]]; then
       dir=$(dirname "$1")
     elif [[ -d $1 ]]; then
-      dir="$1"
+      tail -n1000 -f "$1"/.submitit/**/*.out
+      return
     else
       dir=$(scontrol show job $1 | grep -oP "StdOut=\K[^ ]+" | xargs dirname)
     fi
@@ -93,4 +112,10 @@ function cudavisibledevices() {
 
 function get_ids(){
   echo "$(grep -F -f <(nvidia-smi --query-gpu=uuid --format=csv,noheader) $HOMEDIR/perm/scripts/gpu_data/uuids.txt | cut -d, -f1 | paste -sd,)"
+}
+
+function scuda(){
+  devs=$(job_database.py get_gpus "$MACHINE_NAME")
+  echo "Setting CUDA_VISIBLE_DEVICES=$devs"
+  export CUDA_VISIBLE_DEVICES=$devs
 }
