@@ -27,6 +27,7 @@ def main(
     no_exit: bool = False,
     cpu: Optional[int] = None,
     mem: Optional[int] = None,
+    constraint: Optional[str] = None,
     sbatch: bool = False,
 ):
     
@@ -96,11 +97,13 @@ def main(
     if mem is not None:
         resources = re.sub(r'--mem=[0-9]+g', f'--mem={mem}g', resources)
     
-    if big:
+    if big and constraint is None:
         if cluster_name == "grogu":
             resources = f'{resources} --constraint=\'A5000|A6000\''
         else:
             resources = f'{resources} --constraint=\'A100|6000ADA\''
+    elif constraint is not None:
+        resources = f'{resources} --constraint=\'{constraint}\''
 
     if big and gpus == 1:
         partition = 'all'
