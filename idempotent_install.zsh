@@ -12,4 +12,4 @@ command -v fzf >/dev/null 2>&1 || (eget junegunn/fzf --to "$BIN/fzf" && chmod +x
 command -v fd >/dev/null 2>&1 || (eget sharkdp/fd --asset "musl" --to "$BIN/fd" && chmod +x $BIN/fd && echo "Installed Fd");
 command -v rg >/dev/null 2>&1 || (eget BurntSushi/ripgrep --to "$BIN/rg" && chmod +x $BIN/rg && echo "Installed rg");
 command -v micro >/dev/null 2>&1 || (eget zyedidia/micro --tag nightly --asset "static" --to "$BIN/micro" && chmod +x $BIN/micro && echo "Installed micro");
-
+command -v parquet-tools >/dev/null 2>&1 || (eget hangxie/parquet-tools --to "$BIN/parquet-tools" && chmod +x $BIN/parquet-tools && echo "Installed parquet-tools");
