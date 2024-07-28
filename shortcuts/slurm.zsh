@@ -29,7 +29,7 @@ else
 fi
 
 alias jobss='sacct -X -j' # --format=JobID,JobName,Partition,State,ExitCode,Start,End,Elapsed,AllocCPUS,ReqMem,Timelimit,NodeList,AveRSS,AveVMSize,MaxRSS,MaxVMSize,User 
-alias wjobs='watchx10 jobs'
+alias wjobs='watchx5 jobs'
 alias wcluster='watchx60 cluster'
 alias cluster='$DOTFILES/scripts/matrix/lib/gpu-usage-by-node -p'
 alias cluster_all='$DOTFILES/venv/bin/slurm_gpustat --partition $PARTITION; $DOTFILES/scripts/matrix/lib/whoson -g; $DOTFILES/scripts/matrix/lib/gpu-usage-by-node -p'
@@ -72,7 +72,7 @@ function wf() {
     if [[ -f $1 ]]; then
       dir=$(dirname "$1")
     elif [[ -d $1 ]]; then
-      tail -n1000 -f "$1"/.submitit/**/*.out
+      tail -n +1 -f "$1"/.submitit/**/*.out
       return
     else
       dir=$(scontrol show job $1 | grep -oP "StdOut=\K[^ ]+" | xargs dirname)
@@ -82,7 +82,7 @@ function wf() {
     dir=$(scontrol show job $jobid | grep -oP "StdOut=\K[^ ]+" | xargs dirname)
   fi
 
-  tail -n1000 -f "$dir"/*.out
+  tail -n +1 -f "$dir"/*.out
 }
 
 

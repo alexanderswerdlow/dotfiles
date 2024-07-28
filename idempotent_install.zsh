@@ -13,3 +13,4 @@ command -v fd >/dev/null 2>&1 || (eget sharkdp/fd --asset "musl" --to "$BIN/fd" 
 command -v rg >/dev/null 2>&1 || (eget BurntSushi/ripgrep --to "$BIN/rg" && chmod +x $BIN/rg && echo "Installed rg");
 command -v micro >/dev/null 2>&1 || (eget zyedidia/micro --tag nightly --asset "static" --to "$BIN/micro" && chmod +x $BIN/micro && echo "Installed micro");
 command -v parquet-tools >/dev/null 2>&1 || (eget hangxie/parquet-tools --to "$BIN/parquet-tools" && chmod +x $BIN/parquet-tools && echo "Installed parquet-tools");
+command -v jq >/dev/null 2>&1 || (eget jqlang/jq --asset "amd64" --to "$BIN/jq" && chmod +x $BIN/jq && echo "Installed jq");
