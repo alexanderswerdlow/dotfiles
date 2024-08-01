@@ -233,6 +233,7 @@ check_home_usage() {
   local usage=$(df ~ | awk 'NR==2{print substr($5, 1, length($5)-1)}')
   if [[ $usage -ge 95 ]]; then
     echo "Warning: Your home directory is $usage% full!"
+  fi
 }
 
 function installdeps() {

@@ -1,5 +1,7 @@
 # Alex's Dotfiles
 
+## Main Install
+
 ### Before you re-install
 
 First, go through the checklist below to make sure you didn't forget anything before you wipe your hard drive.
@@ -38,7 +40,7 @@ Your Mac is now ready to use!
 
 > Note: you can use a different location than `~/.dotfiles` if you want. Just make sure you also update the reference in the [`.zshrc`](./.zshrc) file.
 
-### Non-automated Setup (Dangerous!!!)
+### macOS Non-automated Setup (Dangerous!!!)
 
 The commands below disable important macOS security features and should not be taken lightly. They will make it much easier for malware to break things and/or be more invasive. I decide to disable these features both for convinience (i.e. macOS doesn't need to verify the signature of every program, make it diffcult to open some programs etc.) and because I've run into several programs (specifically for development) that require SIP to be disabled anyway.
 
@@ -64,6 +66,12 @@ If you want to disable any Apple programs from bypassing the Network Extensions 
 
 ### More Info
 Installs iTerm2, oh-my-zsh, and the [Powerlevel10k theme](https://github.com/romkatv/powerlevel10k)
+
+## Minimal Shell
+
+```
+wget --no-check-certificate --no-cache --no-cookies -O - https://raw.githubusercontent.com/alexanderswerdlow/dotfiles/master/minimal_shell.sh | sh
+```
 
 ### Additional Programs
 
