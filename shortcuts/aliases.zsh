@@ -8,7 +8,7 @@ alias reload="exec zsh"
 alias library="cd $HOME/Library"
 alias dotfiles="$IDE $DOTFILES"
 alias sshconfig="subl -w ~/.ssh/config"
-alias notes="code $HOME/Documents/Notes"
+alias notes="$IDE $HOME/Documents/Notes"
 alias aliases="subl $DOTFILES/aliases.zsh"
 alias paths="subl $DOTFILES/path.zsh"
 alias '..'="cd .."
@@ -21,6 +21,7 @@ alias untar="tar --extract --verbose --file"
 alias ls='exa -lam --group-directories-first'
 alias cat='bat --paging=never --plain'
 alias st='subl'
+alias sth='st ~/.ssh/config'
 
 alias home="cd ~/"
 alias search="rga --rga-cache-max-blob-len=50000000 --no-messages --rga-adapters=-decompress,zip,tar"

@@ -112,7 +112,7 @@ function tg() {
   if (( $# > 0 )); then
     server=$(cluster_normalize $1 "grogu")
   else
-    server="grogu.ri.cmu.edu"
+    server="grogu"
   fi
 
   LC_MESSAGES="TMUX" ssh -t $server 'LD_LIBRARY_PATH=$HOME/local/lib $HOME/local/bin/tmux -L aswerdlo -f "/home/mprabhud/aswerdlo/dotfiles/.tmux.conf" -CC new -A -s main'
@@ -233,5 +233,14 @@ check_home_usage() {
   local usage=$(df ~ | awk 'NR==2{print substr($5, 1, length($5)-1)}')
   if [[ $usage -ge 95 ]]; then
     echo "Warning: Your home directory is $usage% full!"
+}
+
+function installdeps() {
+  pip install 'git+https://github.com/alexanderswerdlow/image_utils.git@wip_v1'
+  pip install 'imageio[ffmpeg]>=2.23.0' 'av>=10.0.0' 'lovely-tensors>=0.1.14' 'lovely-numpy>=0.2.8'
+  if [[ $OS == "macos" ]]; then
+    pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
+  elif [[ $OS == "linux" ]]; then
+    pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
   fi
 }

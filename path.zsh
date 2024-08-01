@@ -23,6 +23,7 @@ if [[ "$OS" == "macos" ]]; then
     export ZSH_PYENV_LAZY_VIRTUALENV=true
     export PAGER="col -b  | open -a /Applications/Google\ Chrome.app -f"
     export NVM_DIR="$HOME/.nvm"
+    export IDE="/usr/local/bin/cursor" # code
 
     path=(  "$DOTFILES/scripts"
             "$HOME/bin"

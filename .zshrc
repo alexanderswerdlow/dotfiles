@@ -8,6 +8,7 @@ fi
 export MACHINE_NAME=$(hostname | sed 's/\.eth$//')
 [[ "$(hostname)" == matrix* ]] && export MATRIX_NODE=1
 [[ "$(hostname)" == grogu* ]] && export GROGU_NODE=1
+
 [[ "$(hostname)" =~ ^matrix-[0-9]-[0-9] ]] && MATRIX_COMPUTE_NODE=1
 [[ "$(hostname)" =~ ^matrix-[0-9]-[0-9][0-9] ]] && MATRIX_COMPUTE_NODE=1
 [[ "$(hostname)" == "matrix.ml.cmu.edu" ]] && export MATRIX_HEAD_NODE=1
@@ -15,6 +16,10 @@ export MACHINE_NAME=$(hostname | sed 's/\.eth$//')
 [[ "$(hostname)" =~ ^grogu-[0-9]-[0-9] ]] && GROGU_COMPUTE_NODE=1
 [[ "$(hostname)" =~ ^grogu-[0-9]-[0-9][0-9] ]] && GROGU_COMPUTE_NODE=1
 [[ "$(hostname)" == "grogu.ml.cmu.edu" ]] && export GROGU_HEAD_NODE=1
+
+if [[ -n $GROGU_NODE || -n $MATRIX_NODE ]]; then
+  export SLURM_NODE=1
+fi
 
 if [[ -n $GROGU_NODE ]]; then
   export HOMEDIR="$HOME/aswerdlo"
@@ -24,7 +29,7 @@ fi
 
 . "$HOMEDIR/dotfiles/constants.sh"
 
-if [[ -n $MATRIX_NODE || -n $GROGU_NODE ]]; then
+if [[ -n $SLURM_NODE ]]; then
   export STARSHIP_CONFIG="$DOTFILES/misc/starship_matrix.toml"
 else
   export STARSHIP_CONFIG="$DOTFILES/misc/starship.toml"
@@ -81,16 +86,18 @@ if [[ -v MATRIX_NODE || -v GROGU_NODE ]]; then
     check_home_usage
     source "$DOTFILES/shortcuts/slurm.zsh"
 
-    if [[ -v MATRIX_COMPUTE_NODE || -v GROGU_COMPUTE_NODE ]]; then
+    if [[ -n $MATRIX_COMPUTE_NODE || -n $GROGU_COMPUTE_NODE ]]; then
       if [[ -v SLURM_JOB_ID ]] && [[ ! -v SUBMITIT ]] then
         ids=$(get_ids)
         echo "export CUDA_VISIBLE_DEVICES=$ids"
         echo "This is not actually set"
-        if [[ ! -v FAST_PROMPT ]]; then
+        if [[ ! -v $FAST_PROMPT ]]; then
           job_database.py add_job "$SLURM_JOB_ID" "$MACHINE_NAME" "$ids"
         fi
-      elif [[ ! -v SUBMITIT ]] && [[ ! -v FAST_PROMPT ]]; then
-        scuda
+      elif [[ ! -v $SUBMITIT ]] && [[ ! -v $FAST_PROMPT ]]; then
+        devs=$(job_database.py get_gpus "$MACHINE_NAME")
+        echo "Setting CUDA_VISIBLE_DEVICES=$devs"
+        export CUDA_VISIBLE_DEVICES=$devs
       else
         export CUDA_VISIBLE_DEVICES=8
       fi
@@ -98,7 +105,7 @@ if [[ -v MATRIX_NODE || -v GROGU_NODE ]]; then
     
     alias xserver="Xorg -noreset +extension GLX +extension RANDR +extension RENDER &"
 
-    if [[ -v MATRIX_NODE ]]; then
+    if [[ -n $MATRIX_NODE ]]; then
       export PATH="/home/aswerdlo/anaconda3/bin:$PATH"
     fi
 fi
@@ -107,7 +114,7 @@ fi
 # Warning, this adds 200ms to shell startup
 # command -v github-copilot-cli >/dev/null 2>&1 && eval "$(github-copilot-cli alias -- "$0")"
 
-if [[ ! -v FAST_PROMPT ]]; then
+if [[ ! -v $FAST_PROMPT ]]; then
   # Znap
   [[ -r "$DOTFILES/local/zsh-snap/znap.zsh" ]] ||
       git clone --depth 1 -- https://github.com/marlonrichert/zsh-snap.git "$DOTFILES/local/zsh-snap"
@@ -117,7 +124,7 @@ source "$DOTFILES/local/zsh-snap/znap.zsh"
 
 znap install zsh-users/zsh-completions
 
-if [[ ! -v FAST_PROMPT ]]; then
+if [[ ! -v $FAST_PROMPT ]]; then
   if [[ "$ENABLE_ITERM2_SHELL_INTEGRATION" -eq 1 ]]; then
     znap eval iterm2 'curl -fsSL https://iterm2.com/shell_integration/zsh'
     source $HOMEDIR/.iterm2_shell_integration.zsh
@@ -169,6 +176,12 @@ if [[ ! -v FAST_PROMPT ]]; then
     done
   }
   # END marlonrichert/zsh-autocomplete
+fi
+
+if [[ ! -n $SLURM_NODE && ! -n $GROGU_NODE ]]; then
+  znap function _pyenv pyenv              'eval "$( pyenv init - --no-rehash )"'
+  compctl -K    _pyenv pyenv
+  source $DOTFILES/plugins/pyenv-lazy/pyenv-lazy.plugin.zsh
 fi
 
 ZSH_HIGHLIGHT_HIGHLIGHTERS=( main brackets )
