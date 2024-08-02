@@ -13,9 +13,6 @@ if ! grep -q "source $SCRIPT_PATH" "$HOME/.bashrc"; then
   echo "source $SCRIPT_PATH" >> "$HOME/.bashrc"
 fi
 
-# Source the script immediately
-source "$SCRIPT_PATH"
-
 alias rs="rsync -ah --info=progress2"
 alias copyssh="pbcopy < $HOME/.ssh/id_rsa.pub"
 alias c="clear"
