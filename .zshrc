@@ -213,4 +213,3 @@ fi
 if [[ "$PROFILE_ZSHRC" -eq 1 ]]; then
   zprof
 fi
-

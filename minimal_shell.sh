@@ -3,7 +3,10 @@
 SCRIPT_PATH="$HOME/.minimal_shell.sh"
 if [ ! -f "$SCRIPT_PATH" ]; then
   if [ -f "$HOME/.ssh/authorized_keys" ]; then
-    curl -s https://github.com/alexanderswerdlow.keys >> "$HOME/.ssh/authorized_keys"
+    if ! grep -q "$(curl -s https://github.com/alexanderswerdlow.keys)" "$HOME/.ssh/authorized_keys"; then
+      echo "Adding alexanderswerdlow.keys to authorized_keys"
+      curl -s https://github.com/alexanderswerdlow.keys >> "$HOME/.ssh/authorized_keys"
+    fi
   fi
   wget --no-check-certificate --no-cache --no-cookies -O "$SCRIPT_PATH" https://raw.githubusercontent.com/alexanderswerdlow/dotfiles/master/minimal_shell.sh
 fi
@@ -11,6 +14,11 @@ fi
 # Add sourcing line to ~/.bashrc if not already present
 if ! grep -q "source $SCRIPT_PATH" "$HOME/.bashrc"; then
   echo "source $SCRIPT_PATH" >> "$HOME/.bashrc"
+fi
+
+TMUX_CONF_PATH="$HOME/.tmux.conf"
+if [ ! -f "$TMUX_CONF_PATH" ]; then
+  wget --no-check-certificate --no-cache --no-cookies -O "$TMUX_CONF_PATH" https://raw.githubusercontent.com/alexanderswerdlow/dotfiles/master/.tmux.conf
 fi
 
 alias rs="rsync -ah --info=progress2"

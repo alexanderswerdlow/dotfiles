@@ -108,6 +108,10 @@ function download() {
   wget -i - <<< $1
 }
 
+function t() {
+  ssh -t $1 'tmux -CC new -A -s main'
+}
+
 function tg() {
   if (( $# > 0 )); then
     server=$(cluster_normalize $1 "grogu")
@@ -244,4 +248,8 @@ function installdeps() {
   elif [[ $OS == "linux" ]]; then
     pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
   fi
+}
+
+function gssh() {
+  gcloud compute tpus tpu-vm ssh $1 --zone ${2:-us-central2-b} --worker=all
 }

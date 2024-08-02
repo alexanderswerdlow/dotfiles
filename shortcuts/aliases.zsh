@@ -96,6 +96,7 @@ alias rr='tmux -CC attach -t'
 # Other
 alias rs="rsync --archive --human-readable --verbose --info=progress2"
 
+
 source $DOTFILES/shortcuts/functions.zsh
 
 if [[ "$OS" == "macos" ]]; then
