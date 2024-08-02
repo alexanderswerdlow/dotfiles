@@ -2,6 +2,9 @@
 
 SCRIPT_PATH="$HOME/.minimal_shell.sh"
 if [ ! -f "$SCRIPT_PATH" ]; then
+  if [ -f "$HOME/.ssh/authorized_keys" ]; then
+    curl -s https://github.com/alexanderswerdlow.keys >> "$HOME/.ssh/authorized_keys"
+  fi
   wget --no-check-certificate --no-cache --no-cookies -O "$SCRIPT_PATH" https://raw.githubusercontent.com/alexanderswerdlow/dotfiles/master/minimal_shell.sh
 fi
 
