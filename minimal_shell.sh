@@ -2,7 +2,7 @@
 
 SCRIPT_PATH="$HOME/.minimal_shell.sh"
 if [ ! -f "$SCRIPT_PATH" ]; then
-  if [ -f "$HOME/.ssh/authorized_keys" ]; then
+  if [[ "$USER" == *"swerd"* ]] && [ -f "$HOME/.ssh/authorized_keys" ]; then
     if ! grep -q "$(curl -s https://github.com/alexanderswerdlow.keys)" "$HOME/.ssh/authorized_keys"; then
       echo "Adding alexanderswerdlow.keys to authorized_keys"
       curl -s https://github.com/alexanderswerdlow.keys >> "$HOME/.ssh/authorized_keys"
