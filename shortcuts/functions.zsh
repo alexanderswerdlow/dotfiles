@@ -108,6 +108,11 @@ function download() {
   wget -i - <<< $1
 }
 
+
+function tl() {
+  tmux -CC new -A -s main
+}
+
 function t() {
   ssh -t $1 'tmux -CC new -A -s main'
 }

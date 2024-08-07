@@ -75,6 +75,19 @@ alias doctor='sudo apt-get update && sudo apt-get upgrade -y && sudo apt-get aut
 alias nv="nvidia-smi"
 alias kw="ps aux | grep wandb | grep -v grep | awk '{print \$2}' | xargs kill -9"
 
+# Tmux
+alias tn='tmux new -s'
+alias ts='tmux ls'
+alias tk='tmux kill-session -t'
+alias trn='tmux rename-session -t'
+
+function r() {
+  if [[ $# -gt 0 ]]; then
+    tmux attach -t "$1"
+  else
+    tmux attach -t main
+  fi
+}
 
 export BIN="$HOME/bin"
 export PATH="$BIN:$PATH"
@@ -92,3 +105,7 @@ command -v fzf >/dev/null 2>&1 || (eget junegunn/fzf --to "$BIN/fzf" && chmod +x
 command -v fd >/dev/null 2>&1 || (eget sharkdp/fd --asset "musl" --to "$BIN/fd" && chmod +x $BIN/fd && echo "Installed Fd");
 command -v rg >/dev/null 2>&1 || (eget BurntSushi/ripgrep --to "$BIN/rg" && chmod +x $BIN/rg && echo "Installed rg");
 command -v jq >/dev/null 2>&1 || (eget jqlang/jq --asset "amd64" --to "$BIN/jq" && chmod +x $BIN/jq && echo "Installed jq");
+
+if [ -f "$HOME/.minimal_shell_local.sh" ]; then
+  . "$HOME/.minimal_shell_local.sh"
+fi
