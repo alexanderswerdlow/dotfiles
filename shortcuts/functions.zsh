@@ -256,21 +256,21 @@ function installdeps() {
 }
 
 function gsh() {
-  gcloud compute tpus tpu-vm ssh aswerdlow@$1 --zone ${ZONE:-us-central2-b} --ssh-flag="-A" "${@:2}" "${@:3}"
+  gcloud alpha compute tpus tpu-vm ssh aswerdlow@$1 --zone ${ZONE:-us-central2-b} --ssh-flag="-A" "${@:2}" --verbosity=debug "${@:3}"
 }
 
 function gsho() {
-  gcloud compute tpus tpu-vm ssh aswerdlow@$1 --zone ${ZONE:-us-central2-b} --ssh-flag="-A" --worker=0 --command="source ~/.minimal_shell.sh; $2" "${@:3}"
+  gcloud alpha compute tpus tpu-vm ssh aswerdlow@$1 --zone ${ZONE:-us-central2-b} --ssh-flag="-A" --worker=0 --command="source ~/.minimal_shell.sh; $2" --verbosity=debug "${@:3}"
 }
 
 function gsha() {
-  gcloud compute tpus tpu-vm ssh aswerdlow@$1 --zone ${ZONE:-us-central2-b} --ssh-flag="-A" --worker=all --command=$2
+  gcloud alpha compute tpus tpu-vm ssh aswerdlow@$1 --zone ${ZONE:-us-central2-b} --ssh-flag="-A" --worker=all --command=$2 --verbosity=debug "${@:3}"
 }
 
 function gshi() {
-  gcloud compute tpus tpu-vm ssh aswerdlow@$1 --zone ${ZONE:-us-central2-b} --ssh-flag="-A" --worker=all --command="source ~/.minimal_shell.sh; $2" 
+  gcloud alpha compute tpus tpu-vm ssh aswerdlow@$1 --zone ${ZONE:-us-central2-b} --ssh-flag="-A" --worker=all --command="source ~/.minimal_shell.sh; $2" --verbosity=debug "${@:3}"
 }
 
 function gshii() {
-  gcloud compute tpus tpu-vm ssh aswerdlow@$1 --zone ${ZONE:-us-central2-b} --ssh-flag="-A" --worker=$3 --command="source ~/.minimal_shell.sh; $2" 
+  gcloud alpha compute tpus tpu-vm ssh aswerdlow@$1 --zone ${ZONE:-us-central2-b} --ssh-flag="-A" --worker=$3 --command="source ~/.minimal_shell.sh; $2" --verbosity=debug "${@:4}"
 }
