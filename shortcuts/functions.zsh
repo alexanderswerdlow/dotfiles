@@ -256,21 +256,31 @@ function installdeps() {
 }
 
 function gsh() {
-  gcloud alpha compute tpus tpu-vm ssh aswerdlow@$1 --zone ${ZONE:-us-central2-b} --ssh-flag="-A" "${@:2}" --verbosity=debug "${@:3}"
-}
-
-function gsho() {
-  gcloud alpha compute tpus tpu-vm ssh aswerdlow@$1 --zone ${ZONE:-us-central2-b} --ssh-flag="-A" --worker=0 --command="source ~/.minimal_shell.sh; $2" --verbosity=debug "${@:3}"
+  gcloud alpha compute tpus tpu-vm ssh aswerdlow@$1 --zone ${ZONE:-us-central2-b} --ssh-flag="-A" "${@:2}" "${@:3}"
 }
 
 function gsha() {
-  gcloud alpha compute tpus tpu-vm ssh aswerdlow@$1 --zone ${ZONE:-us-central2-b} --ssh-flag="-A" --worker=all --command=$2 --verbosity=debug "${@:3}"
+  gcloud alpha compute tpus tpu-vm ssh aswerdlow@$1 --zone ${ZONE:-us-central2-b} --ssh-flag="-A" --worker=all --command=$2 "${@:3}"
 }
 
-function gshi() {
-  gcloud alpha compute tpus tpu-vm ssh aswerdlow@$1 --zone ${ZONE:-us-central2-b} --ssh-flag="-A" --worker=all --command="source ~/.minimal_shell.sh; $2" --verbosity=debug "${@:3}"
+function tgsh() {
+  gcloud alpha compute tpus tpu-vm ssh aswerdlow@$1 --zone ${ZONE:-us-central2-b} --ssh-flag="-A" "${@:2}" "${@:3}" --tunnel-through-iap
 }
 
-function gshii() {
-  gcloud alpha compute tpus tpu-vm ssh aswerdlow@$1 --zone ${ZONE:-us-central2-b} --ssh-flag="-A" --worker=$3 --command="source ~/.minimal_shell.sh; $2" --verbosity=debug "${@:4}"
+function tgsha() {
+  gcloud alpha compute tpus tpu-vm ssh aswerdlow@$1 --zone ${ZONE:-us-central2-b} --ssh-flag="-A" --worker=all --command=$2 "${@:3}" --tunnel-through-iap
 }
+
+# function gsho() {
+#   gcloud alpha compute tpus tpu-vm ssh aswerdlow@$1 --zone ${ZONE:-us-central2-b} --ssh-flag="-A" --worker=0 --command="source ~/.minimal_shell.sh; $2" --verbosity=debug "${@:3}"
+# }
+
+
+
+# function gshi() {
+#   gcloud alpha compute tpus tpu-vm ssh aswerdlow@$1 --zone ${ZONE:-us-central2-b} --ssh-flag="-A" --worker=all --command="source ~/.minimal_shell.sh; $2" "${@:3}"
+# }
+
+# function gshii() {
+#   gcloud alpha compute tpus tpu-vm ssh aswerdlow@$1 --zone ${ZONE:-us-central2-b} --ssh-flag="-A" --worker=$3 --command="source ~/.minimal_shell.sh; $2" "${@:4}"
+# }
