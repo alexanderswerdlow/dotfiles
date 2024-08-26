@@ -48,15 +48,25 @@ function kgs() {
   ggs $1 $2 | grep -v PID | awk '{print $2}' | xargs -I {} kill {}
 }
 
-function kg(){
+
+function kga(){
   for i ($argv) lsof -t "/dev/nvidia$i" | xargs -I {} kill -9 {}
 }
 
-function kgg() {
+function kgga() {
   local user=$(whoami)
   for i ($argv); do
     lsof -t "/dev/nvidia$i" | xargs -I {} ps -u $user -p {} | grep -v PID | awk '{print $1}' | xargs -r kill -9
   done
+}
+
+function kg(){
+  lsof -t "/dev/nvidia$1" | xargs -I {} kill -9 {}
+}
+
+function kgg() {
+  local user=$(whoami)
+  lsof -t "/dev/nvidia$1" | xargs -I {} ps -u $user -p {} | grep -v PID | awk '{print $1}' | xargs -r kill -9
 }
 
 # Lists all processes running on all GPUs and relevant info
