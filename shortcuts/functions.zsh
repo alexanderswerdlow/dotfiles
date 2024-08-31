@@ -136,6 +136,15 @@ function tt() {
   ssh -t $server 'LD_LIBRARY_PATH=$HOME/local/lib $HOME/local/bin/tmux -CC new -A -s main'
 }
 
+function tb() {
+  if (( $# > 0 )); then
+    server=$(cluster_normalize $1 "babel")
+  else
+    server="babel"
+  fi
+  ssh -t $server 'LD_LIBRARY_PATH=$HOME/local/lib $HOME/local/bin/tmux -CC new -A -s main'
+}
+
 function tsp() {
   et $HOME_HOSTNAME -c 'tmux -CC new -A -s main'
 }
@@ -157,6 +166,14 @@ function sm() {
     ssh $(cluster_normalize $1 "matrix")
   else
     ssh matrix
+  fi
+}
+
+function sb() {
+  if (( $# > 0 )); then
+    ssh $(cluster_normalize $1 "babel")
+  else
+    ssh babel
   fi
 }
 

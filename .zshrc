@@ -137,7 +137,11 @@ if [[ ! -v $FAST_PROMPT ]]; then
   fi
 
   # # To clear cache: rm -rf ${XDG_CACHE_HOME:-$HOME/.cache}/zsh-snap/eval
-  znap eval starship 'starship init zsh --print-full-init'
+  if [[ -n $BABEL_NODE ]]; then
+    eval "$(starship init zsh)"
+  else
+    znap eval starship 'starship init zsh --print-full-init'
+  fi
 
   znap source djui/alias-tips
 
