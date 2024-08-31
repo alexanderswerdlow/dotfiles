@@ -161,11 +161,18 @@ function sm() {
 }
 
 function r() {
-  setopt aliases
-  if (( $# > 0 )); then
-    tmux attach -t $1
+  if alias tmux &>/dev/null; then
+    if (( $# > 0 )); then
+      tmux attach -t $1
+    else
+      tmux attach -t main
+    fi
   else
-    tmux attach -t main
+    if (( $# > 0 )); then
+      command tmux attach -t $1
+    else
+      command tmux attach -t main
+    fi
   fi
 }
 

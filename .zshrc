@@ -8,6 +8,7 @@ fi
 export MACHINE_NAME=$(hostname | sed 's/\.eth$//')
 [[ "$(hostname)" == matrix* ]] && export MATRIX_NODE=1
 [[ "$(hostname)" == grogu* ]] && export GROGU_NODE=1
+[[ "$(hostname)" == babel* ]] && export BABEL_NODE=1
 
 [[ "$(hostname)" =~ ^matrix-[0-9]-[0-9] ]] && MATRIX_COMPUTE_NODE=1
 [[ "$(hostname)" =~ ^matrix-[0-9]-[0-9][0-9] ]] && MATRIX_COMPUTE_NODE=1
@@ -17,7 +18,11 @@ export MACHINE_NAME=$(hostname | sed 's/\.eth$//')
 [[ "$(hostname)" =~ ^grogu-[0-9]-[0-9][0-9] ]] && GROGU_COMPUTE_NODE=1
 [[ "$(hostname)" == "grogu.ml.cmu.edu" ]] && export GROGU_HEAD_NODE=1
 
-if [[ -n $GROGU_NODE || -n $MATRIX_NODE ]]; then
+[[ "$(hostname)" =~ ^babel-[0-9]-[0-9] ]] && BABEL_COMPUTE_NODE=1
+[[ "$(hostname)" =~ ^babel-[0-9]-[0-9][0-9] ]] && BABEL_COMPUTE_NODE=1
+[[ "$(hostname)" =~ .*lti\.cs\.cmu\.edu$ ]] && export BABEL_HEAD_NODE=1
+
+if [[ -n $GROGU_NODE || -n $MATRIX_NODE || -n $BABEL_NODE ]]; then
   export SLURM_NODE=1
 fi
 
@@ -197,7 +202,11 @@ znap eval zoxide 'zoxide init zsh'
 
 if [[ "$OS" == "linux" ]]; then
   if [[ "$MACHINE_NAME" != "pop-os" ]]; then
-    source "$DOTFILES/shortcuts/conda.zsh"
+    if [[ -v MATRIX_NODE ]]; then
+      source "$DOTFILES/shortcuts/matrix_conda.zsh"
+    else
+      source "$DOTFILES/shortcuts/conda.zsh"
+    fi
   fi
 fi
 

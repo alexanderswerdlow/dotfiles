@@ -29,6 +29,7 @@ def main(
     mem: Optional[int] = None,
     constraint: Optional[str] = None,
     sbatch: bool = False,
+    comment: Optional[str] = None,
 ):
     
     if node is not None and "--" in node:
@@ -125,8 +126,8 @@ def main(
     else:
         time_limit = '--time=72:00:00'
 
-    comment = ''
-    if cluster_name == 'grogu':
+    comment = '' if comment is None else f' --comment="{comment}" '
+    if cluster_name == 'grogu' and comment == '':
         comment = "--comment='aswerdlo' "
 
     extra_sbatch_args = ""
