@@ -1,0 +1,42 @@
+#!/bin/bash
+
+nodes=`sinfo --format="%N" --noheader`
+partitions=`sinfo --format="%R" --noheader | tr '\n' ','`
+
+print_usage () {
+  cat << EOM
+Usage: $0 [-n nodelist] script
+    Runs given script on all nodes by submitting supplied script with sbatch.
+
+Arguments:
+    script    the script to be submitted to slurm via sbatch
+    -n        (optional) specify nodes, either comma separated list, or summarised.
+              Mirrors slurm command -n usage in sinfo, and -w usage for squeue.
+    -p        (optional) specify partitions, comma separated."
+
+EOM
+}
+
+while getopts 'n:p:' flag; do
+  case "${flag}" in
+    n) nodes="${OPTARG}" ;;
+    p) partitions="${OPTARG}" ;;
+    *) print_usage
+       exit 1 ;;
+  esac
+done
+shift $((OPTIND-1))
+
+script="${@}"
+if [ "$script" = "" ]; then
+    >&2 echo "You must supply a script"
+    exit 1
+fi
+
+node_partition_list=`sinfo --format="%n,%R" --noheader -n ${nodes} -p ${partitions} -N`
+nodes_filtered=`sinfo --format="%N" --noheader -n ${nodes} -p ${partitions}`
+node=`echo "${node_partition_list}" | cut -f1 -d','` 
+partition=`echo "${node_partition_list}" | cut -f2 -d','` 
+echo "running $script on nodes $nodes_filtered"
+parallel --link "sbatch --partition={1} --nodelist={2} ${script}" ::: $partition ::: $node 
+

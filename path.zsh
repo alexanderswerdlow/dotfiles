@@ -122,7 +122,7 @@ elif [[ "$OS" == "linux" ]]; then
         export CPPFLAGS="-I$HOME/include $CPPFLAGS"
         export LDFLAGS="-L$HOME/lib $LDFLAGS"
 
-        export MANPATH="${MANPATH-$(manpath)}:$NPM_PACKAGES/share/man:/opt/gcc/9.2.0/share/man:$HOME/local/share/man"
+        export MANPATH="${MANPATH-$(manpath)}:$NPM_PACKAGES/share/man:/opt/gcc/9.2.0/share/man:$HOME/local/share/man:$HOME/.local/share/man"
         
         export TORCH_CUDA_ARCH_LIST="6.1;7.0;7.5;8.0;8.6"
         # export CUDA_VISIBLE_DEVICES=$(cudavisibledevices)
@@ -173,6 +173,7 @@ elif [[ "$OS" == "linux" ]]; then
         export TORCH_CUDA_ARCH_LIST='7.5;8.6'
         export GOBIN="$HOMEDIR/bin"
         export GOPATH="$HOMEDIR/bin/go"
+        export MANPATH="${MANPATH-$(manpath)}:$HOME/.local/share/man"
     else
         path=(        
             "/home/linuxbrew/.linuxbrew/bin"
