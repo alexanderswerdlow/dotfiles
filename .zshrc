@@ -87,7 +87,7 @@ if [[ $MACHINE_NAME =~ gpu[0-9]{2} ]]; then
   fi
 fi
 
-if [[ -v MATRIX_NODE || -v GROGU_NODE ]]; then
+if [[ -n $SLURM_NODE ]]; then
     check_home_usage
     source "$DOTFILES/shortcuts/slurm.zsh"
 

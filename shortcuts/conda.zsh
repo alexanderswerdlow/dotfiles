@@ -3,8 +3,8 @@ load_micromamba() {
 
   # >>> mamba initialize >>>
   # !! Contents within this block are managed by 'mamba init' !!
-  export MAMBA_EXE="/home/$USER/.local/bin/micromamba";
-  export MAMBA_ROOT_PREFIX="/home/$USER/micromamba";
+  export MAMBA_EXE="$HOME/.local/bin/micromamba";
+  export MAMBA_ROOT_PREFIX="$HOME/micromamba";
   __mamba_setup="$("$MAMBA_EXE" shell hook --shell zsh --root-prefix "$MAMBA_ROOT_PREFIX" 2> /dev/null)"
   if [ $? -eq 0 ]; then
       eval "$__mamba_setup"
@@ -16,11 +16,18 @@ load_micromamba() {
 
   unfunction load_micromamba 2>/dev/null
 
-  if [[ -n $GROGU_NODE ]]; then
+  if [[ -n $GROGU_NODE || -n $BABEL_NODE ]]; then
     unalias conda 2>/dev/null
     alias conda="micromamba"
   fi
 
 }
 
+load_both() {
+  unalias python
+  load_micromamba
+}
+
+
 alias 'conda'='load_micromamba && micromamba'
+alias 'python'='load_both && python'

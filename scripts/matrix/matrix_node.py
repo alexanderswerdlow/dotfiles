@@ -71,25 +71,29 @@ def main(
         print(f'Creating session: {session_name}')
         subprocess.run(['tmux', *extra_tmux_args, 'new-session', '-d', '-s', session_name])
 
+    if big and constraint is None:
+        if cluster_name == "grogu":
+            resources = f'{resources} --constraint=\'A5000|A6000\''
+        else:
+            resources = f'{resources} --constraint=\'A100|6000ADA\''
+    elif constraint is not None:
+        if cluster_name == "babel":
+            gres_prefix = f"gpu:{constraint}:"
+        else:
+            resources = f'{resources} --constraint=\'{constraint}\''
+
+    gres_prefix = "gpu:"
+    if cluster_name == "babel":
+        gres_prefix += f"{constraint}:" if constraint else "A6000|6000Ada|L40|A100_40GB|A100_80GB|A5000|3090:"
+
     if gpus == 0:
         resources = '-c4 --mem=8g'
-    elif gpus == 1:
-        resources = '--gres=gpu:1 -c8 --mem=48g'
-    elif gpus == 2:
-        resources = '--gres=gpu:2 -c16 --mem=96g'
-    elif gpus == 3:
-        resources = '--gres=gpu:3 -c24 --mem=144g'
-    elif gpus == 4:
-        resources = '--gres=gpu:4 -c32 --mem=192g'
-    elif gpus == 5:
-        resources = '--gres=gpu:5 -c40 --mem=240g'
-    elif gpus == 6:
-        resources = '--gres=gpu:6 -c48 --mem=288g'
-    elif gpus == 7:
-        resources = '--gres=gpu:7 -c56 --mem=336g'
-    elif gpus == 8:
-        resources = '--gres=gpu:8 -c64 --mem=384g'
+    elif gpus in range(1, 9):
+        cores = gpus * 8
+        mem = gpus * 48
+        resources = f'--gres={gres_prefix}{gpus} -c{cores} --mem={mem}g'
     else:
+        raise ValueError("Invalid number of GPUs")
         raise ValueError("Invalid number of GPUs")
     
     if cpu is not None:
@@ -97,14 +101,6 @@ def main(
 
     if mem is not None:
         resources = re.sub(r'--mem=[0-9]+g', f'--mem={mem}g', resources)
-    
-    if big and constraint is None:
-        if cluster_name == "grogu":
-            resources = f'{resources} --constraint=\'A5000|A6000\''
-        else:
-            resources = f'{resources} --constraint=\'A100|6000ADA\''
-    elif constraint is not None:
-        resources = f'{resources} --constraint=\'{constraint}\''
 
     if big and gpus == 1:
         partition = 'all'
@@ -114,17 +110,26 @@ def main(
         resources = f'{resources} --nodelist="{node}"'
     elif re.match(fr"^{cluster_name}-[0-9]{{1}}-[0-9]{{1}}$", node):
         resources = f'{resources} --nodelist="{node}"'
+    elif re.match(fr"^{cluster_name}-[0-9]{{2}}-[0-9]{{2}}$", node):
+        resources = f'{resources} --nodelist="{node}"'
 
     id_str = ''
     if echo_ids:
         id_str = " -c '~/perm/scripts/gpu_data/run.sh'"
 
-    if partition == 'all':
-        time_limit = '--time=06:00:00'
-    elif partition == 'deepaklong':
-        time_limit = '--time=48:00:00'
-    else:
-        time_limit = '--time=72:00:00'
+    time_limits = {
+        'all': '--time=06:00:00',
+        'deepaklong': '--time=48:00:00'
+    }
+    if cluster_name == 'babel':
+        time_limits.update({
+            'debug': '--time=02:00:00',
+            'general': '--time=2-00:00:00',
+            'long': '--time=7-00:00:00',
+            'cpu': '--time=2-00:00:00',
+            'mld': '--time=20-01:00:00'
+        })
+    time_limit = time_limits.get(partition, '--time=72:00:00')
 
     comment = '' if comment is None else f' --comment="{comment}" '
     if cluster_name == 'grogu' and comment == '':

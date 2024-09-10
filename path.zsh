@@ -174,6 +174,29 @@ elif [[ "$OS" == "linux" ]]; then
         export GOBIN="$HOMEDIR/bin"
         export GOPATH="$HOMEDIR/bin/go"
         export MANPATH="${MANPATH-$(manpath)}:$HOME/.local/share/man"
+
+    elif [[ -v BABEL_NODE ]]; then
+        path=(
+            "$HOME/.local/bin"
+            "$HOME/local/bin"
+            "$HOME/bin"
+            "$DOTFILES/scripts/matrix"
+            "/usr/sbin"
+            $path
+        )
+
+        ld_library_path=(
+            "$CUDA_HOME/lib64"
+            "/usr/lib/nvidia"
+            "$HOME/lib"
+            "$HOME/lib64"
+            "/lib64"
+            "/lib"
+            "$HOME/local/lib"
+            $ld_library_path
+        )
+
+        export MANPATH="${MANPATH-$(manpath)}:$HOME/.local/share/man:$HOME/local/share/man"
     else
         path=(        
             "/home/linuxbrew/.linuxbrew/bin"
