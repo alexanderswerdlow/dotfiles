@@ -1,5 +1,6 @@
 load_micromamba() {
   unalias conda 2>/dev/null
+  unalias micromamba 2>/dev/null
 
   # >>> mamba initialize >>>
   # !! Contents within this block are managed by 'mamba init' !!
@@ -20,7 +21,6 @@ load_micromamba() {
     unalias conda 2>/dev/null
     alias conda="micromamba"
   fi
-
 }
 
 load_both() {
@@ -28,6 +28,6 @@ load_both() {
   load_micromamba
 }
 
-
 alias 'conda'='load_micromamba && micromamba'
 alias 'python'='load_both && python'
+alias 'micromamba'='load_micromamba && micromamba'

@@ -126,7 +126,6 @@ if [[ ! -v $FAST_PROMPT ]]; then
 fi
 
 source "$DOTFILES/local/zsh-snap/znap.zsh"
-
 znap install zsh-users/zsh-completions
 
 if [[ ! -v $FAST_PROMPT ]]; then
@@ -200,7 +199,11 @@ znap source zsh-users/zsh-syntax-highlighting
 znap function _pip_completion pip       'eval "$( pip completion --zsh )"'
 compctl -K    _pip_completion pip
 
-znap eval zoxide 'zoxide init zsh'
+if [[ -v BABEL_NODE ]]; then
+  zoxide init zsh
+else
+  znap eval zoxide 'zoxide init zsh'
+fi
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
@@ -226,5 +229,6 @@ fi
 if [[ "$PROFILE_ZSHRC" -eq 1 ]]; then
   zprof
 fi
+
 # Created by `pipx` on 2024-08-04 15:59:51
 export PATH="$PATH:/Users/aswerdlow/.local/bin"

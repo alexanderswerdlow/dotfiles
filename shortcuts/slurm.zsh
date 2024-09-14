@@ -53,7 +53,7 @@ else
 fi
 
 alias kjn='scancel --name'
-alias sb='sbatch.py'
+alias sba='sbatch.py'
 alias mn='matrix_node.py'
 alias tailm='tail -f "$(/usr/bin/ls -t ~/logs/*.out | head -n 1)"'
 alias bench='sb --gpu_count=0 benchmark_server.py'
