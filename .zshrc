@@ -201,7 +201,7 @@ znap function _pip_completion pip       'eval "$( pip completion --zsh )"'
 compctl -K    _pip_completion pip
 
 if [[ -v BABEL_NODE ]]; then
-  zoxide init zsh
+  eval "$(zoxide init zsh)"
 else
   znap eval zoxide 'zoxide init zsh'
 fi
