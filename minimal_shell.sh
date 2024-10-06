@@ -54,6 +54,8 @@ alias spy="pyenv shell"
 alias ca='conda activate'
 alias condad='conda deactivate'
 alias ce='conda env list'
+alias ma='micromamba activate'
+alias cdd='conda deactivate'
 
 # Git
 alias gp="git peek"
