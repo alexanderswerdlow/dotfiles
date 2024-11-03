@@ -71,6 +71,7 @@ elif [[ "$OS" == "linux" ]]; then
 
     fi
 
+    export IDE="code"
     export CPATH="$CUDA_HOME/include:$CPATH"
     export CONDA_AUTO_ACTIVATE_BASE=false
 
@@ -182,6 +183,7 @@ elif [[ "$OS" == "linux" ]]; then
             "$HOME/bin"
             "$DOTFILES/scripts/matrix"
             "/usr/sbin"
+            "/usr/bin"
             $path
         )
 

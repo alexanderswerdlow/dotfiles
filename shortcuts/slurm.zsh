@@ -25,7 +25,7 @@ alias wnvvv='watch -n2 -x nvidia-smi'
 if [[ -v GROGU_NODE ]]; then
   alias jobs='squeue -o "%.10i %3P %.18j %.2t %.10M %.2C %.3m %.5b %.11R %.5k" -u $SLURM_USER'
 else
-  alias jobs='squeue -o "%.10i %3P %.18j %.2t %.10M %.2C %.3m %.5b %.11R" -u $SLURM_USER'
+  alias jobs='squeue -o "%.10i %8P %.18j %.2t %.10M %.2C %.3m %.5b %.11R" -u $SLURM_USER'
 fi
 
 alias jobss='sacct -X -j' # --format=JobID,JobName,Partition,State,ExitCode,Start,End,Elapsed,AllocCPUS,ReqMem,Timelimit,NodeList,AveRSS,AveVMSize,MaxRSS,MaxVMSize,User 
@@ -118,4 +118,91 @@ function scuda(){
   devs=$(job_database.py get_gpus "$MACHINE_NAME")
   echo "Setting CUDA_VISIBLE_DEVICES=$devs"
   export CUDA_VISIBLE_DEVICES=$devs
+}
+
+function get_exclude_nodes() {
+    # Combine arguments and replace '|' with spaces to handle both formats
+    local desired_gpus="${@//|/ }"
+    local -a gpu_types
+    gpu_types=(${=desired_gpus})
+
+    # Get the sinfo output and skip the header line
+    local -a sinfo_output
+    sinfo_output=($(sinfo -N -o "%N %G" | tail -n +2))
+
+    local -A node_gpus  # Associative array to map nodes to their GPU types
+
+    # Process sinfo output to populate node_gpus
+    local i node gres
+    for ((i=1; i<=$#sinfo_output; i+=2)); do
+        node=${sinfo_output[i]}
+        gres=${sinfo_output[i+1]}
+        # Extract the GPU type from the GRES field
+        local gpu_type=${${(s/:/)gres}[2]}
+        node_gpus[$node]=$gpu_type
+    done
+
+    # Build a list of nodes to exclude
+    local -a exclude_nodes
+    for node in ${(k)node_gpus}; do
+        gpu_type=${node_gpus[$node]}
+        # Check if the GPU type is not in the desired list
+        if (( ! ${gpu_types[(Ie)$gpu_type]} )); then
+            exclude_nodes+=$node
+        fi
+    done
+
+    # Output the exclude list in the format '--exclude=node1,node2,...'
+    if [[ ${#exclude_nodes[@]} -gt 0 ]]; then
+        local exclude_list
+        exclude_list=$(IFS=,; echo "${exclude_nodes[*]}")
+        echo "--exclude=$exclude_list"
+    else
+        echo ""
+    fi
+}
+
+function get_exclude_nodes_include_only() {
+    # Check if at least one argument is provided
+    if [[ $# -lt 1 ]]; then
+        echo "Usage: get_exclude_nodes_include_only \"node1,node2,...\""
+        return 1
+    fi
+
+    # Combine all arguments into a single string and replace commas with spaces
+    local include_input="${1//,/ }"
+    local -a include_nodes
+    include_nodes=(${=include_input})
+
+    # Get the list of all unique nodes using sinfo and skip the header line
+    # The '-h' flag omits the header, and 'sort -u' ensures uniqueness
+    local -a all_nodes
+    all_nodes=($(sinfo -p ${2:-"general"} -h -N -o "%N" | sort -u))
+
+    # Create an associative array for quick lookup of included nodes
+    local -A include_map
+    for node in "${include_nodes[@]}"; do
+        include_map[$node]=1
+    done
+
+    # Build the list of nodes to exclude (all nodes not in include_map)
+    local -a exclude_nodes
+    for node in "${all_nodes[@]}"; do
+        if [[ -z "${include_map[$node]}" ]]; then
+            exclude_nodes+=("$node")
+        fi
+    done
+
+    # Remove any potential duplicates in exclude_nodes (extra safety)
+    exclude_nodes=("${(@u)exclude_nodes}")
+
+    # Output the exclude list in the format '--exclude=node1,node2,...'
+    if [[ ${#exclude_nodes[@]} -gt 0 ]]; then
+        local exclude_list
+        exclude_list=$(IFS=,; echo "${exclude_nodes[*]}")
+        echo "--exclude=$exclude_list"
+    else
+        # If no nodes to exclude, output an empty string
+        echo ""
+    fi
 }
