@@ -127,6 +127,8 @@ if [[ ! -v $FAST_PROMPT ]]; then
 fi
 
 source "$DOTFILES/local/zsh-snap/znap.zsh"
+
+zstyle '*:compinit' arguments -D -i -u -C -w
 znap install zsh-users/zsh-completions
 
 if [[ ! -v $FAST_PROMPT ]]; then
@@ -155,36 +157,36 @@ if [[ ! -v $FAST_PROMPT ]]; then
     }
   fi
 
-  # START marlonrichert/zsh-autocomplete
-  source $DOTFILES/plugins/zsh-autocomplete/zsh-autocomplete.plugin.zsh
+  # # START marlonrichert/zsh-autocomplete
+  # source $DOTFILES/plugins/zsh-autocomplete/zsh-autocomplete.plugin.zsh
 
-  # For reference, see: https://github.com/marlonrichert/zsh-autocomplete
-  # Limit the number of lines shown
-  zstyle -e ':autocomplete:*' list-lines 'reply=( $(( LINES / 3 )) )'
+  # # For reference, see: https://github.com/marlonrichert/zsh-autocomplete
+  # # Limit the number of lines shown
+  # zstyle -e ':autocomplete:*' list-lines 'reply=( $(( LINES / 3 )) )'
 
-  # Make Tab go straight to the menu and cycle there
-  bindkey '\t' menu-select "$terminfo[kcbt]" menu-select
-  bindkey -M menuselect '\t' menu-complete "$terminfo[kcbt]" reverse-menu-complete
+  # # Make Tab go straight to the menu and cycle there
+  # bindkey '\t' menu-select "$terminfo[kcbt]" menu-select
+  # bindkey -M menuselect '\t' menu-complete "$terminfo[kcbt]" reverse-menu-complete
 
-  # First insert the common substring
-  zstyle ':autocomplete:*complete*:*' insert-unambiguous yes
+  # # First insert the common substring
+  # zstyle ':autocomplete:*complete*:*' insert-unambiguous yes
 
-  # Make Enter submit the command line straight from the menu
-  bindkey -M menuselect '\r' .accept-line
+  # # Make Enter submit the command line straight from the menu
+  # bindkey -M menuselect '\r' .accept-line
 
-  # Reset history key bindings to Zsh default
-  () {
-    local -a prefix=( '\e'{\[,O} )
-    local -a up=( ${^prefix}A ) down=( ${^prefix}B )
-    local key=
-    for key in $up[@]; do
-        bindkey "$key" up-line-or-history
-    done
-    for key in $down[@]; do
-        bindkey "$key" down-line-or-history
-    done
-  }
-  # END marlonrichert/zsh-autocomplete
+  # # Reset history key bindings to Zsh default
+  # () {
+  #   local -a prefix=( '\e'{\[,O} )
+  #   local -a up=( ${^prefix}A ) down=( ${^prefix}B )
+  #   local key=
+  #   for key in $up[@]; do
+  #       bindkey "$key" up-line-or-history
+  #   done
+  #   for key in $down[@]; do
+  #       bindkey "$key" down-line-or-history
+  #   done
+  # }
+  # # END marlonrichert/zsh-autocomplete
 fi
 
 if [[ ! -n $SLURM_NODE && ! -n $GROGU_NODE ]]; then

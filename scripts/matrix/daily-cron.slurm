@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=cron-daily
+#SBATCH --job-name=daily-cron
 #SBATCH --ntasks=1
 #SBATCH --nodes=1
 #SBATCH --hint=nomultithread         # we get physical cores not logical
@@ -10,7 +10,7 @@
 #SBATCH --mail-type=FAIL
 
 # ensure to restart self first
-sbatch --begin=now+24hour $DOTFILES/scripts/matrix/cron-daily.slurm
+sbatch --begin=now+24hour $DOTFILES/scripts/matrix/daily-cron.slurm
 
 # now launch any slurm scripts in cron.daily
 cd $DOTFILES/local/cron/daily

@@ -206,3 +206,23 @@ function get_exclude_nodes_include_only() {
         echo ""
     fi
 }
+
+
+function get_nodes_by_gpu_type() {
+    local gpu_type="$1"
+
+    # Ensure a GPU type is provided
+    if [[ -z "$gpu_type" ]]; then
+        echo "Usage: get_nodes_by_gpu_type <gpu_type>"
+        return 1
+    fi
+
+    # Extract node names where the GPU type matches the specified type
+    sinfo -N -o "%N %G" | tail -n +2 | awk -v type="$gpu_type" '
+    {
+        split($2, gres_parts, ":")
+        if (gres_parts[2] == type) {
+            print $1
+        }
+    }' | paste -sd "," -
+}
