@@ -1,7 +1,10 @@
 # Matrix-specific
-if [[ -v GROGU_NODE ]]; then
+if [[ ${GROGU_NODE:-0} -eq 1 ]]; then
   export PARTITION='deepaklong'
   export SLURM_USER='mprabhud'
+elif [[ ${BABEL_NODE:-0} -eq 1 ]]; then
+  export PARTITION='general'
+  export SLURM_USER=$USER
 else
   export PARTITION='kate_reserved'
   export SLURM_USER=$USER
@@ -13,29 +16,36 @@ alias watchx='watch -x '
 alias watchx5='watch -n5 -x '
 alias watchx10='watch -n10 -x '
 alias watchx60='watch -n60 -x '
-if [[ -v GROGU_NODE ]]; then
+
+if [[ ${GROGU_NODE:-0} -eq 1 ]]; then
   export gpu_env='/home/mprabhud/micromamba/envs/sedd/bin/gpustat --watch'
 else
   export gpu_env='~/anaconda3/envs/sedd/bin/gpustat --watch'
 fi
+
 alias wnv="$gpu_env"
 alias wnvv="$gpu_env --show-pid --show-user --show-power"
 alias wnvvv='watch -n2 -x nvidia-smi'
 
-if [[ -v GROGU_NODE ]]; then
+if [[ ${GROGU_NODE:-0} -eq 1 ]]; then
   alias jobs='squeue -o "%.10i %3P %.18j %.2t %.10M %.2C %.3m %.5b %.11R %.5k" -u $SLURM_USER'
 else
-  alias jobs='squeue -o "%.10i %8P %.18j %.2t %.10M %.2C %.3m %.5b %.11R" -u $SLURM_USER'
+  alias jobs='squeue -o "%.14i %8P %.18j %.2t %.10M %.3C %.4m %.12b %.12R" -u $SLURM_USER'
 fi
 
 alias jobss='sacct -X -j' # --format=JobID,JobName,Partition,State,ExitCode,Start,End,Elapsed,AllocCPUS,ReqMem,Timelimit,NodeList,AveRSS,AveVMSize,MaxRSS,MaxVMSize,User 
 alias wjobs='watchx5 jobs'
 alias wcluster='watchx60 cluster'
-alias cluster='$DOTFILES/scripts/matrix/lib/gpu-usage-by-node -p'
-alias cluster_all='$DOTFILES/venv/bin/slurm_gpustat --partition $PARTITION; $DOTFILES/scripts/matrix/lib/whoson -g; $DOTFILES/scripts/matrix/lib/gpu-usage-by-node -p'
 
-if [[ -v GROGU_NODE ]]; then
-  # alias kj='squeue --me --states=RUNNING --Format=jobid,comment --noheader | grep "aswerdlo" | awk '\''{print $1}'\'' | xargs scancel'
+export DOTFILES_PYTHON_BIN="$DOTFILES/venv/bin"
+
+alias cl="$DOTFILES_PYTHON_BIN/slurm_gpustat"
+alias cluster="$DOTFILES_PYTHON_BIN/python /home/aswerdlo/dotfiles/scripts/matrix/gpu.py --verbose"
+alias clusterr="$DOTFILES_PYTHON_BIN/python /opt/cluster_tools/babel_contrib/tir_tool/gpu.py"
+alias clusterrr='$DOTFILES/scripts/matrix/lib/gpu-usage-by-node -p'
+alias cluster_all="$DOTFILES_PYTHON_BIN/slurm_gpustat --verbose; $DOTFILES/scripts/matrix/lib/whoson -g; $DOTFILES/scripts/matrix/lib/gpu-usage-by-node -p; $DOTFILES_PYTHON_BIN/python /home/aswerdlo/dotfiles/scripts/matrix/gpu.py"
+
+if [[ ${GROGU_NODE:-0} -eq 1 ]]; then
   function kj() {
     local job_id=$1
     local required_comment='aswerdlo'
@@ -63,8 +73,90 @@ alias gj='scontrol show job'
 alias nfs='nfsiostat 2 $HOME /projects/katefgroup'
 alias nfsa='watch -n1 nfsiostat'
 alias kjp='squeue -u $SLURM_USER --state=PENDING -h -o "%i %t" | awk '\''$2=="PD"{print $1}'\'' | xargs -I {} scancel {}'
+alias nv='nvitop'
+alias nf='nfsflush .'
 
-# sinline -n matrix-1-24 -c 'echo "It'\''s so convenient!"'
+alias jobs='squeue -o "%.14i %8P %.18j %.2t %.10M %.3C %.4m %.12b %.12R" -u $SLURM_USER'
+alias gjj='sacct --user=$USER --long --yaml -j'
+
+
+function nfw() {
+  watch -n5 'zsh -c "source /home/aswerdlo/dotfiles/shortcuts/functions.zsh; nfsflush_all ."'
+}
+
+function tf() { 
+  tail -f -n100 $1
+}
+
+function pythoninfo() {
+    python -c "import sys, site, platform, os; print(platform.processor(), os.uname(), sys.version, sys.executable, sys.path, site.getsitepackages())"
+}
+
+function nodee() {
+  local jobid=$(sbatch --time=7-00:00 --partition=preempt -c12 --mem=128G $(get_exclude_nodes "L40|L40S|A100_40GB|A100_80GB|6000Ada") --gres=gpu:1 --wrap="sleep infinity" | grep -o '[0-9]\+')
+  echo "Waiting for job $jobid to start..."
+  while true; do
+    local state=$(scontrol show job $jobid | grep JobState | grep -o 'RUNNING')
+    if [[ $state == "RUNNING" ]]; then
+      local nodename=$(scontrol show job $jobid | grep BatchHost | cut -d'=' -f2)
+      echo "Job is running on node $nodename"
+      ssh $nodename
+      break
+    fi
+    sleep 1
+  done
+}
+
+
+function node() {
+  local partition="debug"
+  local gpus=1
+  local cpus=12
+  local mem="128G"
+  local exclude="$BAD_NODES"
+  local constraint="L40|L40S|A100_40GB|A100_80GB|6000Ada"
+  local time="6:00:00"
+ 
+  local ARGS=()
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      -p=*|--partition=*) partition="${1#*=}"; shift ;;
+      -p|--partition) partition="$2"; shift 2 ;;
+      -c=*|--cpus=*) cpus="${1#*=}"; shift ;;
+      -c*) cpus="${1#-c}"; shift ;;  # Handle -c8 format
+      -c|--cpus) cpus="$2"; shift 2 ;;
+      -m=*|--mem=*) mem="${1#*=}"; shift ;;
+      -m|--mem) mem="$2"; shift 2 ;;
+      -g=*|--gres=*) gpus="${1#*=}"; shift ;;
+      -g|--gres) gpus="$2"; shift 2 ;;
+      -t=*|--time=*) time="${1#*=}"; shift ;;
+      -t|--time) time="$2"; shift 2 ;;
+      --constraint=*) constraint="${1#*=}"; shift ;;
+      --constraint) constraint="$2"; shift 2 ;;
+      -e=*|--exclude=*) exclude="${1#*=}"; shift ;;
+      -e|--exclude) exclude="$2"; shift 2 ;;
+      *) ARGS+=("$1"); shift ;;
+    esac
+  done
+
+  echo "--time=$time --partition=$partition --cpus-per-task=$cpus --hint=nomultithread --mem=$mem --exclude=$exclude --constraint=\"$constraint\" --gres=gpu:$gpus"
+  if [[ "$partition" == "preempt" ]]; then
+    jobid=$(sbatch --time=$time --partition=$partition --cpus-per-task=$cpus --hint=nomultithread --mem=$mem --exclude=$exclude --constraint="$constraint" --gres=gpu:$gpus --wrap="sleep infinity" | grep -o '[0-9]\+')
+    echo "Waiting for job $jobid to start..."
+    while true; do
+      local state=$(scontrol show job $jobid | grep JobState | grep -o 'RUNNING')
+      if [[ $state == "RUNNING" ]]; then
+        local nodename=$(scontrol show job $jobid | grep BatchHost | cut -d'=' -f2)
+        echo "Job is running on node $nodename"
+        ssh $nodename
+        break
+      fi
+      sleep 1
+    done
+  else
+    srun --time=$time --partition=$partition --cpus-per-task=$cpus --hint=nomultithread --mem=$mem --exclude=$exclude --constraint="$constraint" --gres=gpu:$gpus --pty $SHELL "${ARGS[@]}"
+  fi
+}
 
 function wf() {
   local dir
@@ -85,6 +177,60 @@ function wf() {
   tail -n +1 -f "$dir"/*.out
 }
 
+function sj() {
+  # local old_trap=$(trap -p INT)
+  # trap "echo -e '\nExiting...'; return" INT
+  # trap 'eval "$old_trap"' EXIT
+
+  # Default value for n_arg
+  local n_arg="-n 100"
+  local jobid=""
+
+  # Parse arguments
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      -n*) n_arg="-n ${1#-n}"; shift ;;
+      *) jobid="$1"; shift ;;
+    esac
+  done
+
+  if [[ -z "$jobid" ]]; then
+    echo "Error: Job ID is required"
+    return 1
+  fi
+
+  while true; do
+    job_info=$(sacct --user=$USER --long --json -j $jobid 2>/dev/null)
+    if [[ $? -ne 0 ]]; then
+      echo "Error: Failed to get job info"
+      return 1
+    fi
+    
+    stdout_path=$(echo "$job_info" | jq -r '.jobs[0].stdout_expanded')
+    elapsed=$(echo "$job_info" | jq -r '.jobs[0].time.elapsed')
+
+    if [[ -f "$stdout_path" ]]; then
+      echo "Following $stdout_path"
+      tail -f $n_arg "$stdout_path"
+      break
+    elif [[ $elapsed -gt 100 ]]; then
+      echo "Job completed but output file $stdout_path does not exist"
+      break
+    else
+      state=$(echo "$job_info" | jq -r '.jobs[0].state.current[0]')
+      echo "Waiting for job output file to be created... Current state: $state"
+      sleep 5
+    fi
+  done
+}
+
+function sjj() { 
+  tail -f -n20 $MDLM_ROOT_OUTPUT_DIR/outputs/logs/$1*
+}
+
+function grepj() { 
+  grep $1 $MDLM_ROOT_OUTPUT_DIR/outputs/logs/$2*
+}
 
 function getjobsonnode() {
   matrixname=$(cluster_normalize $1)
@@ -92,6 +238,7 @@ function getjobsonnode() {
     do scontrol show job $job | egrep 'JobId|UserId|JobState|EndTime|TRES';
     echo;
   done
+  scontrol show node $matrixname
 }
 
 function getjobid(){
@@ -110,16 +257,19 @@ function cudavisibledevices() {
   echo "$gpu_ids"
 }
 
+# Not required on babel
 function get_ids(){
   echo "$(grep -F -f <(nvidia-smi --query-gpu=uuid --format=csv,noheader) $HOMEDIR/perm/scripts/gpu_data/uuids.txt | cut -d, -f1 | paste -sd,)"
 }
 
+# Not required on babel
 function scuda(){
   devs=$(job_database.py get_gpus "$MACHINE_NAME")
   echo "Setting CUDA_VISIBLE_DEVICES=$devs"
   export CUDA_VISIBLE_DEVICES=$devs
 }
 
+# Not required anymore since we have --constraint
 function get_exclude_nodes() {
     # Combine arguments and replace '|' with spaces to handle both formats
     local desired_gpus="${@//|/ }"
@@ -152,6 +302,11 @@ function get_exclude_nodes() {
         fi
     done
 
+    # Remove any nodes that are in the BAD_NODES list
+    if [[ -n "$BAD_NODES" ]]; then
+        exclude_nodes+=(${(s:,:)BAD_NODES})
+    fi
+
     # Output the exclude list in the format '--exclude=node1,node2,...'
     if [[ ${#exclude_nodes[@]} -gt 0 ]]; then
         local exclude_list
@@ -162,6 +317,7 @@ function get_exclude_nodes() {
     fi
 }
 
+# Not required anymore since we have --constraint
 function get_exclude_nodes_include_only() {
     # Check if at least one argument is provided
     if [[ $# -lt 1 ]]; then
@@ -207,7 +363,7 @@ function get_exclude_nodes_include_only() {
     fi
 }
 
-
+# Not required anymore since we have --constraint
 function get_nodes_by_gpu_type() {
     local gpu_type="$1"
 
@@ -226,3 +382,6 @@ function get_nodes_by_gpu_type() {
         }
     }' | paste -sd "," -
 }
+
+
+

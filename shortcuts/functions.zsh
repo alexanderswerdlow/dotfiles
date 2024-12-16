@@ -212,6 +212,8 @@ function cluster_normalize() {
     NODE_NAME="${CURRENT_CLUSTER_NAME}$NODE_NAME"
   elif [[ $NODE_NAME =~ ^[0-9]{2}-[0-9]{2}$ ]]; then
     NODE_NAME="${CURRENT_CLUSTER_NAME}$NODE_NAME"
+  elif [[ $NODE_NAME =~ ^[0-9]{2}-[0-9]{1}$ ]]; then
+    NODE_NAME="${CURRENT_CLUSTER_NAME}$NODE_NAME"
   elif [[ $NODE_NAME =~ ^[0-9]{2}$ ]]; then
     NODE_NAME="${CURRENT_CLUSTER_NAME}${NODE_NAME:0:1}-${NODE_NAME:1:2}"
   fi
@@ -221,6 +223,8 @@ function cluster_normalize() {
   elif [[ $NODE_NAME =~ ^${CURRENT_CLUSTER_NAME}[0-9]{1}-[0-9]{1}$ ]]; then
     echo $NODE_NAME
   elif [[ $NODE_NAME =~ ^${CURRENT_CLUSTER_NAME}[0-9]{2}-[0-9]{2}$ ]]; then
+    echo $NODE_NAME
+  elif [[ $NODE_NAME =~ ^${CURRENT_CLUSTER_NAME}[0-9]{2}-[0-9]{1}$ ]]; then
     echo $NODE_NAME
   fi
 }
@@ -314,3 +318,41 @@ function tgsha() {
 # function gshii() {
 #   gcloud alpha compute tpus tpu-vm ssh aswerdlow@$1 --zone ${ZONE:-us-central2-b} --ssh-flag="-A" --worker=$3 --command="source ~/.minimal_shell.sh; $2" "${@:4}"
 # }
+
+
+function nfsflush_all() {
+  FD_PATH="$HOME/bin/fd"
+  NFSFLUSH_PATH="$HOME/bin/nfsflush"
+
+  local paths=("$@")
+
+  # If no paths are provided, use the current directory
+  if [ ${#paths[@]} -eq 0 ]; then
+    paths=(".")
+  fi
+
+  # Array to store all directories to flush
+  local dirs=()
+
+  # Find directories starting from the specified paths
+  for path in "${paths[@]}"; do
+    # Use fd to find directories, respecting .gitignore
+    while IFS= read -r -d '' dir; do
+      dirs+=("$dir")
+    done < <($FD_PATH --type d --hidden --follow --exclude .git -0 . "$path")
+  done
+
+  # Check if there are too many directories
+  if [ ${#dirs[@]} -gt 1000 ]; then
+    echo "Error: Too many directories to flush (${#dirs[@]} > 1000)"
+    return 1
+  fi
+
+  # Flush the NFS attribute cache for each directory found
+  if [ ${#dirs[@]} -gt 0 ]; then
+    $NFSFLUSH_PATH "${dirs[@]}"
+    echo "Flushed ${#dirs[@]} directories..."
+  else
+    echo "No directories found to flush."
+  fi
+}
