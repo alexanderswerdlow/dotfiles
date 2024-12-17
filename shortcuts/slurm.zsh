@@ -78,7 +78,7 @@ alias nf='nfsflush .'
 
 alias jobs='squeue -o "%.14i %8P %.18j %.2t %.10M %.3C %.4m %.12b %.12R" -u $SLURM_USER'
 alias gjj='sacct --user=$USER --long --yaml -j'
-
+alias sd='ssh data'
 
 function nfw() {
   watch -n5 'zsh -c "source /home/aswerdlo/dotfiles/shortcuts/functions.zsh; nfsflush_all ."'
