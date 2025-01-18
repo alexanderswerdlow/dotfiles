@@ -1,6 +1,16 @@
 #!/bin/bash
 
-JOB_NAME="data"
+# Check for --gpu flag
+USE_GPU=false
+if [[ "$1" == "--gpu" ]]; then
+    USE_GPU=true
+    JOB_NAME="gpu"
+else
+    JOB_NAME="data"
+fi
+
+# SB_CMD="--wrap 'sleep infinity'"
+SB_CMD="/home/aswerdlo/dotfiles/scripts/matrix/create_tmux_sleep.sh"
 
 SACCT_ARGS="--user=$USER --name=$JOB_NAME --starttime=now-2days --json"
 JQ_FILTER='.jobs | map(select(
@@ -50,7 +60,13 @@ if check_job_exists; then
     wait_for_job "$jobid"
 else
     # Submit a job and wait for it
-    jobid=$(sbatch -p general --job-name="$JOB_NAME" --time=2-00:00:00 -c12 --mem=32g --output=/dev/null --error=/dev/null --wrap="sleep infinity" | grep -o '[0-9]\+')
+    # --partition=debug --time=6:00:00
+    # --partition=array --array=0-0%1 --time=2-00:00:00
+    if $USE_GPU; then
+        jobid=$(sbatch --partition=debug --time=6:00:00 --job-name=$JOB_NAME --constraint="A100_40GB|A100_80GB|L40S" --gres=gpu:1 -c12 --mem=64G --output=/dev/null --error=/dev/null $SB_CMD | grep -o '[0-9]\+')
+    else
+        jobid=$(sbatch --partition=general --time=2-00:00:00 --job-name=$JOB_NAME -c12 --mem=32G --output=/dev/null --error=/dev/null $SB_CMD | grep -o '[0-9]\+')
+    fi
     echo "Did not find existing job, submitted job $jobid"
     wait_for_job "$jobid"
 fi

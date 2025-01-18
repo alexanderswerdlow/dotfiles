@@ -397,7 +397,7 @@ def occupancy_stats_for_node(node: str) -> dict:
                 if tokens == [""]:
                     # SLURM sometimes omits information, so we alert the user to its
                     # its exclusion and report nothing for this node
-                    print(f"Missing information for {node}: {key}, skipping....")
+                    # print(f"Missing information for {node}: {key}, skipping....")
                     metrics[key] = {}
                 else:
                     metrics[key] = {x.split("=")[0]: x.split("=")[1] for x in tokens}
@@ -423,6 +423,8 @@ def occupancy_stats_for_node(node: str) -> dict:
 
     if 'gres/gpu:' in occupancy.keys():
       assert False, f"gres/gpu: in occupancy.keys(): {occupancy}"
+    # if node == 'babel-4-25':
+    #     breakpoint()
     return occupancy
 
 
@@ -734,18 +736,8 @@ def all_info(color: int, verbose: bool, partition: Optional[str] = None):
     online_table = summary(mode="online", resources=resources, states=states)
     avail_table = available(node2gpus_map=resources, states=states, verbose=verbose)
 
-    # Updated section to include node names
-    filtered_resources = {node: gpus for node, gpus in resources.items() if ("drain" not in states.get(node, "") and "down" not in states.get(node, ""))}
-    free_gpus_counts = count_free_gpus_per_type(filtered_resources)
-    print("\nCount of Nodes with n Free GPUs per GPU Type:")
-    for gpu_type, counts in free_gpus_counts.items():
-        sorted_counts = sorted(counts.items(), key=lambda x: x[0], reverse=True)
-        for free_gpu, data in sorted_counts:
-            node_count = data["count"]
-            nodes = data["nodes"]
-            node_list = ", ".join(nodes)
-            print(f"{gpu_type} {free_gpu} GPUs Free: {node_count} [ {node_list} ]")
-    print()
+    available_gpus = get_available_gpus_per_node(resources, states)
+    print_available_gpus_summary(available_gpus)
 
     # Existing summary printing
     if verbose:
@@ -824,6 +816,85 @@ def count_free_gpus_per_type(node2gpus_map: dict) -> dict:
             gpu_type_free_counts[gpu_type][free_gpus]["nodes"].append(node)
 
     return gpu_type_free_counts
+
+
+@beartype
+def get_available_gpus_per_node(
+        node2gpus_map: dict = None,
+        states: dict = None,
+) -> dict:
+    """Get a mapping of nodes to their available (unallocated) GPUs using SLURM's TRES data.
+
+    Args:
+        node2gpus_map: a summary of cluster resources, organised by node name.
+        states: a mapping between node names and SLURM states.
+
+    Returns:
+        dict: A mapping of node names to lists of available GPUs, where each GPU is
+              represented by a dict containing its type and count.
+    """
+    if not node2gpus_map:
+        node2gpus_map = get_node2gpus_mapping()
+    if not states:
+        states = node_states()
+
+    # Only consider accessible nodes
+    available_gpus = {
+        node: [gpu.copy() for gpu in gpus]
+        for node, gpus in node2gpus_map.items()
+        if states.get(node, "down") not in INACCESSIBLE
+    }
+
+    # For each node, query SLURM for actual GPU allocation
+    for node_name in list(available_gpus.keys()):
+        occupancy = occupancy_stats_for_node(node_name)
+        
+        # Parse GPU allocations from TRES data
+        for metric, alloc_str in occupancy.items():
+            if not metric.startswith("gres/gpu"):
+                continue
+                
+            # Parse allocation string (format: "used/total")
+            alloc_val, total_val = map(int, alloc_str.split("/"))
+            
+            # If this is a specific GPU type (e.g., "gres/gpu:a100")
+            if ":" in metric:
+                gpu_type = metric.split(":")[1]
+                gpu_types = [x["type"] for x in available_gpus[node_name]]
+                if gpu_type in gpu_types:
+                    idx = gpu_types.index(gpu_type)
+                    available_gpus[node_name][idx]["count"] = total_val - alloc_val
+            # If this is the generic "gres/gpu" and we only have one GPU type
+            elif len(available_gpus[node_name]) == 1:
+                available_gpus[node_name][0]["count"] = total_val - alloc_val
+
+    # Remove nodes with no available GPUs
+    available_gpus = {
+        node: gpus for node, gpus in available_gpus.items()
+    }
+
+    return available_gpus
+
+
+def print_available_gpus_summary(available_gpus: dict):
+    """Print a summary of available GPUs by type, including node names.
+
+    Args:
+        available_gpus: Output from get_available_gpus_per_node()
+    """
+    # Group nodes by GPU type and count
+    gpu_type_groups = defaultdict(lambda: defaultdict(list))
+    for node, gpus in available_gpus.items():
+        for gpu in gpus:
+            #if gpu["count"] > 0:  # Only include nodes with available GPUs
+            gpu_type_groups[gpu["type"]][gpu["count"]].append(node)
+
+    print("\nAvailable (Unallocated) GPUs by Type:")
+    for gpu_type, counts in gpu_type_groups.items():
+        print(f"\n{gpu_type}:")
+        for gpu_count, nodes in sorted(counts.items(), reverse=True):
+            node_list = ", ".join(sorted(nodes))
+            print(f"  {gpu_count} GPUs free on {len(nodes)} nodes: [ {node_list} ]")
 
 
 def main():

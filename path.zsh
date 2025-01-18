@@ -3,8 +3,9 @@ export HOMEBREW_NO_INSECURE_REDIRECT=1
 export HOMEBREW_AUTO_UPDATE_SECS="604800"
 export SECRETS="$HOME/Documents/Programs/secrets.ini"
 export PYTHONSTARTUP=$DOTFILES/scripts/pythonrc.py
-export ITERM_ENABLE_SHELL_INTEGRATION_WITH_TMUX=YES
+export ITERM_ENABLE_SHELL_INTEGRATION_WITH_TMUX=1
 export EINX_WARN_ON_RETRACE=25
+export TMUX_CONF="$DOTFILES/.tmux.conf"
 
 # Remove duplicates
 typeset -U path PATH

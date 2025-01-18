@@ -43,7 +43,7 @@ alias cl="$DOTFILES_PYTHON_BIN/slurm_gpustat"
 alias cluster="$DOTFILES_PYTHON_BIN/python /home/aswerdlo/dotfiles/scripts/matrix/gpu.py --verbose"
 alias clusterr="$DOTFILES_PYTHON_BIN/python /opt/cluster_tools/babel_contrib/tir_tool/gpu.py"
 alias clusterrr='$DOTFILES/scripts/matrix/lib/gpu-usage-by-node -p'
-alias cluster_all="$DOTFILES_PYTHON_BIN/slurm_gpustat --verbose; $DOTFILES/scripts/matrix/lib/whoson -g; $DOTFILES/scripts/matrix/lib/gpu-usage-by-node -p; $DOTFILES_PYTHON_BIN/python /home/aswerdlo/dotfiles/scripts/matrix/gpu.py"
+alias cluster_all="$DOTFILES_PYTHON_BIN/python /home/aswerdlo/dotfiles/scripts/matrix/gpu.py --verbose; $DOTFILES/scripts/matrix/lib/whoson -g; $DOTFILES/scripts/matrix/lib/gpu-usage-by-node -p;"
 
 if [[ ${GROGU_NODE:-0} -eq 1 ]]; then
   function kj() {
@@ -77,7 +77,7 @@ alias nv='nvitop'
 alias nf='nfsflush .'
 
 alias jobs='squeue -o "%.14i %8P %.18j %.2t %.10M %.3C %.4m %.12b %.12R" -u $SLURM_USER'
-alias gjj='sacct --user=$USER --long --yaml -j'
+alias gjj='sacct --long --yaml -j'
 alias sd='ssh data'
 
 function nfw() {
@@ -106,7 +106,6 @@ function nodee() {
     sleep 1
   done
 }
-
 
 function node() {
   local partition="debug"
@@ -182,11 +181,9 @@ function sj() {
   # trap "echo -e '\nExiting...'; return" INT
   # trap 'eval "$old_trap"' EXIT
 
-  # Default value for n_arg
   local n_arg="-n 100"
   local jobid=""
 
-  # Parse arguments
   while [[ $# -gt 0 ]]; do
     case "$1" in
       -n*) n_arg="-n ${1#-n}"; shift ;;
@@ -224,8 +221,38 @@ function sj() {
   done
 }
 
-function sjj() { 
-  tail -f -n20 $MDLM_ROOT_OUTPUT_DIR/outputs/logs/$1*
+function sjj() {
+  local jobid=""
+
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      *) jobid="$1"; shift ;;
+    esac
+  done
+
+  if [[ -z "$jobid" ]]; then
+    echo "Error: Job ID is required"
+    return 1
+  fi
+
+  while true; do
+    job_info=$(sacct --user=$USER --long --json -j $jobid 2>/dev/null)
+    if [[ $? -ne 0 ]]; then
+      echo "Error: Failed to get job info"
+      return 1
+    fi
+    
+    stdout_path=$(echo "$job_info" | jq -r '.jobs[0].stdout_expanded')
+    elapsed=$(echo "$job_info" | jq -r '.jobs[0].time.elapsed')
+    if [[ -f "$stdout_path" ]]; then
+      echo "$stdout_path"
+      break
+    else
+      state=$(echo "$job_info" | jq -r '.jobs[0].state.current[0]')
+      echo "Waiting for job output file to be created... Current state: $state"
+      sleep 5
+    fi
+  done
 }
 
 function grepj() { 

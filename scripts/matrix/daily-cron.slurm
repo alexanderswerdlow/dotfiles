@@ -9,6 +9,8 @@
 #SBATCH --mail-user=swerdlow@cmu.edu
 #SBATCH --mail-type=FAIL
 
+set -Eeuo pipefail
+
 # ensure to restart self first
 sbatch --begin=now+24hour $DOTFILES/scripts/matrix/daily-cron.slurm
 
