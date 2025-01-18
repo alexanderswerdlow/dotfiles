@@ -150,9 +150,9 @@ if [[ ${FAST_PROMPT:-0} -eq 0 ]]; then
   ZSH_AUTOSUGGEST_STRATEGY=( history )
   znap source zsh-users/zsh-autosuggestions
 
-  if [[ ${MEDIUM_FAST_PROMPT-} -eq 1 ]]; then
-    znap source djui/alias-tips
-  fi
+  # if [[ ${MEDIUM_FAST_PROMPT-} -eq 1 ]]; then
+  #   znap source djui/alias-tips
+  # fi
 
   if [[ ${MEDIUM_FAST_PROMPT-} -eq 1 ]]; then
     # This is a hack to enable the localcode function to work properly
