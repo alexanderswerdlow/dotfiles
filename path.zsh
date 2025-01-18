@@ -6,6 +6,8 @@ export PYTHONSTARTUP=$DOTFILES/scripts/pythonrc.py
 export ITERM_ENABLE_SHELL_INTEGRATION_WITH_TMUX=1
 export EINX_WARN_ON_RETRACE=25
 export TMUX_CONF="$DOTFILES/.tmux.conf"
+export AUTOSSH_PORT=0
+export AUTOSSH_POLL=30
 
 # Remove duplicates
 typeset -U path PATH

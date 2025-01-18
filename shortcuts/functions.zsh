@@ -108,13 +108,13 @@ function download() {
   wget -i - <<< $1
 }
 
-
 function tl() {
   tmux -CC new -A -s main
 }
 
 function t() {
-  ssh -t $1 'tmux -CC new -A -s main'
+  SSHCMD=$(command -v autossh &> /dev/null && echo autossh || echo ssh)
+  $SSHCMD -t $1 'tmux -CC new -A -s main'
 }
 
 function tg() {
@@ -124,7 +124,8 @@ function tg() {
     server="grogu"
   fi
 
-  LC_MESSAGES="TMUX" ssh -t $server 'LD_LIBRARY_PATH=$HOME/local/lib $HOME/local/bin/tmux -L aswerdlo -f "/home/mprabhud/aswerdlo/dotfiles/.tmux.conf" -CC new -A -s main'
+  SSHCMD=$(command -v autossh &> /dev/null && echo autossh || echo ssh)
+  LC_MESSAGES="TMUX" $SSHCMD -t $server 'LD_LIBRARY_PATH=$HOME/local/lib $HOME/local/bin/tmux -L aswerdlo -f "/home/mprabhud/aswerdlo/dotfiles/.tmux.conf" -CC new -A -s main'
 }
 
 function tt() {
@@ -133,7 +134,8 @@ function tt() {
   else
     server="matrix.ml.cmu.edu"
   fi
-  ssh -t $server 'LD_LIBRARY_PATH=$HOME/local/lib $HOME/local/bin/tmux -CC new -A -s main'
+  SSHCMD=$(command -v autossh &> /dev/null && echo autossh || echo ssh)
+  $SSHCMD -t $server 'LD_LIBRARY_PATH=$HOME/local/lib $HOME/local/bin/tmux -CC new -A -s main'
 }
 
 function tb() {
@@ -142,7 +144,8 @@ function tb() {
   else
     server="babel"
   fi
-  ssh -t $server 'LD_LIBRARY_PATH=$HOME/local/lib $HOME/local/bin/tmux -CC new -A -s main'
+  SSHCMD=$(command -v autossh &> /dev/null && echo "autossh" || echo ssh)
+  $SSHCMD -t $server 'LD_LIBRARY_PATH=$HOME/local/lib $HOME/local/bin/tmux -CC new -A -s main'
 }
 
 function tsp() {
