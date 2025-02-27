@@ -196,10 +196,16 @@ if [[ ${FAST_PROMPT:-0} -eq 0 ]]; then
 fi
 
 if [[ ! -n $SLURM_NODE && ! -n $GROGU_NODE ]]; then
-  znap function _pyenv pyenv              'eval "$( pyenv init - --no-rehash )"'
-  compctl -K    _pyenv pyenv
-  source $DOTFILES/plugins/pyenv-lazy/pyenv-lazy.plugin.zsh
+  alias pi='eval "$( pyenv init - --no-rehash )"'
+  if [[ $USE_PYENV -eq 1 ]]; then
+    znap function _pyenv pyenv              'eval "$( pyenv init - --no-rehash )"'
+    compctl -K    _pyenv pyenv
+    source $DOTFILES/plugins/pyenv-lazy/pyenv-lazy.plugin.zsh
+  fi
 fi
+
+znap eval uv 'eval $(uv generate-shell-completion zsh)'
+znap eval uvx 'eval $(uvx --generate-shell-completion zsh)'
 
 ZSH_HIGHLIGHT_HIGHLIGHTERS=( main brackets )
 

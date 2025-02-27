@@ -359,3 +359,18 @@ function nfsflush_all() {
     echo "No directories found to flush."
   fi
 }
+
+
+function sshp() {
+  local port_to_forward=$2
+  local port_to_use=$2
+
+  # Keep incrementing port until we find an unused one
+  while nc -z localhost $port_to_use 2>/dev/null; do
+    echo "Port $port_to_use is in use, trying next port..."
+    ((port_to_use++))
+  done
+
+  echo "Forwarding http://0.0.0.0:$port_to_use"
+  ssh -L "${port_to_use}:localhost:${port_to_forward}" $1
+}

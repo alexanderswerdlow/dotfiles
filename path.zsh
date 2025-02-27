@@ -23,10 +23,17 @@ join() {
 # Global macOS exports/paths here
 if [[ "$OS" == "macos" ]]; then
     export PYENV_ROOT="$HOME/.pyenv"
-    export ZSH_PYENV_LAZY_VIRTUALENV=true
+    if [[ $USE_PYENV -eq 1 ]]; then
+        export ZSH_PYENV_LAZY_VIRTUALENV=true
+        path=( "$PYENV_ROOT/bin" $path )
+    fi
     export PAGER="col -b  | open -a /Applications/Google\ Chrome.app -f"
     export NVM_DIR="$HOME/.nvm"
     export IDE="/usr/local/bin/cursor" # code
+
+    export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
+    export PATH="$PATH:/Users/aswerdlow/.local/bin"
+    export PATH="$PATH:/Users/aswerdlow/.cache/lm-studio/bin"
 
     path=(  "$DOTFILES/scripts"
             "$HOME/bin"
@@ -44,7 +51,6 @@ if [[ "$OS" == "macos" ]]; then
             "/sbin"
             "/opt/homebrew/anaconda3/bin"
             "$HOME/.node/bin"
-            "$PYENV_ROOT/bin"
             "$HOME/.cargo/bin"
             "$HOME/go/bin"
             "$HOME/.bun/bin"
@@ -97,7 +103,6 @@ elif [[ "$OS" == "linux" ]]; then
             "$HOME/bin/cmake/bin"
             "$HOME/.local/bin"
             "$HOME/.npm-packages"
-            "$HOME/.pyenv/bin"
             "$CUDA_HOME/bin"
             "$DOTFILES/scripts/matrix"
             "$DOTFILES/scripts/matrix/disk_utils"
