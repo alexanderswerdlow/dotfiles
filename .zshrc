@@ -244,6 +244,3 @@ fi
 if [[ "$PROFILE_ZSHRC" -eq 1 ]]; then
   zprof
 fi
-
-# Created by `pipx` on 2024-08-04 15:59:51
-export PATH="$PATH:/Users/aswerdlow/.local/bin"
