@@ -1,9 +1,10 @@
 #!/bin/bash
 set -euo pipefail
 
-USE_GPU=false
+USE_TMUX=1
+USE_GPU=0
+VERIFY_SSH=1
 JOB_NAME="data"
-VERIFY_SSH=true
 TOTAL_JOB_DAYS=4
 JOB_EXPIRE_DAYS=3
 TIMEOUT=60
@@ -12,12 +13,12 @@ TIMEOUT=60
 while [[ $# -gt 0 ]]; do
     case "$1" in
         --gpu)
-            USE_GPU=true
+            USE_GPU=1
             JOB_NAME="gpu"
             shift
             ;;
         --verify-ssh)
-            VERIFY_SSH=true
+            VERIFY_SSH=1
             shift
             ;;
         *)
@@ -55,13 +56,39 @@ JQ_FILTER='.jobs | map(select(
     (.time.elapsed | tonumber) <= '"$(( JOB_EXPIRE_DAYS * 86400 ))"'
 )) | sort_by(.submit_time) | reverse'
 
+TMUX_CMD=$(cat <<'EOF'
+# Check if tmux server is running
+if tmux ls &>/dev/null; then
+    # Check if the session named "main" exists
+    if ! tmux has-session -t main 2>/dev/null; then
+        echo "Session main does not exist, creating"
+        tmux new-session -d -s main
+    else
+        # Create a session with SLURM_JOB_ID if "main" session exists
+        echo "Session main exists, creating $SLURM_JOB_ID"
+        tmux new-session -d -s $SLURM_JOB_ID
+    fi
+else
+    # Create a session named "main" if tmux server is not running
+    echo "Creating session main"
+    tmux new-session -d -s main
+fi
+
+echo "Sleeping for infinity"
+sleep infinity
+EOF
+)
+
+SLEEP_CMD="sleep infinity"
+WRAP_CMD=$([[ "$USE_TMUX" -eq 1 ]] && echo "$TMUX_CMD" || echo "$SLEEP_CMD")
+
 # Submit a new job and return its job id.
 submit_job() {
     local jobid
-    if $USE_GPU; then
-        jobid=$(sbatch "${GPU_JOB_ARGS[@]}" --output=/dev/null --error=/dev/null --wrap="sleep infinity" | grep -o '[0-9]\+')
+    if [[ "$USE_GPU" -eq 1 ]]; then
+        jobid=$(sbatch "${GPU_JOB_ARGS[@]}" --output=/dev/null --error=/dev/null --wrap="$WRAP_CMD" | grep -o '[0-9]\+')
     else
-        jobid=$(sbatch "${DATA_JOB_ARGS[@]}" --output=/dev/null --error=/dev/null --wrap="sleep infinity" | grep -o '[0-9]\+')
+        jobid=$(sbatch "${DATA_JOB_ARGS[@]}" --output=/dev/null --error=/dev/null --wrap="$WRAP_CMD" | grep -o '[0-9]\+')
     fi
     echo "Submitted new job $jobid, waiting 0.25 seconds"
     sleep 0.25
@@ -168,7 +195,7 @@ main() {
 
         node_name=$(squeue -j "$jobid" -h -o "%N")
         echo "Job: $jobid is running on node: $node_name"
-        if $VERIFY_SSH; then
+        if [[ "$VERIFY_SSH" -eq 1 ]]; then
             if verify_ssh_access "$node_name"; then
                 echo "SSH access granted on node: $node_name"
                 echo "$node_name"

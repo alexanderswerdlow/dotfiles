@@ -10,8 +10,10 @@ command -v starship >/dev/null 2>&1 || (eget starship/starship --asset 'musl' --
 command -v gh >/dev/null 2>&1 || (eget cli/cli --asset '.tar.gz' --to $BIN/gh && chmod +x $BIN/gh && echo "Installed gh");
 command -v fzf >/dev/null 2>&1 || (eget junegunn/fzf --to "$BIN/fzf" && chmod +x $BIN/fzf && echo "Installed fzf");
 command -v fd >/dev/null 2>&1 || (eget sharkdp/fd --to "$BIN/fd" && chmod +x $BIN/fd && echo "Installed Fd");
-command -v hyperfine >/dev/null 2>&1 || (eget sharkdp/hyperfine --to "$BIN/hyperfine" && chmod +x $BIN/hyperfine && echo "Installed hyperfine");
 command -v rg >/dev/null 2>&1 || (eget BurntSushi/ripgrep --to "$BIN/rg" && chmod +x $BIN/rg && echo "Installed rg");
+command -v jq >/dev/null 2>&1 || (eget jqlang/jq --asset "amd64" --to "$BIN/jq" && chmod +x $BIN/jq && echo "Installed jq");
+command -v hyperfine >/dev/null 2>&1 || (eget sharkdp/hyperfine --to "$BIN/hyperfine" && chmod +x $BIN/hyperfine && echo "Installed hyperfine");
 command -v micro >/dev/null 2>&1 || (eget zyedidia/micro --tag nightly --asset "static" --to "$BIN/micro" && chmod +x $BIN/micro && echo "Installed micro");
 command -v parquet-tools >/dev/null 2>&1 || (eget hangxie/parquet-tools --to "$BIN/parquet-tools" && chmod +x $BIN/parquet-tools && echo "Installed parquet-tools");
-command -v jq >/dev/null 2>&1 || (eget jqlang/jq --asset "amd64" --to "$BIN/jq" && chmod +x $BIN/jq && echo "Installed jq");
+command -v cloudflared >/dev/null 2>&1 || (eget cloudflare/cloudflared --to "$BIN/cloudflared" --asset "cloudflared-linux-amd64" && chmod +x $BIN/cloudflared && echo "Installed cloudflared");
+command -v procs >/dev/null 2>&1 || (eget dalance/procs --to "$BIN/procs" && chmod +x $BIN/procs && echo "Installed procs");

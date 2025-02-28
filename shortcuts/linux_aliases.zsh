@@ -105,7 +105,18 @@ function localcode() (
 
     CMD=ITERM-TRIGGER-open-with-local-vscode-remote
     SSH_IP=$(echo $SSH_CLIENT | awk '{ print $1}')
-    if [[ "$SSH_IP" == "::1" ]]; then
+    if [[ "$(hostname)" == *"babel"* ]]; then
+      GPU_JOB_NAME="gpu"
+      DATA_JOB_NAME="data"
+      LOCALCODE_MACHINE="$(whoami)@$(hostname | sed 's/\.eth$//')"
+      if sacct --user=$USER --name=$GPU_JOB_NAME --state=RUNNING --node=$(hostname) --format=JobID --noheader 2>/dev/null | grep -q .; then
+        echo "Found job with name $GPU_JOB_NAME on node $(hostname)"
+        LOCALCODE_MACHINE="$GPU_JOB_NAME"
+      elif sacct --user=$USER --name=$DATA_JOB_NAME --state=RUNNING --node=$(hostname) --format=JobID --noheader 2>/dev/null | grep -q .; then
+        echo "Found job with name $DATA_JOB_NAME on node $(hostname)"
+        LOCALCODE_MACHINE="$DATA_JOB_NAME"
+      fi
+    elif [[ "$SSH_IP" == "::1" ]]; then
         LOCALCODE_MACHINE='ssh.aswerdlow.com'
     else
         LOCALCODE_MACHINE="$(whoami)@$(hostname | sed 's/\.eth$//')"
@@ -120,6 +131,10 @@ function localcode() (
     if [[ ${#FILENAMES[@]} == 1 && -d ${FILENAMES[0]} ]]; then
             FILENAMES[0]=$(cd ${FILENAMES[0]}; pwd)
             FTYPE=directory
+            if [[ -n $SLURM_NODE ]]; then
+              FILENAMES[0]=$(realpath ${FILENAMES[0]})
+              echo "On a slurm node, using realpath: ${FILENAMES[0]}"
+            fi
     else
         # Convert filenames to abspaths
         for (( i=0; i < ${#FILENAMES[@]}; i++ )); do
