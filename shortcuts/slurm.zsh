@@ -62,6 +62,14 @@ else
   alias kj='scancel'
 fi
 
+alias g='ssh gpu'
+alias g1='ssh gpu1'
+alias g2='ssh gpu2'
+alias g3='ssh gpu3'
+alias g4='ssh gpu4'
+alias g5='ssh gpu5'
+alias g6='ssh gpu6'
+alias g7='ssh gpu7'
 alias kjn='scancel --name'
 alias sba='sbatch.py'
 alias mn='matrix_node.py'
@@ -73,7 +81,8 @@ alias gj='scontrol show job'
 alias nfs='nfsiostat 2 $HOME /projects/katefgroup'
 alias nfsa='watch -n1 nfsiostat'
 alias kjp='squeue -u $SLURM_USER --state=PENDING -h -o "%i %t" | awk '\''$2=="PD"{print $1}'\'' | xargs -I {} scancel {}'
-alias nv='nvitop'
+alias nv='uvx nvitop'
+alias nvv='uvx gpustat --watch --show-pid --show-cmd'
 alias nf='nfsflush .'
 
 alias jobs='squeue -o "%.14i %8P %.18j %.2t %.10M %.3C %.4m %.12b %.12R" -u $SLURM_USER'
@@ -176,11 +185,8 @@ function wf() {
   tail -n +1 -f "$dir"/*.out
 }
 
+# Finds the job stdout file and tails the last 100 lines (by default). Uses sacct so it works even for inactive jobs.
 function sj() {
-  # local old_trap=$(trap -p INT)
-  # trap "echo -e '\nExiting...'; return" INT
-  # trap 'eval "$old_trap"' EXIT
-
   local n_arg="-n 100"
   local jobid=""
 
@@ -203,15 +209,26 @@ function sj() {
       return 1
     fi
     
+    stdout_pattern=$(echo "$job_info" | jq -r '.jobs[0].stdout')
     stdout_path=$(echo "$job_info" | jq -r '.jobs[0].stdout_expanded')
     elapsed=$(echo "$job_info" | jq -r '.jobs[0].time.elapsed')
 
-    if [[ -f "$stdout_path" ]]; then
-      echo "Following $stdout_path"
-      tail -f $n_arg "$stdout_path"
+    # For some reason, sacct does the expansion of %A wrong and puts the job id (not the master array id) in the stdout_pattern
+    if [[ "$stdout_pattern" == *"%A"* && ! "$stdout_pattern" =~ "%[^Aaj]" ]]; then
+      master_job_id=$(echo "$job_info" | jq -r '.jobs[0].array.job_id')
+      job_id=$(echo "$job_info" | jq -r '.jobs[0].job_id')
+      task_id=$(echo "$job_info" | jq -r '.jobs[0].array.task_id.number')
+      final_stdout=$(echo "$stdout_pattern" | sed "s/%A/$master_job_id/g" | sed "s/%a/$task_id/g" | sed "s/%j/$job_id/g")
+    else
+      final_stdout="$stdout_path"
+    fi
+
+    if [[ -f "$final_stdout" ]]; then
+      echo "Following $final_stdout"
+      tail -f $n_arg "$final_stdout"
       break
     elif [[ $elapsed -gt 100 ]]; then
-      echo "Job completed but output file $stdout_path does not exist"
+      echo "Job completed but output file $final_stdout does not exist"
       break
     else
       state=$(echo "$job_info" | jq -r '.jobs[0].state.current[0]')

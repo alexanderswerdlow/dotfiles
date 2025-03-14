@@ -2,23 +2,44 @@
 set -euo pipefail
 
 USE_TMUX=1
-USE_GPU=0
+NUM_GPUS=0
 VERIFY_SSH=1
 JOB_NAME="data"
 TOTAL_JOB_DAYS=4
 JOB_EXPIRE_DAYS=3
-TIMEOUT=60
+TIMEOUT=120
+MAX_RETRIES=5
+PARTITION="preempt"
 
 # Process command-line options
 while [[ $# -gt 0 ]]; do
     case "$1" in
         --gpu)
-            USE_GPU=1
+            NUM_GPUS=1
             JOB_NAME="gpu"
+            shift
+            ;;
+        --type=*)
+            JOB_NAME="${1#*=}"
+            if [[ "$JOB_NAME" =~ ^gpu([0-9]*)$ ]]; then
+                # Extract number after "gpu", default to 1 if no number
+                NUM_GPUS="${BASH_REMATCH[1]:-1}"
+                [[ -z "$NUM_GPUS" ]] && NUM_GPUS=1
+            else
+                NUM_GPUS=0
+            fi
+            shift
+            ;;
+        --partition=*)
+            PARTITION="${1#*=}"
             shift
             ;;
         --verify-ssh)
             VERIFY_SSH=1
+            shift
+            ;;
+        --max-retries=*)
+            MAX_RETRIES="${1#*=}"
             shift
             ;;
         *)
@@ -28,16 +49,16 @@ while [[ $# -gt 0 ]]; do
 done
 
 GPU_JOB_ARGS=(
-    --partition=preempt
+    --partition="${PARTITION}"
     --time="${TOTAL_JOB_DAYS}-00:00:00"
     --job-name="${JOB_NAME}"
-    --cpus-per-task=12
-    --mem=96G
-    --gres=gpu:1
+    --cpus-per-gpu=10
+    --mem-per-gpu=72G
+    --gres="gpu:${NUM_GPUS}"
     --constraint="A100_40GB|A100_80GB|L40S|H100"
 )
 DATA_JOB_ARGS=(
-    --partition=preempt
+    --partition="${PARTITION}"
     --time="${TOTAL_JOB_DAYS}-00:00:00"
     --job-name="${JOB_NAME}"
     --cpus-per-task=12
@@ -85,12 +106,12 @@ WRAP_CMD=$([[ "$USE_TMUX" -eq 1 ]] && echo "$TMUX_CMD" || echo "$SLEEP_CMD")
 # Submit a new job and return its job id.
 submit_job() {
     local jobid
-    if [[ "$USE_GPU" -eq 1 ]]; then
+    if [[ "$NUM_GPUS" -gt 0 ]]; then
         jobid=$(sbatch "${GPU_JOB_ARGS[@]}" --output=/dev/null --error=/dev/null --wrap="$WRAP_CMD" | grep -o '[0-9]\+')
     else
         jobid=$(sbatch "${DATA_JOB_ARGS[@]}" --output=/dev/null --error=/dev/null --wrap="$WRAP_CMD" | grep -o '[0-9]\+')
     fi
-    echo "Submitted new job $jobid, waiting 0.25 seconds"
+    echo "Submitted new job $jobid, waiting 0.25 seconds" >&2
     sleep 0.25
     echo "$jobid"
 }
@@ -106,7 +127,7 @@ verify_ssh_access() {
     
     # Run SSH check in background
     {
-        ssh -o ConnectTimeout=1 -o BatchMode=yes -T "$node" exit 2>/dev/null 1>/dev/null
+        ssh -o ConnectTimeout=1 -o BatchMode=yes -o StrictHostKeyChecking=no -T "$node" exit 2>/dev/null 1>/dev/null
         echo $? > "$fifo_path"
     } &
     
@@ -151,19 +172,16 @@ wait_for_job_to_start() {
         state=$(echo "$job_info" | jq -r '.jobs[0].state.current[0]' 2>/dev/null)
         case "$state" in
             RUNNING)
+                echo "Job $jobid is in state: $state. Returning 0." >&2
                 return 0
-                ;;
-            PENDING)
-                echo "Job $jobid is in state: $state. Sleeping 0.5 seconds..." >&2
-                sleep 0.25
                 ;;
             FAILED|CANCELLED|TIMEOUT)
                 echo "Job $jobid is in state: $state" >&2
                 return 1
                 ;;
             *)
-                echo "Job $jobid is in state: $state. Sleeping 0.5 seconds..." >&2
-                sleep 0.5
+                echo "Job $jobid is in state: $state. Sleeping 1.0 seconds..." >&2
+                sleep 1.0
                 ;;
         esac
     done
@@ -172,23 +190,35 @@ wait_for_job_to_start() {
 
 main() {
     local job_info jobid state node_name
+    local just_submitted=0
+    local retries=0
 
-    while true; do
-        if job_info=$(get_recent_job); then
+    while [[ $retries -lt $MAX_RETRIES ]]; do
+        retries=$((retries + 1))
+        if [[ $retries -gt 1 ]]; then
+            echo "Attempt $retries of $MAX_RETRIES" >&2
+        fi
+        
+        if [[ "$just_submitted" -eq 1 ]]; then
+            echo "Using previously submitted job: $jobid" >&2
+            just_submitted=0
+        elif job_info=$(get_recent_job); then
             IFS="|" read -r jobid state <<< "$job_info"
-            echo "Found job: $jobid (state: $state)"
+            echo "Found job: $jobid (state: $state)" >&2
         else
-            echo "No job found. Submitting a new job..."
+            echo "No job found. Submitting a new job..." >&2
             jobid=$(submit_job | tail -n 1)
             state=""
+            just_submitted=1
         fi
 
         if [ "$state" != "RUNNING" ]; then
             echo "Waiting for job: $jobid to start..." >&2
             if ! wait_for_job_to_start "$jobid"; then
-                echo "Job: $jobid did not start in time. Submitting a new job."
+                echo "Job: $jobid did not start in time. Submitting a new job." >&2
                 jobid=$(submit_job | tail -n 1)
                 state=""
+                just_submitted=1
                 continue
             fi
         fi
@@ -201,16 +231,20 @@ main() {
                 echo "$node_name"
                 return 0
             else
-                echo "SSH access denied on node: $node_name. Submitting a new job."
+                echo "SSH access denied on node: $node_name. Submitting a new job." >&2
                 jobid=$(submit_job | tail -n 1)
+                just_submitted=1
                 continue
             fi
         else
-            echo "Not verifying SSH access. Returning node: $node_name"
+            echo "Not verifying SSH access. Returning node: $node_name" >&2
             echo "$node_name"
             return 0
         fi
     done
+    
+    echo "Maximum retry attempts ($MAX_RETRIES) reached without finding a suitable node." >&2
+    return 1
 }
 
 main

@@ -87,7 +87,7 @@ function pp(){
 # cv 0123 -> export CUDA_VISIBLE_DEVICES=0,1,2,3
 cv() {
   if [ -z "$1" ]; then
-    echo $CUDA_VISIBLE_DEVICES
+    unset CUDA_VISIBLE_DEVICES
   else
     export CUDA_VISIBLE_DEVICES=$(echo $1 | sed 's/./&,/g' | sed 's/,$//')
   fi

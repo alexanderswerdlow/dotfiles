@@ -17,3 +17,5 @@ command -v micro >/dev/null 2>&1 || (eget zyedidia/micro --tag nightly --asset "
 command -v parquet-tools >/dev/null 2>&1 || (eget hangxie/parquet-tools --to "$BIN/parquet-tools" && chmod +x $BIN/parquet-tools && echo "Installed parquet-tools");
 command -v cloudflared >/dev/null 2>&1 || (eget cloudflare/cloudflared --to "$BIN/cloudflared" --asset "cloudflared-linux-amd64" && chmod +x $BIN/cloudflared && echo "Installed cloudflared");
 command -v procs >/dev/null 2>&1 || (eget dalance/procs --to "$BIN/procs" && chmod +x $BIN/procs && echo "Installed procs");
+command -v rclone >/dev/null 2>&1 || (eget rclone/rclone --to "$BIN/rclone" --asset "linux-amd64.zip" && chmod +x $BIN/rclone && echo "Installed rclone");
+command -v btop >/dev/null 2>&1 || (eget aristocratos/btop --to "$BIN/btop" --asset "x86_64" && chmod +x $BIN/btop && echo "Installed btop");

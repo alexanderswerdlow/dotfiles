@@ -9,6 +9,8 @@ export MACHINE_NAME=$(hostname | sed 's/\.eth$//')
 [[ "$(hostname)" == matrix* ]] && export MATRIX_NODE=1
 [[ "$(hostname)" == grogu* ]] && export GROGU_NODE=1
 [[ "$(hostname)" == babel* ]] && export BABEL_NODE=1
+[[ "$(hostname)" == flame* ]] && export BABEL_NODE=1
+[[ "$(hostname)" == shire* ]] && export BABEL_NODE=1
 
 [[ "$(hostname)" =~ ^matrix-[0-9]-[0-9] ]] && MATRIX_COMPUTE_NODE=1
 [[ "$(hostname)" =~ ^matrix-[0-9]-[0-9][0-9] ]] && MATRIX_COMPUTE_NODE=1
@@ -20,6 +22,10 @@ export MACHINE_NAME=$(hostname | sed 's/\.eth$//')
 
 [[ "$(hostname)" =~ ^babel-[0-9]-[0-9] ]] && BABEL_COMPUTE_NODE=1
 [[ "$(hostname)" =~ ^babel-[0-9]-[0-9][0-9] ]] && BABEL_COMPUTE_NODE=1
+[[ "$(hostname)" =~ ^flame-[0-9]-[0-9] ]] && BABEL_COMPUTE_NODE=1
+[[ "$(hostname)" =~ ^flame-[0-9]-[0-9][0-9] ]] && BABEL_COMPUTE_NODE=1
+[[ "$(hostname)" =~ ^shire-[0-9]-[0-9] ]] && BABEL_COMPUTE_NODE=1
+[[ "$(hostname)" =~ ^shire-[0-9]-[0-9][0-9] ]] && BABEL_COMPUTE_NODE=1
 [[ "$(hostname)" =~ .*lti\.cs\.cmu\.edu$ ]] && export BABEL_HEAD_NODE=1
 
 if [[ -n $GROGU_NODE || -n $MATRIX_NODE || -n $BABEL_NODE ]]; then

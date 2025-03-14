@@ -8,6 +8,7 @@ export EINX_WARN_ON_RETRACE=25
 export TMUX_CONF="$DOTFILES/.tmux.conf"
 export AUTOSSH_PORT=0
 export AUTOSSH_POLL=30
+export INSTALLER_NO_MODIFY_PATH=1
 
 # Remove duplicates
 typeset -U path PATH
