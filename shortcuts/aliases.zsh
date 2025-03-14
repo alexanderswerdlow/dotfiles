@@ -87,9 +87,13 @@ alias sp='et $HOME_HOSTNAME'
 alias work="ssh home"
 
 # Docker
-alias drr="docker compose down && docker compose up -d"
-alias dr="docker compose restart"
-alias dup="docker compose pull && docker compose up --force-recreate --build -d"
+alias dcu="docker compose up -d && docker compose logs -f"
+alias dcd="docker compose down"
+alias dcr="docker compose restart && docker compose logs -f"
+alias dcl="docker compose logs -f"
+alias dcrr="docker compose down && docker compose up -d && docker compose logs -f"
+alias dcf="docker compose down && docker compose pull && docker compose up --force-recreate --build -d && docker compose logs -f"
+alias dc="docker compose" # Who uses /bin/dc anyway
 
 # Tmux
 alias rr='tmux -CC attach -t'
