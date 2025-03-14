@@ -308,6 +308,14 @@ function tgsha() {
   gcloud alpha compute tpus tpu-vm ssh aswerdlow@$1 --zone ${ZONE:-us-central2-b} --ssh-flag="-A" --worker=all --command=$2 "${@:3}" --tunnel-through-iap
 }
 
+
+function tgsho() {
+  for i in {0..$(($3-1))}; do
+    echo "ssh worker $i"
+    gcloud alpha compute tpus tpu-vm ssh aswerdlow@$1 --zone ${ZONE:-us-central2-b} --ssh-flag="-A" --worker=$i --command=$2 --tunnel-through-iap
+  done
+}
+
 # function gsho() {
 #   gcloud alpha compute tpus tpu-vm ssh aswerdlow@$1 --zone ${ZONE:-us-central2-b} --ssh-flag="-A" --worker=0 --command="source ~/.minimal_shell.sh; $2" --verbosity=debug "${@:3}"
 # }
