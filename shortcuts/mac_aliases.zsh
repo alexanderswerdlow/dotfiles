@@ -102,14 +102,15 @@ function encodeuri {
   echo "${encoded}"
 }
 
-function man {
+function manfunc {
   if [[ (-d /Applications/Dash.app || -d /Applications/Setapp/Dash.app) && -d "$HOME/Library/Application Support/Dash/DocSets/Man_Pages" ]]; then
     query=`encodeuri ${@}`
     /usr/bin/open "dash-plugin://keys=manpages&query=$query"
   else
-    /usr/bin/man ${@}
+    $(whereis -b -q man) ${@}
   fi
 }
+alias man=manfunc
 
 # UCLA Specific
 alias seas="ssh -R 52698:localhost:52698 swerdlow@lnxsrv09.seas.ucla.edu"
